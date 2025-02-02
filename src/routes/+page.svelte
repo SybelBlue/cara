@@ -113,6 +113,10 @@
     readyForCommit = true;
     selectedCard = cards.find((c) => c.id === card.id);
   };
+  const onAddCard = (card: SimpleDeck[number]) => {
+    cards.push(card);
+    displayDeck.push(card);
+  };
 
   const setDisplayDeck = (deck: Deck) => {
     displayDeck = deck;
@@ -151,7 +155,7 @@
       {/if}
     </div>
     <div class="static split">
-      <CardBoard cards={displayDeck} selectCard={onSelectCard} />
+      <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
     </div>
   {/if}
 </main>
