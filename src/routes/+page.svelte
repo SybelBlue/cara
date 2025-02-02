@@ -9,19 +9,16 @@
   import CardBoard from '$lib/components/CardBoard.svelte';
   import Toolbar from '$lib/components/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
-  
-  import { slide } from 'svelte/transition';
 
   let selectedCard: SimpleCard | undefined = $state();
   let readyForCommit: boolean = $state(false);
 
-  const deckInfo = $page.url.searchParams.get("deckInfo") ?? btoa("[]");
+  const deckInfo = $page.url.searchParams.get('deckInfo') ?? btoa('[]');
   const deckName = $page.url.searchParams.get('deckName');
-  const deckInit: SimpleDeck = deckName && deckName in exampleDecks 
-                               ? exampleDecks[deckName]
-                               : JSON.parse(atob(deckInfo));
+  const deckInit: SimpleDeck =
+    deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
-  console.log("Initializing deck", deckInit);
+  console.log('Initializing deck', deckInit);
   let cards: SimpleDeck = $state(deckInit);
   let displayDeck: Deck = $state(deckInit);
 
@@ -121,7 +118,9 @@
     displayDeck.push(card);
   };
 
-  const setDisplayDeck = (deck: Deck) => { displayDeck = deck; };
+  const setDisplayDeck = (deck: Deck) => {
+    displayDeck = deck;
+  };
 </script>
 
 <svelte:head>
@@ -142,24 +141,22 @@
 <Toolbar currentDeck={cards} {setDisplayDeck} {commits} />
 
 <main class="flex w-screen max-h-full overflow-hidden">
-  {#if cards.length == 0}
-  <DeckDialog
-    loadDeck={(keyedDeck) => {cards = displayDeck = keyedDeck;}}
-    />
+  {#if displayDeck.length == 0}
+    <DeckDialog loadDeck={(keyedDeck) => (cards = displayDeck = keyedDeck)} />
   {:else}
-  <div class:split={selectedCard} class="transition-all min-h-full max-h-full">
-    {#if selectedCard}
-      <Editor
-        card={selectedCard}
-        propose={onProposeEdit}
-        close={() => (selectedCard = undefined)}
-        {readyForCommit}
-      />
-    {/if}
-  </div>
-  <div class="static split">
-    <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard}/>
-  </div>
+    <div class:split={selectedCard} class="transition-all min-h-full max-h-full">
+      {#if selectedCard}
+        <Editor
+          card={selectedCard}
+          propose={onProposeEdit}
+          close={() => (selectedCard = undefined)}
+          {readyForCommit}
+        />
+      {/if}
+    </div>
+    <div class="static split">
+      <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
+    </div>
   {/if}
 </main>
 

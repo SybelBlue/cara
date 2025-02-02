@@ -50,6 +50,9 @@
     "@types/reveal.js": "^5.0.4",
     "cohere-ai": "^7.14.0",
     "diff": "^7.0.0",
-    "openai": "^4.72.0"
+    "dotenv": "^16.4.6",
+    "local": "^0.3.3",
+    "openai": "^4.72.0",
+    "reveal.js": "^5.1.0"
   }
 }

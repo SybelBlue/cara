@@ -1,11 +1,14 @@
-<script lang="ts">
-  import type { Card, Deck } from '$lib/types';
-  import { undiffWords } from '$lib/diff';
+<script module lang="ts">
+  import type { Deck } from '$lib/types';
 
-  type Props = {
+  export type SortFn = (a: Deck[number], b: Deck[number]) => number;
+  export type Props = {
     currentDeck: Deck;
-    setSortFn?: (f?: (a: Card, b: Card) => number) => void;
+    setSortFn?: (f?: SortFn) => void;
   }
+</script>
+<script lang="ts">
+  import { undiffWords } from '$lib/diff';
 
   let {
     currentDeck, setSortFn
@@ -23,13 +26,17 @@
           out[undiffWords(l.name)] = (out[undiffWords(l.name)] ?? 0) + 1;
     return out;
   });
-  const sortFns: Record<Sorter, (a: Card, b: Card) => number> = {
+  const sortFns: Record<Sorter, SortFn> = {
     alpha: (x, y) => (reversed ? -1 : +1) * undiffWords(x.name).localeCompare(undiffWords(y.name)),
     usage: (x, y) =>
       (reversed ? -1 : +1) * usageDict[undiffWords(y.name)] - usageDict[undiffWords(x.name)]
   };
+  const ordering = $derived(currentDeck.map(c => c.id));
+  const defaultSorter: SortFn | undefined = $derived(
+    reversed ? (a, b) => -(ordering.indexOf(a.id) - ordering.indexOf(b.id)) : undefined
+  );
 
-  $effect(() => { setSortFn?.(sorter && sortFns[sorter]) });
+  $effect(() => { setSortFn?.(sorter ? sortFns[sorter] : defaultSorter) });
 </script>
 
 <div class="join rounded-3xl my-auto">
