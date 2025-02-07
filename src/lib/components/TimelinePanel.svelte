@@ -27,7 +27,7 @@
   };
 
   let diffedCards = $derived(
-    diffDecks(currentDeck, compareDeck ?? commits[commits.length - 1].state, expand)
+    diffDecks(compareDeck ?? commits[commits.length - 1].state ?? [], currentDeck, expand)
   );
 
   $effect(() => {

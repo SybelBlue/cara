@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SimpleDeck } from '$lib/types';
-  import { deckWithIds } from '$lib/decks';
-  import { exampleDecks } from '$lib/decks';
+  import { buildContentSchemaString } from '$lib/prompts';
+  import { deckWithIds, exampleDecks } from '$lib/decks';
 
   type Props = {
     loadDeck: (deck: SimpleDeck) => void;
@@ -62,7 +62,10 @@
                 loading = true;
                 const response = await fetch('/api/object', {
                   method: 'POST',
-                  body: JSON.stringify({ description, schema })
+                  body: JSON.stringify({ 
+                    description: buildContentSchemaString(description, 'Deck'),
+                    schema: schema
+                  })
                 });
                 const { response: deck } = await response.json();
                 console.log(deck);

@@ -1,0 +1,178 @@
+{
+  "cards": [
+    {
+      "id": 628,
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "id": 607,
+          "description": "Manages all business logic and external service integrations",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            },
+            {
+              "id": 604,
+              "name": "UserModule"
+            },
+            {
+              "id": 605,
+              "name": "ReportingEngine"
+            },
+            {
+              "id": 606,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 625,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 626,
+              "name": "AWSCloudWatch"
+            },
+            {
+              "id": 634,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 635,
+              "name": "RSAModule"
+            },
+            {
+              "id": 644,
+              "name": "AWSMessagingService"
+            },
+            {
+              "id": 657,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        },
+        {
+          "id": 610,
+          "description": "Tracks user interactions and manages user engagement",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            },
+            {
+              "id": 604,
+              "name": "UserModule"
+            }
+          ]
+        },
+        {
+          "id": 612,
+          "description": "Implements database transactions",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 616,
+          "description": "Manages authentication and security",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 621,
+          "description": "Handles UI events, data validation, and reporting",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            },
+            {
+              "id": 604,
+              "name": "UserModule"
+            },
+            {
+              "id": 605,
+              "name": "ReportingEngine"
+            }
+          ]
+        },
+        {
+          "id": 627,
+          "description": "Generates predictive analytics and makes recommendations",
+          "collaborators": [
+            {
+              "id": 603,
+              "name": "Database"
+            },
+            {
+              "id": 605,
+              "name": "ReportingEngine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 639,
+      "name": "Database",
+      "responsibilities": [
+        {
+          "id": 632,
+          "description": "Performs data persistence and read operations",
+          "collaborators": [
+            {
+              "id": 628,
+              "name": "SystemController"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 647,
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "id": 642,
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            {
+              "id": 639,
+              "name": "Database"
+            },
+            {
+              "id": 628,
+              "name": "SystemController"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 651,
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "id": 650,
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            {
+              "id": 639,
+              "name": "Database"
+            },
+            {
+              "id": 628,
+              "name": "SystemController"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

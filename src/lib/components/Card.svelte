@@ -20,10 +20,23 @@
 <script lang="ts">
   import { highlightedClass } from '$lib/stores';
   import ClassLabel from '$lib/components/ClassLabel.svelte';
+  import { diffWords, isDiff } from '$lib/diff';
+  import { all } from '$lib/common';
 
   let { name = $bindable(), responsibilities = $bindable(), locked, selectName }: Props = $props();
 
-  let highlight = $derived($highlightedClass === name);
+  const highlight = $derived($highlightedClass === name);
+  const emptyBody = $derived(
+    all(responsibilities, (r) =>
+      isDiff(r.description) ? all(r.description, (chg) => chg.removed) : !r.description.length
+    )
+  );
+  const newBody = $derived(
+    all(responsibilities, (r) => isDiff(r.description) && all(r.description, (chg) => chg.added))
+  );
+  const titleDifftext: DiffText = $derived(
+    emptyBody ? diffWords(name, '') : newBody ? diffWords('', name) : name
+  );
 </script>
 
 {#snippet diff(v: DiffText)}
@@ -44,13 +57,13 @@
   {/if}
 {/snippet}
 
-{#snippet diffLabel(v: DiffText)}
+{#snippet diffLabel(v: DiffText, disabled: boolean = false)}
   {#if Array.isArray(v)}
-    <ClassLabel {selectName} name={v.map((c) => (c.removed ? '' : c.value)).join('')}>
+    <ClassLabel {disabled} {selectName} name={v.map((c) => (c.removed ? '' : c.value)).join('')}>
       {@render diff(v)}
     </ClassLabel>
   {:else}
-    <ClassLabel {selectName} name={v} />
+    <ClassLabel {disabled} {selectName} name={v} />
   {/if}
 {/snippet}
 
@@ -63,7 +76,7 @@
 >
   <section class="card-body">
     <h3 class="card-title m-1 mb-0 italic">
-      <ClassLabel disabled {selectName} {name} />
+      {@render diffLabel(titleDifftext, true)}
     </h3>
     <hr class="border-primary" />
     <table class="table table-auto table-sm">

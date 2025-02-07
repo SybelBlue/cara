@@ -6,11 +6,12 @@
   interface Props {
     card: SimpleCard;
     readyForCommit: boolean;
+    freeEditing?: boolean;
     propose?: (card: SimpleCard, message: string) => void;
     close?: () => void;
   }
 
-  let { readyForCommit = $bindable(false), card, propose, close }: Props = $props();
+  let { readyForCommit = $bindable(false), freeEditing, card, propose, close }: Props = $props();
 
   let lastChange = $derived.by(() => {
     card;
@@ -68,7 +69,7 @@
       <input
         class="btn btn-outline min-w-fit w-1/4"
         type="submit"
-        value="propose"
+        value={freeEditing ? "commit" : "propose"}
         id="submitBtn"
         onclick={() => {
           if (card) {

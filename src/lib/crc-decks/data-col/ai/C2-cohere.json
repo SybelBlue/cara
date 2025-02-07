@@ -1,0 +1,416 @@
+{
+  "cards": [
+    {
+      "id": 668,
+      "name": "PlayerProfile",
+      "responsibilities": [
+        {
+          "id": 662,
+          "description": "Store and manage user account information",
+          "collaborators": [
+            {
+              "id": 660,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 661,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 665,
+          "description": "Track player statistics and achievements",
+          "collaborators": [
+            {
+              "id": 663,
+              "name": "GameManager"
+            },
+            {
+              "id": 664,
+              "name": "TournamentOrganizer"
+            }
+          ]
+        },
+        {
+          "id": 667,
+          "description": "Handle player authentication and authorization",
+          "collaborators": [
+            {
+              "id": 666,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 675,
+      "name": "HandEvaluator",
+      "responsibilities": [
+        {
+          "id": 671,
+          "description": "Calculate and rank poker hands",
+          "collaborators": [
+            {
+              "id": 669,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 670,
+              "name": "TableManager"
+            }
+          ]
+        },
+        {
+          "id": 674,
+          "description": "Determine winners in different poker variants",
+          "collaborators": [
+            {
+              "id": 672,
+              "name": "GameManager"
+            },
+            {
+              "id": 673,
+              "name": "RuleEngine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 682,
+      "name": "ChipTransaction",
+      "responsibilities": [
+        {
+          "id": 678,
+          "description": "Implement secure payment and balance tracking",
+          "collaborators": [
+            {
+              "id": 676,
+              "name": "GameManager"
+            },
+            {
+              "id": 677,
+              "name": "TournamentOrganizer"
+            }
+          ]
+        },
+        {
+          "id": 681,
+          "description": "Manage virtual chip transactions",
+          "collaborators": [
+            {
+              "id": 679,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 680,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 689,
+      "name": "RuleEngine",
+      "responsibilities": [
+        {
+          "id": 686,
+          "description": "Enforce poker game rules across variants",
+          "collaborators": [
+            {
+              "id": 683,
+              "name": "TableManager"
+            },
+            {
+              "id": 684,
+              "name": "GameManager"
+            },
+            {
+              "id": 685,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 688,
+          "description": "Validate player actions and game progression",
+          "collaborators": [
+            {
+              "id": 687,
+              "name": "TableManager"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 697,
+      "name": "NetworkConnectionHandler",
+      "responsibilities": [
+        {
+          "id": 693,
+          "description": "Manage real-time multiplayer synchronization",
+          "collaborators": [
+            {
+              "id": 690,
+              "name": "GameManager"
+            },
+            {
+              "id": 691,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 692,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 696,
+          "description": "Handle cross-platform connection and authentication",
+          "collaborators": [
+            {
+              "id": 694,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 695,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 705,
+      "name": "TournamentOrganizer",
+      "responsibilities": [
+        {
+          "id": 701,
+          "description": "Create and manage tournament structures",
+          "collaborators": [
+            {
+              "id": 698,
+              "name": "GameManager"
+            },
+            {
+              "id": 699,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 700,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 704,
+          "description": "Maintain tournament leaderboards and rankings",
+          "collaborators": [
+            {
+              "id": 702,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 703,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 712,
+      "name": "AnalyticsEngine",
+      "responsibilities": [
+        {
+          "id": 708,
+          "description": "Generate player performance insights",
+          "collaborators": [
+            {
+              "id": 706,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 707,
+              "name": "TournamentOrganizer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 720,
+      "name": "BasePlayer",
+      "responsibilities": [
+        {
+          "id": 716,
+          "description": "Define common player attributes and methods",
+          "collaborators": [
+            {
+              "id": 713,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 714,
+              "name": "TableManager"
+            },
+            {
+              "id": 715,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 719,
+          "description": "Provide interface for player actions and game interactions",
+          "collaborators": [
+            {
+              "id": 717,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 718,
+              "name": "HandEvaluator"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 728,
+      "name": "HumanPlayer",
+      "responsibilities": [
+        {
+          "id": 724,
+          "description": "Implement user-driven player interactions",
+          "collaborators": [
+            {
+              "id": 721,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 722,
+              "name": "NetworkConnectionHandler"
+            },
+            {
+              "id": 723,
+              "name": "TableManager"
+            }
+          ]
+        },
+        {
+          "id": 727,
+          "description": "Handle direct user input and game controls",
+          "collaborators": [
+            {
+              "id": 725,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 726,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 748,
+      "name": "GameManager",
+      "responsibilities": [
+        {
+          "id": 741,
+          "description": "Coordinate overall game session lifecycle",
+          "collaborators": [
+            {
+              "id": 738,
+              "name": "TableManager"
+            },
+            {
+              "id": 739,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 740,
+              "name": "RuleEngine"
+            }
+          ]
+        },
+        {
+          "id": 744,
+          "description": "Manage game state transitions",
+          "collaborators": [
+            {
+              "id": 742,
+              "name": "NetworkConnectionHandler"
+            },
+            {
+              "id": 743,
+              "name": "RuleEngine"
+            }
+          ]
+        },
+        {
+          "id": 747,
+          "description": "Orchestrate tournament and match configurations",
+          "collaborators": [
+            {
+              "id": 745,
+              "name": "TournamentOrganizer"
+            },
+            {
+              "id": 746,
+              "name": "ChipTransaction"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 757,
+      "name": "TableManager",
+      "responsibilities": [
+        {
+          "id": 753,
+          "description": "Configure and manage individual poker table states",
+          "collaborators": [
+            {
+              "id": 749,
+              "name": "GameManager"
+            },
+            {
+              "id": 750,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 751,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 752,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 756,
+          "description": "Manage player seating and turn order",
+          "collaborators": [
+            {
+              "id": 754,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 755,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

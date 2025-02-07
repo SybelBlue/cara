@@ -45,6 +45,7 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "@types/diff": "^6.0.0",
     "@types/npm": "^7.19.3",
     "@types/reveal.js": "^5.0.4",

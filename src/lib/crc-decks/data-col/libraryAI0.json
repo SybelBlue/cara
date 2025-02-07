@@ -1,0 +1,120 @@
+{
+  "cards": [
+    {
+      "name": "Book",
+      "responsibilities": [
+        {
+          "description": "Store book information (title, author, ISBN)",
+          "collaborators": [{ "name": "Library" }]
+        },
+        {
+          "description": "Track availability status",
+          "collaborators": [{ "name": "Loan" }]
+        },
+        {
+          "description": "Maintain loan history",
+          "collaborators": [{ "name": "Member" }]
+        }
+      ]
+    },
+    {
+      "name": "Member",
+      "responsibilities": [
+        {
+          "description": "Store member information",
+          "collaborators": [{ "name": "Library" }]
+        },
+        {
+          "description": "Track current loans",
+          "collaborators": [{ "name": "Loan" }]
+        },
+        {
+          "description": "Manage loan history",
+          "collaborators": [{ "name": "Book" }]
+        }
+      ]
+    },
+    {
+      "name": "Library",
+      "responsibilities": [
+        {
+          "description": "Manage book inventory",
+          "collaborators": [{ "name": "Book" }]
+        },
+        {
+          "description": "Handle member registrations",
+          "collaborators": [{ "name": "Member" }]
+        },
+        {
+          "description": "Process loans and returns",
+          "collaborators": [{ "name": "Loan" }, { "name": "Librarian" }]
+        }
+      ]
+    },
+    {
+      "name": "Loan",
+      "responsibilities": [
+        {
+          "description": "Track loan details (book, member, dates)",
+          "collaborators": [{ "name": "Book" }, { "name": "Member" }]
+        },
+        { "description": "Calculate due dates and fines", "collaborators": [] },
+        {
+          "description": "Handle renewals",
+          "collaborators": [{ "name": "Library" }, { "name": "Book" }]
+        }
+      ]
+    },
+    {
+      "name": "Librarian",
+      "responsibilities": [
+        {
+          "description": "Process loan and return transactions",
+          "collaborators": [{ "name": "Library" }]
+        },
+        { "description": "Manage member accounts", "collaborators": [{ "name": "Member" }] },
+        {
+          "description": "Handle overdue notices and fines",
+          "collaborators": [{ "name": "Member" }, { "name": "Loan" }]
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "responsibilities": [
+        {
+          "description": "Maintain searchable book database",
+          "collaborators": [{ "name": "Library" }]
+        },
+        { "description": "Provide search functionality", "collaborators": [{ "name": "Library" }] },
+        { "description": "Update book information", "collaborators": [{ "name": "Book" }] }
+      ]
+    },
+    {
+      "name": "Reservation",
+      "responsibilities": [
+        { "description": "Handle book reservations", "collaborators": [{ "name": "Book" }] },
+        { "description": "Manage reservation queue", "collaborators": [{ "name": "Member" }] },
+        {
+          "description": "Notify members when reserved books are available",
+          "collaborators": [{ "name": "Library" }]
+        }
+      ]
+    },
+    {
+      "name": "Report",
+      "responsibilities": [
+        {
+          "description": "Generate usage statistics",
+          "collaborators": [{ "name": "Library" }, { "name": "Book" }]
+        },
+        { "description": "Create overdue reports", "collaborators": [{ "name": "Loan" }] },
+        {
+          "description": "Produce member activity summaries",
+          "collaborators": [{ "name": "Member" }]
+        }
+      ]
+    }
+  ],
+  "prompt": "Implement an intelligent book recommendation algorithm in a Recommender class based on machine learning.<br>- Recommender should have the core of recommendation logic<br>- Catalog should be integrated with Recommender to provide personalized search results<br>- Book should store its own metadata and tagging<br>- Member should track book preferences<br>- Report should generate Recommender performance analytics"
+}

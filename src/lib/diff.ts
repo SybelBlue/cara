@@ -1,4 +1,4 @@
-import type { Card as Card, SimpleDeck, Deck, SimpleCard, Key, DiffText } from '$lib/types';
+import type { Card, SimpleDeck, Deck, SimpleCard, Key, DiffText } from '$lib/types';
 import { withId } from '$lib/decks';
 import { diffWords, type Change } from 'diff';
 import { any } from './common';
@@ -68,6 +68,14 @@ const diffResponsibilities = (
           z.left.description === z.right.description
             ? z.left.description
             : diffWords(z.left.description, z.right.description);
+        const fullReplacement =
+          Array.isArray(description) && !description.find((c) => !c.added && !c.removed);
+        if (fullReplacement) {
+          return [
+            diffResponsibility(z.id, z.right, change.added),
+            diffResponsibility(z.id, z.left, change.removed)
+          ];
+        }
         const collaborators = mergeKeyed(
           z.left.collaborators,
           z.right.collaborators,

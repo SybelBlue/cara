@@ -8,17 +8,22 @@
   import { hasDiff } from '$lib/diff';
 
   type Props = Omit<TimelinePanelProps, 'show'> & {
+    getStateJson: () => string;
     showTimeline?: boolean;
+    prompt?: string;
   };
 
   let {
     showTimeline = false,
     currentDeck,
     setDisplayDeck: setCardBoardDeck,
-    commits
+    commits,
+    prompt,
+    getStateJson
   }: Props = $props();
 
   let displayDeck: Deck = $state(currentDeck);
+  let showPrompt = $state(Boolean(prompt));
 
   const setDisplayDeck: Props['setDisplayDeck'] = (d) => (displayDeck = d);
 
@@ -64,6 +69,24 @@
           >
         </button>
       {/if}
+      {#if prompt}
+        <button class="btn" onclick={()=>(showPrompt = !showPrompt)}>{showPrompt ? "close" : "open"} prompt</button>
+        <dialog id="studentPromptModal" class="modal" open={showPrompt}>
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">Upcoming Changes</h3>
+            <p class="py-4">{@html prompt}</p>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn" onclick={() => (showPrompt = false)}>close</button>
+              </form>
+            </div>
+          </div>
+          <form method="dialog" class="modal-backdrop">
+            <button onclick={() => (showPrompt = false)}>close</button>
+          </form>
+        </dialog>
+      {/if}
+      <button class="btn" onclick={() => console.info(getStateJson())}>dump</button>
     </nav>
     <h1 class="text-lg font-mono italic text-accent decoration-primary hover:underline">
       {'{ cara }'}

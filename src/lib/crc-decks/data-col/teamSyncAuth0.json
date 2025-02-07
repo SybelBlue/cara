@@ -1,0 +1,160 @@
+{
+  "cards": [
+    {
+      "name": "ProjectManager",
+      "responsibilities": [
+        {
+          "description": "Orchestrate overall project lifecycle and resource allocation",
+          "collaborators": [
+            { "name": "TaskEntity" },
+            { "name": "UserProfile" },
+            { "name": "ReportGenerator" }
+          ]
+        },
+        {
+          "description": "Manage project creation, milestone tracking, and team coordination",
+          "collaborators": [
+            { "name": "CollaborationModule" },
+            { "name": "NotificationService" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserProfile",
+      "responsibilities": [
+        {
+          "description": "Manage individual user information and role assignments",
+          "collaborators": [
+            { "name": "AuthenticationHandler" },
+            { "name": "ProjectManager" }
+          ]
+        },
+        {
+          "description": "Handle user permissions and access levels",
+          "collaborators": [
+            { "name": "AuthenticationHandler" },
+            { "name": "CollaborationModule" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TaskEntity",
+      "responsibilities": [
+        {
+          "description": "Represent individual tasks with comprehensive metadata",
+          "collaborators": [
+            { "name": "ProjectManager" },
+            { "name": "ReportGenerator" },
+            { "name": "NotificationService" }
+          ]
+        },
+        {
+          "description": "Track task status, assignments, and progress",
+          "collaborators": [
+            { "name": "UserProfile" },
+            { "name": "CollaborationModule" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "NotificationService",
+      "responsibilities": [
+        {
+          "description": "Manage communication and alert systems for team updates",
+          "collaborators": [
+            { "name": "UserProfile" },
+            { "name": "TaskEntity" },
+            { "name": "ProjectManager" }
+          ]
+        },
+        {
+          "description": "Handle real-time notifications across different communication channels",
+          "collaborators": [
+            { "name": "CollaborationModule" },
+            { "name": "AuthenticationHandler" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AuthenticationHandler",
+      "responsibilities": [
+        {
+          "description": "Manage user authentication and access control",
+          "collaborators": [
+            { "name": "UserProfile" },
+            { "name": "NotificationService" }
+          ]
+        },
+        {
+          "description": "Implement security protocols and login mechanisms",
+          "collaborators": [
+            { "name": "DatabaseConnector" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReportGenerator",
+      "responsibilities": [
+        {
+          "description": "Create comprehensive project-related reports and analytics",
+          "collaborators": [
+            { "name": "ProjectManager" },
+            { "name": "TaskEntity" },
+            { "name": "UserProfile" }
+          ]
+        },
+        {
+          "description": "Generate visual and statistical representations of project data",
+          "collaborators": [
+            { "name": "DatabaseConnector" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DatabaseConnector",
+      "responsibilities": [
+        {
+          "description": "Handle all database interactions and connection management",
+          "collaborators": [
+            { "name": "AuthenticationHandler" },
+            { "name": "ReportGenerator" },
+            { "name": "ProjectManager" }
+          ]
+        },
+        {
+          "description": "Ensure data integrity and efficient query performance",
+          "collaborators": [
+            { "name": "CollaborationModule" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CollaborationModule",
+      "responsibilities": [
+        {
+          "description": "Manage real-time collaboration features like chat and document sharing",
+          "collaborators": [
+            { "name": "UserProfile" },
+            { "name": "TaskEntity" },
+            { "name": "NotificationService" }
+          ]
+        },
+        {
+          "description": "Facilitate team communication and collaborative workflows",
+          "collaborators": [
+            { "name": "ProjectManager" },
+            { "name": "DatabaseConnector" }
+          ]
+        }
+      ]
+    }
+  ],
+  "prompt": "Enhanced AI-Powered Task Recommendation System<br><br>Implement machine learning algorithms to suggest task priorities<br>Analyze historical project data to predict potential bottlenecks<br>Integrate predictive task assignment capabilities<br><br><br>Advanced Role-Based Access Control (RBAC) Redesign<br><br>Granular permission management beyond current binary access levels<br>Support for complex organizational hierarchies<br>Dynamic role creation and nested permission structures<br><br><br>Comprehensive Integrations Platform<br><br>Build robust plugin architecture for third-party tool integrations<br>Support for popular project management, communication, and productivity tools<br>Standardized integration framework with webhook and API capabilities<br><br><br>Real-Time Analytics and Predictive Performance Dashboards<br><br>Develop advanced visualization of team and individual performance metrics<br>Implement predictive modeling for project completion estimates<br>Create interactive, customizable dashboard experiences"
+}

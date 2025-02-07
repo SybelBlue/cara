@@ -1,0 +1,228 @@
+{
+  "cards": [
+    {
+      "id": 582,
+      "name": "Database",
+      "responsibilities": [
+        {
+          "id": 581,
+          "description": "Manages admin authentication, data encryption, and external service integrations",
+          "collaborators": [
+            {
+              "id": 576,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 577,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 578,
+              "name": "RSAModule"
+            },
+            {
+              "id": 579,
+              "name": "AWSCloudWatch"
+            },
+            {
+              "id": 580,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        },
+        {
+          "id": 555,
+          "description": "Implements database transactions",
+          "collaborators": [
+            {
+              "id": 554,
+              "name": "SystemController"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 590,
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "id": 585,
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            {
+              "id": 583,
+              "name": "SystemController"
+            },
+            {
+              "id": 584,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 559,
+          "description": "Manages authentication",
+          "collaborators": [
+            {
+              "id": 556,
+              "name": "Database"
+            },
+            {
+              "id": 558,
+              "name": "IntegrationBroker"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 594,
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "id": 593,
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            {
+              "id": 591,
+              "name": "SystemController"
+            },
+            {
+              "id": 592,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 570,
+          "description": "Generates predictive analytics and makes recommendations",
+          "collaborators": [
+            {
+              "id": 565,
+              "name": "Database"
+            },
+            {
+              "id": 567,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 568,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 569,
+              "name": "AWSCloudWatch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 602,
+      "name": "IntegrationBroker",
+      "responsibilities": [
+        {
+          "id": 601,
+          "description": "Generates live instances of external services from SystemController keys",
+          "collaborators": [
+            {
+              "id": 595,
+              "name": "SystemController"
+            },
+            {
+              "id": 596,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 597,
+              "name": "RSAModule"
+            },
+            {
+              "id": 599,
+              "name": "AWSMessagingService"
+            }
+          ]
+        },
+        {
+          "id": 570,
+          "description": "Acts as a proxy for all external services and manages API keys",
+          "collaborators": [
+            {
+              "id": 568,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 574,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 571,
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "id": 550,
+          "description": "Manages all business logic",
+          "collaborators": [
+            {
+              "id": 546,
+              "name": "Database"
+            },
+            {
+              "id": 547,
+              "name": "UserModule"
+            },
+            {
+              "id": 548,
+              "name": "ReportingEngine"
+            },
+            {
+              "id": 549,
+              "name": "IntegrationBroker"
+            }
+          ]
+        },
+        {
+          "id": 553,
+          "description": "Tracks user interactions",
+          "collaborators": [
+            {
+              "id": 551,
+              "name": "UserModule"
+            },
+            {
+              "id": 552,
+              "name": "ReportingEngine"
+            }
+          ]
+        },
+        {
+          "id": 564,
+          "description": "Handles UI events, data validation, and reporting",
+          "collaborators": [
+            {
+              "id": 560,
+              "name": "Database"
+            },
+            {
+              "id": 561,
+              "name": "UserModule"
+            },
+            {
+              "id": 562,
+              "name": "ReportingEngine"
+            },
+            {
+              "id": 563,
+              "name": "IntegrationBroker"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

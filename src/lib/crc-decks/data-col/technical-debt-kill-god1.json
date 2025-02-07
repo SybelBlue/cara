@@ -1,0 +1,121 @@
+{
+  "cards": [
+    {
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "description": "Manages all business logic",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Tracks user interactions",
+          "collaborators": [
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" }
+          ]
+        },
+        {
+          "description": "Handles UI events, data validation, and reporting",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "IntegrationBroker" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Database",
+      "responsibilities": [
+        {
+          "description": "Performs all data persistence, including caching, and cross-domain operations",
+          "collaborators": [
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Manages data encryption",
+          "collaborators": [
+            { "name": "RSAModule" }
+          ]
+        },
+        {
+          "description": "Implements database transactions",
+          "collaborators": [
+            { "name": "Database" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "Database" }
+          ]
+        },
+        {
+          "description": "Manages email notifications, SMS alerts, push notifications, and user engagement tracking",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Manages authentication",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "IntegrationBroker" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            { "name": "Database" }
+          ]
+        },
+        {
+          "description": "Generates predictive analytics and makes recomendations",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "IntegrationBroker" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntegrationBroker",
+      "responsibilities": [
+        {
+          "description": "Proxies external services",
+          "collaborators": [
+            { "name": "IAMUserAuth" },
+            { "name": "OpenAPI" },
+            { "name": "AWSMessagingService" },
+            { "name": "AWSFirebaseGateway" }
+          ]
+        },
+        {
+          "description": "Manages API keys",
+          "collaborators": [
+            { "name": "SystemController" }
+          ]
+        }
+      ]
+    }
+  ]
+}

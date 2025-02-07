@@ -1,0 +1,116 @@
+{
+  "cards": [
+    {
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "description": "Manages all business logic",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "SystemController" }
+          ]
+        },
+        {
+          "description": "Tracks user interactions",
+          "collaborators": [
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" }
+          ]
+        },
+        {
+          "description": "Implements database transactions",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "RSAModule" }
+          ]
+        },
+        {
+          "description": "Manages authentication",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "IAMUserAuth" }
+          ]
+        },
+        {
+          "description": "Handles UI events, data validation, and reporting",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "AWSCloudWatch" },
+            { "name": "AWSMessagingService" }
+          ]
+        },
+        {
+          "description": "Generates predictive analytics and makes recomendations",
+          "collaborators": [
+            { "name": "ReportingEngine" },
+            { "name": "Database" },
+            { "name": "OpenAPI" },
+            { "name": "AWSCloudWatch" }
+          ]
+        },
+        {
+          "description": "Proxies all external services",
+          "collaborators": [
+            { "name": "IAMUserAuth" },
+            { "name": "RSAModule" },
+            { "name": "OpenAPI" },
+            { "name": "AWSMessagingService" },
+            { "name": "AWSFirebaseGateway" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Database",
+      "responsibilities": [
+        {
+          "description": "Performs all data persistence and transformation, including complex business logic, caching, and cross-domain operations",
+          "collaborators": [
+            { "name": "SystemController" }
+          ]
+        },
+        {
+          "description": "Manages admin authentication, data encryption, and external service integrations",
+          "collaborators": [
+            { "name": "SystemController" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "Database" }
+          ]
+        },
+        {
+          "description": "Manages email notifications, SMS alerts, push notifications, and user engagement tracking",
+          "collaborators": [
+            { "name": "SystemController" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "Database" }
+          ]
+        }
+      ]
+    }
+  ]
+}

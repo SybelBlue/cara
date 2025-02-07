@@ -1,0 +1,165 @@
+{
+  "cards": [
+    {
+      "name": "PatientRecord",
+      "responsibilities": [
+        {
+          "description": "Maintain comprehensive and secure patient medical history",
+          "collaborators": [
+            { "name": "MedicalProcedureTracker" },
+            { "name": "DiagnosisEngine" },
+            { "name": "UserAccessControl" }
+          ]
+        },
+        {
+          "description": "Manage patient personal and medical information with strict privacy controls",
+          "collaborators": [
+            { "name": "InsuranceValidator" },
+            { "name": "BillingSystem" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MedicalProcedureTracker",
+      "responsibilities": [
+        {
+          "description": "Document and track medical procedures and treatment histories",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "DiagnosisEngine" },
+            { "name": "BillingSystem" }
+          ]
+        },
+        {
+          "description": "Maintain detailed logs of medical interventions and outcomes",
+          "collaborators": [
+            { "name": "UserAccessControl" },
+            { "name": "AppointmentScheduler" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PrescriptionManager",
+      "responsibilities": [
+        {
+          "description": "Manage medication prescriptions with comprehensive drug interaction checks",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "DiagnosisEngine" },
+            { "name": "UserAccessControl" }
+          ]
+        },
+        {
+          "description": "Ensure medication safety and compliance with medical guidelines",
+          "collaborators": [
+            { "name": "BillingSystem" },
+            { "name": "InsuranceValidator" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InsuranceValidator",
+      "responsibilities": [
+        {
+          "description": "Process and validate patient insurance information and coverage",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "BillingSystem" },
+            { "name": "UserAccessControl" }
+          ]
+        },
+        {
+          "description": "Manage insurance claim verification and pre-authorization processes",
+          "collaborators": [
+            { "name": "PrescriptionManager" },
+            { "name": "MedicalProcedureTracker" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DiagnosisEngine",
+      "responsibilities": [
+        {
+          "description": "Support clinical decision-making through advanced symptom analysis",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "MedicalProcedureTracker" },
+            { "name": "PrescriptionManager" }
+          ]
+        },
+        {
+          "description": "Provide diagnostic suggestions and risk assessment tools",
+          "collaborators": [
+            { "name": "UserAccessControl" },
+            { "name": "AppointmentScheduler" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AppointmentScheduler",
+      "responsibilities": [
+        {
+          "description": "Manage patient appointments and clinic availability",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "UserAccessControl" },
+            { "name": "DiagnosisEngine" }
+          ]
+        },
+        {
+          "description": "Coordinate scheduling across multiple healthcare professionals",
+          "collaborators": [
+            { "name": "MedicalProcedureTracker" },
+            { "name": "BillingSystem" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BillingSystem",
+      "responsibilities": [
+        {
+          "description": "Handle medical billing and insurance claim processing",
+          "collaborators": [
+            { "name": "InsuranceValidator" },
+            { "name": "PatientRecord" },
+            { "name": "AppointmentScheduler" }
+          ]
+        },
+        {
+          "description": "Manage financial transactions and patient invoicing",
+          "collaborators": [
+            { "name": "PrescriptionManager" },
+            { "name": "MedicalProcedureTracker" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserAccessControl",
+      "responsibilities": [
+        {
+          "description": "Manage healthcare professional authentication and permissions",
+          "collaborators": [
+            { "name": "PatientRecord" },
+            { "name": "DiagnosisEngine" },
+            { "name": "MedicalProcedureTracker" }
+          ]
+        },
+        {
+          "description": "Implement role-based access controls for sensitive medical information",
+          "collaborators": [
+            { "name": "AppointmentScheduler" },
+            { "name": "InsuranceValidator" }
+          ]
+        }
+      ]
+    }
+  ],
+  "prompt": "Telemedicine Integration Module<br>Implement video consultation capabilities<br>Develop secure, HIPAA-compliant communication channels<br>Create virtual waiting room and consultation management system<br>AI-Powered Diagnostic Support System<br>Integrate machine learning for preliminary diagnosis suggestions<br>Develop pattern recognition for complex medical conditions<br>Create risk assessment and early warning algorithms<br>Advanced Patient Portal<br>Develop comprehensive patient-facing mobile and web interfaces<br>Enable self-service appointment booking<br>Provide secure access to personal health records and test results<br>Comprehensive Interoperability Framework<br>Build standardized data exchange protocols<br>Support HL7 FHIR and other healthcare data standards<br>Create seamless integration with external medical systems"
+}

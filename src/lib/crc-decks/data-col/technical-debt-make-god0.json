@@ -1,0 +1,130 @@
+{
+  "cards": [
+    {
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "description": "Manages all business logic",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Tracks user interactions",
+          "collaborators": [
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" }
+          ]
+        },
+        {
+          "description": "Implements database transactions",
+          "collaborators": [
+            { "name": "Database" }
+          ]
+        },
+        {
+          "description": "Manages authentication",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Handles UI events, data validation, and reporting",
+          "collaborators": [
+            { "name": "Database" },
+            { "name": "UserModule" },
+            { "name": "ReportingEngine" },
+            { "name": "IntegrationBroker" }
+          ]
+        },
+        {
+          "description": "Generates predictive analytics and makes recomendations",
+          "collaborators": [
+            { "name": "ReportingEngine" },
+            { "name": "Database" },
+            { "name": "IntegrationBroker" },
+            { "name": "OpenAPI" },
+            { "name": "AWSCloudWatch" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Database",
+      "responsibilities": [
+        {
+          "description": "Performs all data persistence and transformation, including complex business logic, caching, and cross-domain operations",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "IntegrationBroker" },
+            { "name": "AWSFirebaseGateway" }
+          ]
+        },
+        {
+          "description": "Manages admin authentication, data encryption, and external service integrations",
+          "collaborators": [
+            { "name": "IntegrationBroker" },
+            { "name": "IAMUserAuth" },
+            { "name": "RSAModule" },
+            { "name": "AWSCloudWatch" },
+            { "name": "AWSFirebaseGateway" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "Database" }
+          ]
+        },
+        {
+          "description": "Manages email notifications, SMS alerts, push notifications, and user engagement tracking",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "IntegrationBroker" },
+            { "name": "AWSMessagingService" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "Database" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntegrationBroker",
+      "responsibilities": [
+        {
+          "description": "Generates live instances of external services from SystemController keys",
+          "collaborators": [
+            { "name": "SystemController" },
+            { "name": "IAMUserAuth" },
+            { "name": "RSAModule" },
+            { "name": "OpenAPI" },
+            { "name": "AWSMessagingService" },
+            { "name": "AWSFirebaseGateway" }
+          ]
+        }
+      ]
+    }
+  ],
+  "prompt": "Redelegate responsibilities so that SystemController is a true god class. Do not meaningfully edit any responsibilities besides moving them between classes.<br>- IntegrationBroker should be folded into SystemController<br>- SystemController should proxy and manage all external services<br>- Database should only collaborate with SystemController<br>- UserModule and ReportGenerator should only collaborate with Database for reads and SystemController for all other business logic"
+}

@@ -1,0 +1,241 @@
+{
+  "cards": [
+    {
+      "id": 571,
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "id": 564,
+          "description": "Handles UI events and data validation",
+          "collaborators": [
+            {
+              "id": 560,
+              "name": "Database"
+            },
+            {
+              "id": 561,
+              "name": "UserModule"
+            },
+            {
+              "id": 562,
+              "name": "ReportingEngine"
+            },
+            {
+              "id": 563,
+              "name": "IntegrationBroker"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 582,
+      "name": "Database",
+      "responsibilities": [
+        {
+          "id": 575,
+          "description": "Performs all data persistence and transformation, including complex business logic, caching, and cross-domain operations",
+          "collaborators": [
+            {
+              "id": 572,
+              "name": "SystemController"
+            },
+            {
+              "id": 573,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 574,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        },
+        {
+          "id": 555,
+          "description": "Implements database transactions",
+          "collaborators": [
+            {
+              "id": 554,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 581,
+          "description": "Manages data encryption and cross-platform functionality",
+          "collaborators": [
+            {
+              "id": 576,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 578,
+              "name": "RSAModule"
+            },
+            {
+              "id": 580,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 590,
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "id": 585,
+          "description": "Handles user registration, profile management, permissions, and billing",
+          "collaborators": [
+            {
+              "id": 583,
+              "name": "SystemController"
+            },
+            {
+              "id": 584,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 589,
+          "description": "Manages email notifications, SMS alerts, push notifications, and user engagement tracking",
+          "collaborators": [
+            {
+              "id": 586,
+              "name": "SystemController"
+            },
+            {
+              "id": 587,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 588,
+              "name": "AWSMessagingService"
+            }
+          ]
+        },
+        {
+          "id": 559,
+          "description": "Manages authentication",
+          "collaborators": [
+            {
+              "id": 556,
+              "name": "Database"
+            },
+            {
+              "id": 557,
+              "name": "IntegrationBroker"
+            }
+          ]
+        },
+        {
+          "id": 553,
+          "description": "Tracks user interactions",
+          "collaborators": [
+            {
+              "id": 551,
+              "name": "ReportingEngine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 594,
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "id": 593,
+          "description": "Generates data visualization and export",
+          "collaborators": [
+            {
+              "id": 591,
+              "name": "SystemController"
+            },
+            {
+              "id": 592,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 570,
+          "description": "Generates predictive analytics and makes recomendations",
+          "collaborators": [
+            {
+              "id": 565,
+              "name": "Database"
+            },
+            {
+              "id": 567,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 568,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 569,
+              "name": "AWSCloudWatch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 602,
+      "name": "IntegrationBroker",
+      "responsibilities": [
+        {
+          "id": 601,
+          "description": "Generates live instances of external services from SystemController keys",
+          "collaborators": [
+            {
+              "id": 595,
+              "name": "SystemController"
+            },
+            {
+              "id": 596,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 597,
+              "name": "RSAModule"
+            },
+            {
+              "id": 598,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 599,
+              "name": "AWSMessagingService"
+            },
+            {
+              "id": 600,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        },
+        {
+          "description": "Manages API keys and external service integrations",
+          "collaborators": [
+            {
+              "name": "IAMUserAuth"
+            },
+            {
+              "name": "RSAModule"
+            },
+            {
+              "name": "AWSCloudWatch"
+            },
+            {
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

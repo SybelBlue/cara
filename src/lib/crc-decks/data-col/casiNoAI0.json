@@ -1,0 +1,275 @@
+{
+  "cards": [
+    {
+      "name": "PlayerProfile",
+      "responsibilities": [
+        {
+          "description": "Store and manage user account information",
+          "collaborators": [
+            {"name": "AnalyticsEngine"},
+            {"name": "ChipTransaction"}
+          ]
+        },
+        {
+          "description": "Track player statistics and achievements",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "TournamentOrganizer"}
+          ]
+        },
+        {
+          "description": "Handle player authentication and authorization",
+          "collaborators": [
+            {"name": "NetworkConnectionHandler"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HandEvaluator",
+      "responsibilities": [
+        {
+          "description": "Calculate and rank poker hands",
+          "collaborators": [
+            {"name": "RuleEngine"},
+            {"name": "TableManager"}
+          ]
+        },
+        {
+          "description": "Determine winners in different poker variants",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "AIPlayerStrategy"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ChipTransaction",
+      "responsibilities": [
+        {
+          "description": "Implement secure payment and balance tracking",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "TournamentOrganizer"}
+          ]
+        },
+        {
+          "description": "Manage virtual chip transactions",
+          "collaborators": [
+            {"name": "PlayerProfile"},
+            {"name": "NetworkConnectionHandler"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RuleEngine",
+      "responsibilities": [
+        {
+          "description": "Enforce poker game rules across variants",
+          "collaborators": [
+            {"name": "TableManager"},
+            {"name": "GameManager"},
+            {"name": "HandEvaluator"}
+          ]
+        },
+        {
+          "description": "Validate player actions and game progression",
+          "collaborators": [
+            {"name": "TableManager"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "NetworkConnectionHandler",
+      "responsibilities": [
+        {
+          "description": "Manage real-time multiplayer synchronization",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "PlayerProfile"},
+            {"name": "ChipTransaction"}
+          ]
+        },
+        {
+          "description": "Handle cross-platform connection and authentication",
+          "collaborators": [
+            {"name": "RuleEngine"},
+            {"name": "PlayerProfile"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TournamentOrganizer",
+      "responsibilities": [
+        {
+          "description": "Create and manage tournament structures",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "PlayerProfile"},
+            {"name": "ChipTransaction"}
+          ]
+        },
+        {
+          "description": "Maintain tournament leaderboards and rankings",
+          "collaborators": [
+            {"name": "AnalyticsEngine"},
+            {"name": "PlayerProfile"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AnalyticsEngine",
+      "responsibilities": [
+        {
+          "description": "Generate player performance insights",
+          "collaborators": [
+            {"name": "PlayerProfile"},
+            {"name": "TournamentOrganizer"}
+          ]
+        },
+        {
+          "description": "Provide machine learning-based recommendations",
+          "collaborators": [
+            {"name": "AIPlayerStrategy"},
+            {"name": "PlayerProfile"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BasePlayer",
+      "responsibilities": [
+        {
+          "description": "Define common player attributes and methods",
+          "collaborators": [
+            {"name": "PlayerProfile"},
+            {"name": "TableManager"},
+            {"name": "ChipTransaction"}
+          ]
+        },
+        {
+          "description": "Provide interface for player actions and game interactions",
+          "collaborators": [
+            {"name": "RuleEngine"},
+            {"name": "HandEvaluator"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HumanPlayer",
+      "responsibilities": [
+        {
+          "description": "Implement user-driven player interactions",
+          "collaborators": [
+            {"name": "BasePlayer"},
+            {"name": "NetworkConnectionHandler"},
+            {"name": "TableManager"}
+          ]
+        },
+        {
+          "description": "Handle direct user input and game controls",
+          "collaborators": [
+            {"name": "RuleEngine"},
+            {"name": "PlayerProfile"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AIPlayer",
+      "responsibilities": [
+        {
+          "description": "Implement adaptive decision-making algorithms",
+          "collaborators": [
+            {"name": "BasePlayer"},
+            {"name": "AIPlayerStrategy"},
+            {"name": "HandEvaluator"}
+          ]
+        },
+        {
+          "description": "Generate intelligent game actions and responses",
+          "collaborators": [
+            {"name": "RuleEngine"},
+            {"name": "AnalyticsEngine"},
+            {"name": "TableManager"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GameManager",
+      "responsibilities": [
+        {
+          "description": "Coordinate overall game session lifecycle",
+          "collaborators": [
+            {"name": "TableManager"},
+            {"name": "BasePlayer"},
+            {"name": "RuleEngine"}
+          ]
+        },
+        {
+          "description": "Manage game state transitions",
+          "collaborators": [
+            {"name": "NetworkConnectionHandler"},
+            {"name": "RuleEngine"}
+          ]
+        },
+        {
+          "description": "Orchestrate tournament and match configurations",
+          "collaborators": [
+            {"name": "TournamentOrganizer"},
+            {"name": "ChipTransaction"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TableManager",
+      "responsibilities": [
+        {
+          "description": "Configure and manage individual poker table states",
+          "collaborators": [
+            {"name": "GameManager"},
+            {"name": "RuleEngine"},
+            {"name": "BasePlayer"},
+            {"name": "HandEvaluator"}
+          ]
+        },
+        {
+          "description": "Manage player seating and turn order",
+          "collaborators": [
+            {"name": "BasePlayer"},
+            {"name": "NetworkConnectionHandler"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AIPlayerStrategy",
+      "responsibilities": [
+        {
+          "description": "Deploy custom AI decision-making algorithms",
+          "collaborators": [
+            {"name": "AIPlayer"},
+            {"name": "RuleEngine"},
+            {"name": "HandEvaluator"}
+          ]
+        },
+        {
+          "description": "Implement machine learning-based play strategies",
+          "collaborators": [
+            {"name": "AnalyticsEngine"},
+            {"name": "TableManager"}
+          ]
+        }
+      ]
+    }
+  ],
+  "prompt": "New regulations require that online monetary gambling cannot pit non-human decision-makers against humans. To prevent cheating, even recommender systems on play-by-play decisions are now banned. Make the following removals leaving no trace, but while causing minimal changes to function and structure of the app.<br>- AIPlayer and AIPlayerStrategy should not exist<br>- AnalyticsEngine should not provide recommendations"
+}

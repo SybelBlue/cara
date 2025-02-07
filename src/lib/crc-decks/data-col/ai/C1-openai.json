@@ -1,0 +1,496 @@
+{
+  "cards": [
+    {
+      "id": 880,
+      "name": "PlayerProfile",
+      "responsibilities": [
+        {
+          "id": 874,
+          "description": "Store and manage user account information",
+          "collaborators": [
+            {
+              "id": 872,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 873,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 877,
+          "description": "Track player statistics and achievements",
+          "collaborators": [
+            {
+              "id": 875,
+              "name": "GameManager"
+            },
+            {
+              "id": 876,
+              "name": "TournamentOrganizer"
+            }
+          ]
+        },
+        {
+          "id": 879,
+          "description": "Handle player authentication and authorization",
+          "collaborators": [
+            {
+              "id": 878,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 887,
+      "name": "HandEvaluator",
+      "responsibilities": [
+        {
+          "id": 883,
+          "description": "Calculate and rank poker hands",
+          "collaborators": [
+            {
+              "id": 881,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 882,
+              "name": "TableManager"
+            }
+          ]
+        },
+        {
+          "id": 886,
+          "description": "Determine winners in different poker variants",
+          "collaborators": [
+            {
+              "id": 884,
+              "name": "GameManager"
+            },
+            {
+              "id": 885,
+              "name": "AIPlayerStrategy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 894,
+      "name": "ChipTransaction",
+      "responsibilities": [
+        {
+          "id": 890,
+          "description": "Track player balance",
+          "collaborators": [
+            {
+              "id": 891,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 892,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 901,
+      "name": "RuleEngine",
+      "responsibilities": [
+        {
+          "id": 898,
+          "description": "Enforce poker game rules across variants",
+          "collaborators": [
+            {
+              "id": 895,
+              "name": "TableManager"
+            },
+            {
+              "id": 896,
+              "name": "GameManager"
+            },
+            {
+              "id": 897,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 900,
+          "description": "Validate player actions and game progression",
+          "collaborators": [
+            {
+              "id": 899,
+              "name": "TableManager"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 909,
+      "name": "NetworkConnectionHandler",
+      "responsibilities": [
+        {
+          "id": 905,
+          "description": "Manage real-time multiplayer synchronization",
+          "collaborators": [
+            {
+              "id": 902,
+              "name": "GameManager"
+            },
+            {
+              "id": 903,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 904,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 908,
+          "description": "Handle cross-platform connection and authentication",
+          "collaborators": [
+            {
+              "id": 906,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 907,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 917,
+      "name": "TournamentOrganizer",
+      "responsibilities": [
+        {
+          "id": 913,
+          "description": "Create and manage tournament structures",
+          "collaborators": [
+            {
+              "id": 910,
+              "name": "GameManager"
+            },
+            {
+              "id": 911,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 912,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 916,
+          "description": "Maintain tournament leaderboards and rankings",
+          "collaborators": [
+            {
+              "id": 914,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 915,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 924,
+      "name": "AnalyticsEngine",
+      "responsibilities": [
+        {
+          "id": 920,
+          "description": "Generate player performance insights",
+          "collaborators": [
+            {
+              "id": 918,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 919,
+              "name": "TournamentOrganizer"
+            }
+          ]
+        },
+        {
+          "id": 923,
+          "description": "Provide machine learning-based recommendations",
+          "collaborators": [
+            {
+              "id": 921,
+              "name": "AIPlayerStrategy"
+            },
+            {
+              "id": 922,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 932,
+      "name": "BasePlayer",
+      "responsibilities": [
+        {
+          "id": 928,
+          "description": "Define common player attributes and methods",
+          "collaborators": [
+            {
+              "id": 925,
+              "name": "PlayerProfile"
+            },
+            {
+              "id": 926,
+              "name": "TableManager"
+            },
+            {
+              "id": 927,
+              "name": "ChipTransaction"
+            }
+          ]
+        },
+        {
+          "id": 931,
+          "description": "Provide interface for player actions and game interactions",
+          "collaborators": [
+            {
+              "id": 929,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 930,
+              "name": "HandEvaluator"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 940,
+      "name": "HumanPlayer",
+      "responsibilities": [
+        {
+          "id": 936,
+          "description": "Implement user-driven player interactions",
+          "collaborators": [
+            {
+              "id": 933,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 934,
+              "name": "NetworkConnectionHandler"
+            },
+            {
+              "id": 935,
+              "name": "TableManager"
+            }
+          ]
+        },
+        {
+          "id": 939,
+          "description": "Handle direct user input and game controls",
+          "collaborators": [
+            {
+              "id": 937,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 938,
+              "name": "PlayerProfile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 949,
+      "name": "AIPlayer",
+      "responsibilities": [
+        {
+          "id": 944,
+          "description": "Implement adaptive decision-making algorithms",
+          "collaborators": [
+            {
+              "id": 941,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 942,
+              "name": "AIPlayerStrategy"
+            },
+            {
+              "id": 943,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 948,
+          "description": "Generate intelligent game actions and responses",
+          "collaborators": [
+            {
+              "id": 945,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 946,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 947,
+              "name": "TableManager"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 960,
+      "name": "GameManager",
+      "responsibilities": [
+        {
+          "id": 953,
+          "description": "Coordinate overall game session lifecycle",
+          "collaborators": [
+            {
+              "id": 950,
+              "name": "TableManager"
+            },
+            {
+              "id": 951,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 952,
+              "name": "RuleEngine"
+            }
+          ]
+        },
+        {
+          "id": 956,
+          "description": "Manage game state transitions",
+          "collaborators": [
+            {
+              "id": 954,
+              "name": "NetworkConnectionHandler"
+            },
+            {
+              "id": 955,
+              "name": "RuleEngine"
+            }
+          ]
+        },
+        {
+          "id": 959,
+          "description": "Orchestrate tournament and match configurations",
+          "collaborators": [
+            {
+              "id": 957,
+              "name": "TournamentOrganizer"
+            },
+            {
+              "id": 958,
+              "name": "ChipTransaction"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 969,
+      "name": "TableManager",
+      "responsibilities": [
+        {
+          "id": 965,
+          "description": "Configure and manage individual poker table states",
+          "collaborators": [
+            {
+              "id": 961,
+              "name": "GameManager"
+            },
+            {
+              "id": 962,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 963,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 964,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 968,
+          "description": "Manage player seating and turn order",
+          "collaborators": [
+            {
+              "id": 966,
+              "name": "BasePlayer"
+            },
+            {
+              "id": 967,
+              "name": "NetworkConnectionHandler"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 977,
+      "name": "AIPlayerStrategy",
+      "responsibilities": [
+        {
+          "id": 973,
+          "description": "Deploy custom AI decision-making algorithms",
+          "collaborators": [
+            {
+              "id": 970,
+              "name": "AIPlayer"
+            },
+            {
+              "id": 971,
+              "name": "RuleEngine"
+            },
+            {
+              "id": 972,
+              "name": "HandEvaluator"
+            }
+          ]
+        },
+        {
+          "id": 976,
+          "description": "Implement machine learning-based play strategies",
+          "collaborators": [
+            {
+              "id": 974,
+              "name": "AnalyticsEngine"
+            },
+            {
+              "id": 975,
+              "name": "TableManager"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

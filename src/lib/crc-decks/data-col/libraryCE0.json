@@ -1,0 +1,120 @@
+{
+  "cards": [
+    {
+      "name": "Book",
+      "responsibilities": [
+        {
+          "description": "Store book information (title, author, ISBN)",
+          "collaborators": [{ "name": "Library" }]
+        },
+        {
+          "description": "Track availability status",
+          "collaborators": [{ "name": "Loan" }]
+        },
+        {
+          "description": "Maintain loan history",
+          "collaborators": [{ "name": "Member" }]
+        }
+      ]
+    },
+    {
+      "name": "Member",
+      "responsibilities": [
+        {
+          "description": "Store member information",
+          "collaborators": [{ "name": "Library" }]
+        },
+        {
+          "description": "Track current loans",
+          "collaborators": [{ "name": "Loan" }]
+        },
+        {
+          "description": "Manage loan history",
+          "collaborators": [{ "name": "Book" }]
+        }
+      ]
+    },
+    {
+      "name": "Library",
+      "responsibilities": [
+        {
+          "description": "Manage book inventory",
+          "collaborators": [{ "name": "Book" }]
+        },
+        {
+          "description": "Handle member registrations",
+          "collaborators": [{ "name": "Member" }]
+        },
+        {
+          "description": "Process loans and returns",
+          "collaborators": [{ "name": "Loan" }, { "name": "Librarian" }]
+        }
+      ]
+    },
+    {
+      "name": "Loan",
+      "responsibilities": [
+        {
+          "description": "Track loan details (book, member, dates)",
+          "collaborators": [{ "name": "Book" }, { "name": "Member" }]
+        },
+        { "description": "Calculate due dates and fines", "collaborators": [] },
+        {
+          "description": "Handle renewals",
+          "collaborators": [{ "name": "Library" }, { "name": "Book" }]
+        }
+      ]
+    },
+    {
+      "name": "Librarian",
+      "responsibilities": [
+        {
+          "description": "Process loan and return transactions",
+          "collaborators": [{ "name": "Library" }]
+        },
+        { "description": "Manage member accounts", "collaborators": [{ "name": "Member" }] },
+        {
+          "description": "Handle overdue notices and fines",
+          "collaborators": [{ "name": "Member" }, { "name": "Loan" }]
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "responsibilities": [
+        {
+          "description": "Maintain searchable book database",
+          "collaborators": [{ "name": "Library" }]
+        },
+        { "description": "Provide search functionality", "collaborators": [{ "name": "Library" }] },
+        { "description": "Update book information", "collaborators": [{ "name": "Book" }] }
+      ]
+    },
+    {
+      "name": "Reservation",
+      "responsibilities": [
+        { "description": "Handle book reservations", "collaborators": [{ "name": "Book" }] },
+        { "description": "Manage reservation queue", "collaborators": [{ "name": "Member" }] },
+        {
+          "description": "Notify members when reserved books are available",
+          "collaborators": [{ "name": "Library" }]
+        }
+      ]
+    },
+    {
+      "name": "Report",
+      "responsibilities": [
+        {
+          "description": "Generate usage statistics",
+          "collaborators": [{ "name": "Library" }, { "name": "Book" }]
+        },
+        { "description": "Create overdue reports", "collaborators": [{ "name": "Loan" }] },
+        {
+          "description": "Produce member activity summaries",
+          "collaborators": [{ "name": "Member" }]
+        }
+      ]
+    }
+  ],
+  "prompt": "Create social features for public book reservations, discussions, and reviews, as well as a follower/following system for members.<br>- Member should manage its own followers and following<br>- Library should have a public message board, as well as the ability to moderate public reviews and messages<br>- Books should know their ratings and be able to display ratings and messages that mention them<br>- Reservation should be able to be gifted between friends<br>- Report should be able to track ratings and moderation statistics for a Library"
+}

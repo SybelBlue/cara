@@ -1,0 +1,198 @@
+{
+  "cards": [
+    {
+      "id": 571,
+      "name": "SystemController",
+      "responsibilities": [
+        {
+          "id": 550,
+          "description": "Handles UI events, data validation, and forwarding to appropriate modules",
+          "collaborators": [
+            {
+              "id": 560,
+              "name": "Database"
+            },
+            {
+              "id": 561,
+              "name": "UserModule"
+            },
+            {
+              "id": 594,
+              "name": "ReportingEngine"
+            },
+            {
+              "id": 602,
+              "name": "IntegrationBroker"
+            }
+          ]
+        },
+        {
+          "id": 553,
+          "description": "Forwards tracking of user interactions to UserModule",
+          "collaborators": [
+            {
+              "id": 551,
+              "name": "UserModule"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 582,
+      "name": "Database",
+      "responsibilities": [
+        {
+          "id": 575,
+          "description": "Handles data persistence, transformation, encryption, and cross-platform functionality",
+          "collaborators": [
+            {
+              "id": 572,
+              "name": "SystemController"
+            },
+            {
+              "id": 573,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 574,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        },
+        {
+          "id": 581,
+          "description": "Manages admin authentication and external service integrations",
+          "collaborators": [
+            {
+              "id": 576,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 577,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 578,
+              "name": "RSAModule"
+            },
+            {
+              "id": 579,
+              "name": "AWSCloudWatch"
+            },
+            {
+              "id": 580,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 590,
+      "name": "UserModule",
+      "responsibilities": [
+        {
+          "id": 585,
+          "description": "Handles user registration, authentication, profile management, permissions, and billing",
+          "collaborators": [
+            {
+              "id": 583,
+              "name": "SystemController"
+            },
+            {
+              "id": 584,
+              "name": "Database"
+            }
+          ]
+        },
+        {
+          "id": 589,
+          "description": "Manages email notifications, SMS alerts, push notifications, and user engagement tracking",
+          "collaborators": [
+            {
+              "id": 586,
+              "name": "SystemController"
+            },
+            {
+              "id": 587,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 588,
+              "name": "AWSMessagingService"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 594,
+      "name": "ReportingEngine",
+      "responsibilities": [
+        {
+          "id": 593,
+          "description": "Generates data visualization, export, analytics, and recommendations",
+          "collaborators": [
+            {
+              "id": 591,
+              "name": "SystemController"
+            },
+            {
+              "id": 592,
+              "name": "Database"
+            },
+            {
+              "id": 566,
+              "name": "AWSCloudWatch"
+            },
+            {
+              "id": 567,
+              "name": "IntegrationBroker"
+            },
+            {
+              "id": 568,
+              "name": "OpenAPI"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 602,
+      "name": "IntegrationBroker",
+      "responsibilities": [
+        {
+          "id": 601,
+          "description": "Proxies and manages API keys for all external services",
+          "collaborators": [
+            {
+              "id": 595,
+              "name": "SystemController"
+            },
+            {
+              "id": 596,
+              "name": "IAMUserAuth"
+            },
+            {
+              "id": 597,
+              "name": "RSAModule"
+            },
+            {
+              "id": 598,
+              "name": "OpenAPI"
+            },
+            {
+              "id": 599,
+              "name": "AWSMessagingService"
+            },
+            {
+              "id": 600,
+              "name": "AWSFirebaseGateway"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

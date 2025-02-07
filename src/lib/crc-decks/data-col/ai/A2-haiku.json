@@ -1,0 +1,405 @@
+{
+  "cards": [
+    {
+      "id": 492,
+      "name": "Book",
+      "responsibilities": [
+        {
+          "id": 487,
+          "description": "Store book information (title, author, ISBN)",
+          "collaborators": [
+            {
+              "id": 486,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 489,
+          "description": "Track availability status",
+          "collaborators": [
+            {
+              "id": 488,
+              "name": "Loan"
+            }
+          ]
+        },
+        {
+          "id": 491,
+          "description": "Maintain loan history",
+          "collaborators": [
+            {
+              "id": 490,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 546,
+          "description": "Manage book ratings and reviews",
+          "collaborators": [
+            {
+              "id": 547,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 548,
+          "description": "Display public messages and mentions",
+          "collaborators": [
+            {
+              "id": 549,
+              "name": "Library"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 499,
+      "name": "Member",
+      "responsibilities": [
+        {
+          "id": 494,
+          "description": "Store member information",
+          "collaborators": [
+            {
+              "id": 493,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 496,
+          "description": "Track current loans",
+          "collaborators": [
+            {
+              "id": 495,
+              "name": "Loan"
+            }
+          ]
+        },
+        {
+          "id": 498,
+          "description": "Manage loan history",
+          "collaborators": [
+            {
+              "id": 497,
+              "name": "Book"
+            }
+          ]
+        },
+        {
+          "id": 550,
+          "description": "Manage followers and following list",
+          "collaborators": [
+            {
+              "id": 551,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 552,
+          "description": "Create and manage book reviews",
+          "collaborators": [
+            {
+              "id": 553,
+              "name": "Book"
+            }
+          ]
+        },
+        {
+          "id": 554,
+          "description": "Gift reservations to friends",
+          "collaborators": [
+            {
+              "id": 555,
+              "name": "Reservation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 507,
+      "name": "Library",
+      "responsibilities": [
+        {
+          "id": 501,
+          "description": "Manage book inventory",
+          "collaborators": [
+            {
+              "id": 500,
+              "name": "Book"
+            }
+          ]
+        },
+        {
+          "id": 503,
+          "description": "Handle member registrations",
+          "collaborators": [
+            {
+              "id": 502,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 506,
+          "description": "Process loans and returns",
+          "collaborators": [
+            {
+              "id": 504,
+              "name": "Loan"
+            },
+            {
+              "id": 505,
+              "name": "Librarian"
+            }
+          ]
+        },
+        {
+          "id": 556,
+          "description": "Maintain public message board",
+          "collaborators": [
+            {
+              "id": 557,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 558,
+          "description": "Moderate public reviews and messages",
+          "collaborators": [
+            {
+              "id": 559,
+              "name": "Book"
+            },
+            {
+              "id": 560,
+              "name": "Member"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 515,
+      "name": "Loan",
+      "responsibilities": [
+        {
+          "id": 510,
+          "description": "Track loan details (book, member, dates)",
+          "collaborators": [
+            {
+              "id": 508,
+              "name": "Book"
+            },
+            {
+              "id": 509,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 511,
+          "description": "Calculate due dates and fines",
+          "collaborators": []
+        },
+        {
+          "id": 514,
+          "description": "Handle renewals",
+          "collaborators": [
+            {
+              "id": 512,
+              "name": "Library"
+            },
+            {
+              "id": 513,
+              "name": "Book"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 523,
+      "name": "Librarian",
+      "responsibilities": [
+        {
+          "id": 517,
+          "description": "Process loan and return transactions",
+          "collaborators": [
+            {
+              "id": 516,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 519,
+          "description": "Manage member accounts",
+          "collaborators": [
+            {
+              "id": 518,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 522,
+          "description": "Handle overdue notices and fines",
+          "collaborators": [
+            {
+              "id": 520,
+              "name": "Member"
+            },
+            {
+              "id": 521,
+              "name": "Loan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 530,
+      "name": "Catalog",
+      "responsibilities": [
+        {
+          "id": 525,
+          "description": "Maintain searchable book database",
+          "collaborators": [
+            {
+              "id": 524,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 527,
+          "description": "Provide search functionality",
+          "collaborators": [
+            {
+              "id": 526,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 529,
+          "description": "Update book information",
+          "collaborators": [
+            {
+              "id": 528,
+              "name": "Book"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 537,
+      "name": "Reservation",
+      "responsibilities": [
+        {
+          "id": 532,
+          "description": "Handle book reservations",
+          "collaborators": [
+            {
+              "id": 531,
+              "name": "Book"
+            }
+          ]
+        },
+        {
+          "id": 534,
+          "description": "Manage reservation queue",
+          "collaborators": [
+            {
+              "id": 533,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 536,
+          "description": "Notify members when reserved books are available",
+          "collaborators": [
+            {
+              "id": 535,
+              "name": "Library"
+            }
+          ]
+        },
+        {
+          "id": 561,
+          "description": "Support reservation gifting between members",
+          "collaborators": [
+            {
+              "id": 562,
+              "name": "Member"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 545,
+      "name": "Report",
+      "responsibilities": [
+        {
+          "id": 540,
+          "description": "Generate usage statistics",
+          "collaborators": [
+            {
+              "id": 538,
+              "name": "Library"
+            },
+            {
+              "id": 539,
+              "name": "Book"
+            }
+          ]
+        },
+        {
+          "id": 542,
+          "description": "Create overdue reports",
+          "collaborators": [
+            {
+              "id": 541,
+              "name": "Loan"
+            }
+          ]
+        },
+        {
+          "id": 544,
+          "description": "Produce member activity summaries",
+          "collaborators": [
+            {
+              "id": 543,
+              "name": "Member"
+            }
+          ]
+        },
+        {
+          "id": 563,
+          "description": "Track ratings and moderation statistics",
+          "collaborators": [
+            {
+              "id": 564,
+              "name": "Library"
+            },
+            {
+              "id": 565,
+              "name": "Book"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "cards": [
+    {
+      "name": "EmissionsCalculator",
+      "responsibilities": [
+        {
+          "description": "Compute comprehensive carbon footprint and greenhouse gas emissions",
+          "collaborators": [
+            { "name": "SustainabilityReportGenerator" },
+            { "name": "DataIntegrationService" },
+            { "name": "ComplianceValidator" }
+          ]
+        },
+        {
+          "description": "Provide detailed emission calculations across different organizational scopes",
+          "collaborators": [
+            { "name": "SupplyChainAnalyzer" },
+            { "name": "VisualizationEngine" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ResourceConsumptionTracker",
+      "responsibilities": [
+        {
+          "description": "Monitor and analyze energy, water, and material usage across organizational units",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "SustainabilityReportGenerator" },
+            { "name": "OrganizationalProfileManager" }
+          ]
+        },
+        {
+          "description": "Generate granular consumption insights and efficiency recommendations",
+          "collaborators": [
+            { "name": "VisualizationEngine" },
+            { "name": "ComplianceValidator" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SustainabilityReportGenerator",
+      "responsibilities": [
+        {
+          "description": "Create comprehensive and interactive sustainability reports",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "ResourceConsumptionTracker" },
+            { "name": "ComplianceValidator" }
+          ]
+        },
+        {
+          "description": "Support multiple reporting standards and jurisdictional requirements",
+          "collaborators": [
+            { "name": "VisualizationEngine" },
+            { "name": "OrganizationalProfileManager" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ComplianceValidator",
+      "responsibilities": [
+        {
+          "description": "Check and validate compliance with international environmental regulations",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "ResourceConsumptionTracker" },
+            { "name": "SustainabilityReportGenerator" }
+          ]
+        },
+        {
+          "description": "Track and alert on potential regulatory risks and changes",
+          "collaborators": [
+            { "name": "OrganizationalProfileManager" },
+            { "name": "DataIntegrationService" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SupplyChainAnalyzer",
+      "responsibilities": [
+        {
+          "description": "Evaluate environmental impact of supply chain operations and procurement",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "ResourceConsumptionTracker" },
+            { "name": "SustainabilityReportGenerator" }
+          ]
+        },
+        {
+          "description": "Provide recommendations for sustainable supply chain optimization",
+          "collaborators": [
+            { "name": "DataIntegrationService" },
+            { "name": "VisualizationEngine" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DataIntegrationService",
+      "responsibilities": [
+        {
+          "description": "Aggregate and normalize data from multiple corporate and external systems",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "ResourceConsumptionTracker" },
+            { "name": "ComplianceValidator" }
+          ]
+        },
+        {
+          "description": "Ensure data quality, consistency, and real-time synchronization",
+          "collaborators": [
+            { "name": "SupplyChainAnalyzer" },
+            { "name": "VisualizationEngine" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VisualizationEngine",
+      "responsibilities": [
+        {
+          "description": "Create interactive and customizable sustainability dashboards",
+          "collaborators": [
+            { "name": "EmissionsCalculator" },
+            { "name": "ResourceConsumptionTracker" },
+            { "name": "SustainabilityReportGenerator" }
+          ]
+        },
+        {
+          "description": "Support advanced data visualization and comparative analysis",
+          "collaborators": [
+            { "name": "DataIntegrationService" },
+            { "name": "SupplyChainAnalyzer" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrganizationalProfileManager",
+      "responsibilities": [
+        {
+          "description": "Manage comprehensive profiles for companies and their subsidiaries",
+          "collaborators": [
+            { "name": "ComplianceValidator" },
+            { "name": "SustainabilityReportGenerator" },
+            { "name": "ResourceConsumptionTracker" }
+          ]
+        },
+        {
+          "description": "Maintain hierarchical and contextual information for sustainability tracking",
+          "collaborators": [
+            { "name": "DataIntegrationService" },
+            { "name": "VisualizationEngine" }
+          ]
+        }
+      ]
+    }
+  ]
+}
