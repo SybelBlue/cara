@@ -1,19 +1,21 @@
 <script module lang="ts">
-  import type { Deck } from '$lib/types';
+  import type { Deck, SimpleDeck } from '$lib/types';
 
   export interface Props {
     cards: Deck;
     animateIn?: boolean;
     selectCard?: (c: Deck[number]) => void;
+    addCard?: (c: SimpleDeck[number]) => void;
   }
 </script>
 
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import { withId } from '$lib/decks';
   import { debug, highlightedClass } from '$lib/stores';
   import Card from './Card.svelte';
 
-  let { cards = $bindable(), animateIn = !$debug, selectCard }: Props = $props();
+  let { cards = $bindable(), animateIn = !$debug, selectCard, addCard }: Props = $props();
 
   if (animateIn) setTimeout(() => (animateIn = false), 200);
 
@@ -28,6 +30,16 @@
       console.error('Did not find card of name', name);
     }
   };
+
+  let newClassCounter = 0;
+  const addNewCard = () => {
+    const card = withId({
+      name: 'NewClass' + newClassCounter++,
+      responsibilities: [],
+    });
+    addCard?.(card);
+    selectCard?.(card);
+  };
 </script>
 
 <div id="backdrop">
@@ -40,6 +52,18 @@
         {/if}
       </li>
     {/each}
+    <li>
+      <div
+        onfocus={addNewCard}
+        class="h-full btn btn-ghost tw-grow card dark:card-bordered shadow-xl"
+        role="gridcell"
+        tabindex=0
+        >
+        <div class="card-body">
+          <div class="btn btn-circle btn-primary btn-outline my-auto"> + </div>
+        </div>
+      </div>
+    </li>
   </ul>
 </div>
 
