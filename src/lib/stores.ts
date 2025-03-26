@@ -1,10 +1,13 @@
 import { dev } from '$app/environment';
-import { toStore, writable } from 'svelte/store';
+import { derived, toStore, writable } from 'svelte/store';
 
 import type { SimpleDeck } from '$lib/types';
 
 export const highlightedClass = writable<string | undefined>();
 export const availableClasses = writable<string[]>([]);
+export const aiBackend = writable<string | undefined>();
+export const aiEnabled = derived(aiBackend, Boolean);
+
 /** a store that is only writable if in development, else false */
 export const debug = (() => {
   let _debug = dev;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
+  import { aiEnabled } from '$lib/stores';
   import type { SimpleCard } from '$lib/types';
   import Card from './Card.svelte';
 
@@ -55,32 +56,34 @@
   </div>
   <!-- -->
 
-  <!-- The "propose" area -->
-  <div class="flex justify-center w-5/6 mx-auto">
-    <input
-      class="input input-bordered mr-2 w-3/4"
-      type="text"
-      name="commitMessage"
-      id="commitMessageInput"
-      bind:value={message}
-    />
-    {#if readyForCommit}
+  {#if $aiEnabled}
+    <!-- The "propose" area -->
+    <div class="flex justify-center w-5/6 mx-auto">
       <input
-        class="btn btn-outline min-w-fit w-1/4"
-        type="submit"
-        value="propose"
-        id="submitBtn"
-        onclick={() => {
-          if (card) {
-            propose?.(card, message);
-          } else {
-            console.error('Tried to commit undefined card!');
-          }
-        }}
+        class="input input-bordered mr-2 w-3/4"
+        type="text"
+        name="commitMessage"
+        id="commitMessageInput"
+        bind:value={message}
       />
-    {:else}
-      <div class="loading loading-ring loading-lg mb-auto"></div>
-    {/if}
-  </div>
-  <!-- -->
+      {#if readyForCommit}
+        <input
+          class="btn btn-outline min-w-fit w-1/4"
+          type="submit"
+          value="propose"
+          id="submitBtn"
+          onclick={() => {
+            if (card) {
+              propose?.(card, message);
+            } else {
+              console.error('Tried to commit undefined card!');
+            }
+          }}
+        />
+      {:else}
+        <div class="loading loading-ring loading-lg mb-auto"></div>
+      {/if}
+    </div>
+    <!-- -->
+  {/if}
 </div>
