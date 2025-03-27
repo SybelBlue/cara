@@ -41,11 +41,7 @@
     }
 
     &.no-card {
-      color: var(--fallback-nc, oklch(var(--nc) / 0.8));
-
-      &:hover {
-        color: var(--fallback-nc, oklch(var(--nc) / 0.3));
-      }
+      @apply text-neutral italic hover:text-neutral-content;
     }
   }
 </style>
