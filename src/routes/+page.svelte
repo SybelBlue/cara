@@ -151,7 +151,7 @@
       {/if}
     </div>
     <div class="static split">
-      <CardBoard cards={displayDeck} selectCard={onSelectCard} />
+      <CardBoard allowEditing cards={displayDeck} selectCard={onSelectCard} />
     </div>
   {/if}
 </main>

@@ -80,7 +80,7 @@
               {#if locked}
                 {@render diff(r.description)}
               {:else}
-                <input bind:value={r.description} />
+                <textarea bind:value={r.description}></textarea>
               {/if}
             </td>
             <td class="text-right">
@@ -120,11 +120,11 @@
     font-size: 18pt;
   }
 
-  input {
-    @apply desc h-full w-full;
+  textarea {
+    @apply desc h-full w-full resize-none content-center;
 
     &:hover {
-      @apply text-accent-content bg-accent;
+      @apply text-accent-content bg-accent resize-y;
     }
   }
 </style>

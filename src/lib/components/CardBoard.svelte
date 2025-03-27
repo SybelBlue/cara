@@ -4,6 +4,7 @@
   export interface Props {
     cards: Deck;
     animateIn?: boolean;
+    allowEditing?: boolean;
     selectCard?: (c: Deck[number]) => void;
   }
 </script>
@@ -13,7 +14,7 @@
   import { debug, highlightedClass } from '$lib/stores';
   import Card from './Card.svelte';
 
-  let { cards = $bindable(), animateIn = !$debug, selectCard }: Props = $props();
+  let { cards = $bindable(), animateIn = !$debug, allowEditing, selectCard }: Props = $props();
 
   if (animateIn) setTimeout(() => (animateIn = false), 200);
 
@@ -36,7 +37,7 @@
       {@const surface = cardProps.name === $highlightedClass}
       <li class:surface animate:flip={{ duration: 400 }}>
         {#if !animateIn}
-          <Card locked selectName={propagate} {...cardProps} />
+          <Card locked={!allowEditing} selectName={propagate} {...cardProps} />
         {/if}
       </li>
     {/each}
