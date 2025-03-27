@@ -117,6 +117,14 @@
   const setDisplayDeck = (deck: Deck) => {
     displayDeck = deck;
   };
+
+  import { onMount } from 'svelte';
+  onMount(() => {
+
+    window.dump = () => {
+      console.debug(JSON.stringify((cards)));
+    }
+  })
 </script>
 
 <svelte:head>
