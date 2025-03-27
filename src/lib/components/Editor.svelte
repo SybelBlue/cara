@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
-  import { aiEnabled } from '$lib/stores';
+  import { aiEnabled, availableClasses } from '$lib/stores';
   import type { SimpleCard } from '$lib/types';
   import Card from './Card.svelte';
 
@@ -8,10 +8,11 @@
     card: SimpleCard;
     readyForCommit: boolean;
     propose?: (card: SimpleCard, message: string) => void;
+    rename?: (card: SimpleCard, newName: string) => void;
     close?: () => void;
   }
 
-  let { readyForCommit = $bindable(false), card, propose, close }: Props = $props();
+  let { readyForCommit = $bindable(false), card, propose, close, rename }: Props = $props();
 
   let lastChange = $derived.by(() => {
     card;
@@ -19,6 +20,12 @@
   });
 
   let message: string = $state('');
+
+  const selectName = (name: string) => {
+    if (name !== card.name) return;
+    let s = prompt(`Rename ${name}?`);
+    s && !$availableClasses.includes(s) && rename?.(card, s);
+  };
 </script>
 
 <div
@@ -52,7 +59,7 @@
 
   <!-- The Card area -->
   <div class="mx-auto w-4/5">
-    <Card {...card} />
+    <Card {selectName} {...card} />
   </div>
   <!-- -->
 

@@ -108,6 +108,10 @@
     cards = displayDeck = deckWithIds(deck);
     selectedCard = undefined;
   };
+  const onRename = (card: SimpleCard, name: string) => {
+    cards = JSON.parse(JSON.stringify(cards).replaceAll(card.name, name));
+    selectedCard = cards.find(c => c.name === name);
+  };
   const onSelectCard = (card: Deck[number]) => {
     console.log('Card selected:', card.name);
     readyForCommit = true;
@@ -153,6 +157,7 @@
         <Editor
           card={selectedCard}
           propose={onProposeEdit}
+          rename={onRename}
           close={() => (selectedCard = undefined)}
           {readyForCommit}
         />
