@@ -22,9 +22,10 @@
   let message: string = $state('');
 
   const selectName = (name: string) => {
-    if (name !== card.name) return;
-    let s = prompt(`Rename ${name}?`);
-    s && !$availableClasses.includes(s) && rename?.(card, s);
+    if (name === card.name) {
+      let s = prompt(`Rename ${name}?`);
+      s && !$availableClasses.includes(s) && rename?.(card, s);
+    }
   };
 </script>
 

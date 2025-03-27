@@ -20,10 +20,19 @@
 <script lang="ts">
   import { highlightedClass } from '$lib/stores';
   import ClassLabel from '$lib/components/ClassLabel.svelte';
+  import { onMount } from 'svelte';
 
   let { name = $bindable(), responsibilities = $bindable(), locked, selectName }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
+
+  const respElements: HTMLTextAreaElement[] = [];
+  const resize = (target: HTMLTextAreaElement) => {
+    target.style.height = target.scrollHeight + 'px';
+  }
+  onMount(() => {
+    respElements.forEach(resize);
+  })
 </script>
 
 {#snippet diff(v: DiffText)}
@@ -74,13 +83,21 @@
         </tr>
       </thead>
       <tbody>
-        {#each responsibilities as r}
+        {#each responsibilities as r, idx}
           <tr class="hover break-words">
             <td class="desc">
               {#if locked}
                 {@render diff(r.description)}
               {:else}
-                <textarea bind:value={r.description}></textarea>
+                <textarea
+                  bind:this={respElements[idx]}
+                  bind:value={r.description}
+                  onload={e => resize(e.target as HTMLTextAreaElement)}
+                  onfocus={e => resize(e.currentTarget)}
+                  oninput={e => resize(e.currentTarget)}
+                  >
+                <!-- do not add here, bind:value will overwrite -->
+                </textarea>
               {/if}
             </td>
             <td class="text-right">
