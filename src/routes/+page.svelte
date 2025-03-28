@@ -130,7 +130,7 @@
   onMount(() => {
 
     window.dump = () => {
-      console.debug(JSON.stringify((cards)));
+      console.debug(JSON.stringify({ cards }));
     }
   })
 </script>

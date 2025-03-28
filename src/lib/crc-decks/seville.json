@@ -1,212 +1,148 @@
 {
   "cards": [
     {
-      "id": 1,
+      "name": "Location",
+      "responsibilities": [
+        {
+          "description": "Identified by its address",
+          "collaborators": [ ]
+        },
+        {
+          "description": "Has store hours, product inventory and price",
+          "collaborators": [{ "name": "Item" }]
+        },
+        {
+          "description": "Has a list of all assigned employees",
+          "collaborators": [{ "name": "User" }]
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "responsibilities": [
+        {
+          "description": "Identified by a SKU#",
+          "collaborators": [ ]
+        },
+        {
+          "description": "Knows its display name and physical dimensions",
+          "collaborators": [ ]
+        },
+        {
+          "description": "Has a transit/purchased status linked to a Location",
+          "collaborators": [{ "name": "Location" }]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "responsibilities": [
+        {
+          "description": "Identified by an active email address",
+          "collaborators": [
+          ]
+        },
+        {
+          "description": "Has a linked profile (name, addresses, emails, phone numbers, delivery vehicles)",
+          "collaborators": [
+            { "name": "BuyNLargeGateway" }
+          ]
+        },
+        {
+          "description": "Has an active cart",
+          "collaborators": [
+            { "name": "Item" }
+          ]
+        },
+        {
+          "description": "Manage payment methods and process payments",
+          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "Order" }]
+        },
+        {
+          "description": "Provide delivery instructions and contact information",
+          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "User" }, { "name": "AccessRole" }]
+        },
+        {
+          "description": "Has access roles that determine user privileges",
+          "collaborators": [{ "name": "AccessRole" }]
+        }
+      ]
+    },
+    {
+      "name": "AccessRole",
+      "responsibilities": [
+        {
+          "description": "Identified by a role token ID",
+          "collaborators": [
+          ]
+        },
+        {
+          "description": "Grants read/write privileges based on User profile and Location data",
+          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "User" }, { "name": "Location" }]
+        }
+      ]
+    },
+    {
       "name": "Order",
       "responsibilities": [
         {
-          "id": 1,
-          "description": "Track order status throughout delivery process",
+          "description": "Identified by a TXN#, timestamp, Location and customer",
           "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            },
-            {
-              "id": 2,
-              "name": "Restaurant"
-            },
-            {
-              "id": 3,
-              "name": "DeliveryDriver"
-            }
+            { "name": "Location" },
+            { "name": "User" },
+            { "name": "BuyNLargeGateway" }
           ]
         },
         {
-          "id": 2,
+          "description": "Track order status during delivery to customer",
+          "collaborators": [
+            { "name": "User" },
+            { "name": "Location" },
+            { "name": "Item" }
+          ]
+        },
+        {
           "description": "Calculate total price including items, taxes, and delivery fees",
+          "collaborators": [{ "name": "Item" }]
+        },
+        {
+          "description": "Lists any associated return policies if a return",
+          "collaborators": [{ "name": "ReturnPolicy" }]
+        }
+      ]
+    },
+    {
+      "name": "ReturnPolicy",
+      "responsibilities": [
+        {
+          "description": "Created by a manager for a Location",
           "collaborators": [
-            {
-              "id": 4,
-              "name": "PaymentProcessor"
-            }
+            { "name": "User" },
+            { "name": "Location" }
           ]
         },
         {
-          "id": 3,
-          "description": "Manage order items and validate inventory",
+          "description": "Filters which items may be returned, and at what rate",
           "collaborators": [
-            {
-              "id": 2,
-              "name": "Restaurant"
-            }
+            { "name": "Item" }
           ]
         }
       ]
     },
     {
-      "id": 2,
-      "name": "Customer",
+      "name": "BuyNLargeGateway",
       "responsibilities": [
         {
-          "id": 1,
-          "description": "Create and modify grocery orders",
+          "description": "Process transactions and returns securely",
           "collaborators": [
-            {
-              "id": 1,
-              "name": "Order"
-            },
-            {
-              "id": 2,
-              "name": "Restaurant"
-            }
+            { "name": "User" },
+            { "name": "AccessRole" },
+            { "name": "Order" }
           ]
         },
         {
-          "id": 2,
-          "description": "Manage payment methods and process payments",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "PaymentProcessor"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "description": "Provide delivery instructions and contact information",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "DeliveryDriver"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "DeliveryDriver",
-      "responsibilities": [
-        {
-          "id": 1,
-          "description": "Pick up order from restaurant",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Restaurant"
-            },
-            {
-              "id": 1,
-              "name": "Order"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "description": "Navigate to customer's delivery address",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "description": "Confirm order delivery and update order status",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Order"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Restaurant",
-      "responsibilities": [
-        {
-          "id": 1,
-          "description": "Manage product inventory and availability",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Order"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "description": "Prepare orders for pickup by delivery driver",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "DeliveryDriver"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "name": "PaymentProcessor",
-      "responsibilities": [
-        {
-          "id": 1,
-          "description": "Process payment transactions securely",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            },
-            {
-              "id": 1,
-              "name": "Order"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "description": "Handle refunds and payment disputes",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "name": "Product",
-      "responsibilities": [
-        {
-          "id": 1,
-          "description": "Process payment transactions securely",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            },
-            {
-              "id": 1,
-              "name": "Order"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "description": "Handle refunds and payment disputes",
-          "collaborators": [
-            {
-              "id": 1,
-              "name": "Customer"
-            }
-          ]
+          "description": "Authenticate users and roles",
+          "collaborators": [{ "name": "User" }, { "name": "AccessRole" }]
         }
       ]
     }
