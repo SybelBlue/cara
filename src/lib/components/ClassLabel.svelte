@@ -1,15 +1,16 @@
 <script lang="ts">
   import { highlightedClass, availableClasses } from '$lib/stores';
-  import type { Snippet } from 'svelte';
+  import type { DiffText } from '$lib/types';
+  import Diff from './Diff.svelte';
 
   interface Props {
     name: string;
+    diff?: DiffText;
     disabled?: boolean;
     selectName?: (name: string) => void;
-    children?: Snippet;
   }
 
-  let { name, disabled = false, children, selectName }: Props = $props();
+  let { name, diff, disabled = false, selectName }: Props = $props();
 
   let hasACard = $derived($availableClasses.includes(name));
 </script>
@@ -24,11 +25,7 @@
   role="link"
   tabindex="0"
 >
-  {#if children}
-    {@render children()}
-  {:else}
-    {name}
-  {/if}
+  <Diff diff={diff || name} />
 </span>
 
 <style lang="postcss">

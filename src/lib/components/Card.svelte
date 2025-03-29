@@ -20,48 +20,17 @@
 <script lang="ts">
   import { highlightedClass } from '$lib/stores';
   import ClassLabel from '$lib/components/ClassLabel.svelte';
-  import { onMount } from 'svelte';
+  import Diff from './Diff.svelte';
+  import { isDiff, undiffWords } from '$lib/diff';
 
   let { name = $bindable(), responsibilities = $bindable(), locked, selectName }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
 
-  const respElements: HTMLTextAreaElement[] = [];
   const resize = (target: HTMLTextAreaElement) => {
     target.style.height = target.scrollHeight + 'px';
   }
-  onMount(() => {
-    respElements.forEach(resize);
-  })
 </script>
-
-{#snippet diff(v: DiffText)}
-  {#if Array.isArray(v)}
-    {#each v as chg}
-      {#if chg.added}
-        <span class="text-primary decoration-primary underline">{chg.value}</span>
-      {/if}
-      {#if chg.removed}
-        <span class="text-secondary decoration-secondary line-through">{chg.value}</span>
-      {/if}
-      {#if !chg.added && !chg.removed}
-        <span>{chg.value}</span>
-      {/if}
-    {/each}
-  {:else}
-    <span>{v}</span>
-  {/if}
-{/snippet}
-
-{#snippet diffLabel(v: DiffText)}
-  {#if Array.isArray(v)}
-    <ClassLabel {selectName} name={v.map((c) => (c.removed ? '' : c.value)).join('')}>
-      {@render diff(v)}
-    </ClassLabel>
-  {:else}
-    <ClassLabel {selectName} name={v} />
-  {/if}
-{/snippet}
 
 <div
   onfocus={() => selectName?.(name)}
@@ -86,11 +55,10 @@
         {#each responsibilities as r, idx}
           <tr class="hover break-words">
             <td class="desc">
-              {#if locked}
-                {@render diff(r.description)}
+              {#if locked || isDiff(r.description)}
+                <Diff diff={r.description} />
               {:else}
                 <textarea
-                  bind:this={respElements[idx]}
                   bind:value={r.description}
                   onload={e => resize(e.target as HTMLTextAreaElement)}
                   onfocus={e => resize(e.currentTarget)}
@@ -101,9 +69,9 @@
               {/if}
             </td>
             <td class="text-right">
-              {#each r.collaborators as { name, id }, i}
+              {#each r.collaborators as { name: diff, id }, i}
                 {#if i}<span> </span>{/if}
-                {@render diffLabel(name)}
+                <ClassLabel {selectName} name={undiffWords(diff)} {diff} />
               {/each}
             </td>
           </tr>
