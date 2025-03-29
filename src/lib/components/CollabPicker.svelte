@@ -3,18 +3,18 @@
   import { flip } from 'svelte/animate';
   import ClassLabel from './ClassLabel.svelte';
   import type { Keyed } from '$lib/types';
+  import { onMount } from 'svelte';
 
   type Props = {
     collabs: string[];
     avoiding: string[];
-    onchange?: (collabs: string[]) => void;
+    onsubmit?: (collabs: string[]) => void;
   };
 
   // bindable breaks here, don't know why...
-  let { collabs, avoiding = [], onchange }: Props = $props();
-  $effect(() => onchange?.(collabs));
+  let { collabs, avoiding = [], onsubmit }: Props = $props();
 
-
+  let searchbar: HTMLInputElement;
   let search: string = $state('');
 
   const sortedByBool = <T,>(tagged: T[], b: (_: T) => boolean): T[] => {
@@ -26,8 +26,7 @@
   };
 
   let options: Keyed<{ value: string | null }>[] = $derived.by(() => {
-    const cs = new Set([...$allClasses, ...collabs]);
-    if (avoiding) cs.difference(new Set(avoiding));
+    const cs = new Set($allClasses).difference(new Set(avoiding)).union(new Set(collabs));
     const tagged = [...cs].map((value, id) => ({ value, id }));
     tagged.sort((a, b) => a.value.localeCompare(b.value));
     const sorted = sortedByBool(tagged, (t) => collabs.includes(t.value));
@@ -47,57 +46,86 @@
   });
 
   const onsearchkeyup = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (search) {
+        search = '';
+      } else {
+        onsubmit?.(collabs);
+      }
+      return;
+    }
     if (e.key !== 'Enter') return;
     const c = options.find((t) => t.value)?.value;
     if (!c) return;
     // using proper methods breaks it here... why!??
     if (collabs.includes(c)) {
-      collabs = collabs.filter(x => x !== c);
+      collabs = collabs.filter((x) => x !== c);
     } else {
-      collabs = [...collabs, c]
+      collabs = [...collabs, c];
     }
     search = '';
   };
+
+  onMount(() => searchbar.focus())
 </script>
 
-<div class="form-control">
-  <label class="input flex items-center join">
-    <input
-      class="join-item border-b-2 grow placeholder:italic"
-      type="text"
-      placeholder="search collabs..."
-      bind:value={search}
-      onkeyup={onsearchkeyup}
-    />
-    {#if search}
-      <button class="btn btn-sm btn-ghost join-item" onclick={() => (search = '')}>x</button>
-    {/if}
-  </label>
-  {#each options as { value: opt, id }, idx (id)}
-    <span animate:flip={{ duration: 400 }}>
-      {#if opt}
-        {@const forId = 'collab-' + opt}
-        <label for={forId} class="label cursor-pointer px-4" class:search-select={!idx}>
-          <input
-            id={forId}
-            class="checkbox checkbox-primary checkbox-xs"
-            type="checkbox"
-            name="collabs"
-            value={opt}
-            bind:group={collabs}
-          />
-          <span class="label-text"><ClassLabel name={opt} /></span>
-        </label>
-      {:else}
-        <hr class="border-primary m-2" />
-      {/if}
-    </span>
-  {/each}
-</div>
+<dialog class="modal modal-open max-h-full max-w-full" onfocus={() => searchbar?.focus() }>
+  <div class="modal-box max-h-3/4 static">
+    <div class="form-control max-h-full static">
+      <label class="input static flex items-center">
+        <input
+          id="searchbar"
+          bind:this={searchbar}
+          bind:value={search}
+          class="border-b-2 grow placeholder:italic"
+          type="text"
+          placeholder="[↵] to toggle, [esc] to clear..."
+          onkeyup={onsearchkeyup}
+          oninput={() => search = search.replaceAll(/\s/g, '')}
+        />
+      </label>
+      <ul class="overflow-scroll">
+      {#each options as { value: opt, id }, idx (id)}
+        {@const firstItem = !idx}
+        <li animate:flip={{ duration: 400 }} class="list-none">
+          {#if opt}
+            {@const forId = 'collab-' + opt}
+            <label for={forId} class="label cursor-pointer px-4" class:search-select={firstItem}>
+              <input
+                id={forId}
+                class="checkbox checkbox-primary checkbox-xs"
+                type="checkbox"
+                name="collabs"
+                value={opt}
+                bind:group={collabs}
+                onclick={() => searchbar.focus()}
+              />
+              <span>
+                <span class="label-text"><ClassLabel name={opt} /></span>
+                {#if firstItem}&nbsp;<kbd class="kbd kbd-xs">↵</kbd>{/if}
+              </span>
+            </label>
+          {:else}
+            <hr class="border-primary m-2" />
+          {/if}
+        </li>
+      {/each}
+    </ul>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button onclick={() => onsubmit?.(collabs)}>close</button>
+  </form>
+</dialog>
 
 <style lang="postcss">
   label:hover,
   .search-select {
-    @apply underline italic decoration-primary;
+    & .label-text {
+      @apply underline italic decoration-primary;
+    }
+  }
+  #searchbar {
+    font-family: var(--font-mono);
   }
 </style>

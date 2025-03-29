@@ -53,6 +53,7 @@
 
   let editCollabs: { collabs: string[]; card: string; respIdx: number } | undefined = $state();
   const selectCollab = (card: string, respIdx: number, collab: string) => {
+    if (!allowEditing) return propagate(collab);
     const collabs = cards
       .find((c) => c.name === card)
       ?.responsibilities[respIdx]?.collaborators.map((c) => c.name)
@@ -60,11 +61,7 @@
     if (!collabs) return;
     editCollabs = { collabs, card, respIdx };
   };
-  const oncollabedit = (collabs: string[]) => {
-    if (editCollabs) editCollabs.collabs = collabs;
-    console.log(editCollabs?.collabs);
-  };
-  const stopEditting = () => {
+  const fininshCollabEditting = (collabs: string[]) => {
     if (!editCollabs) return;
     const resp = cards.find((c) => c.name === editCollabs?.card)?.responsibilities[
       editCollabs?.respIdx ?? -1
@@ -74,7 +71,7 @@
     // otherwise creatingn new ids for the new custom collabs
     resp.collaborators = mergeKeyed(
       resp.collaborators,
-      editCollabs.collabs.map((name) => ({ name })),
+      collabs.map((name) => ({ name })),
       (x) => undiffWords(x.name)
     ).flatMap((z) => (z.type === 'right' ? [withId(z.right)] : z.type === 'both' ? [z.left] : []));
     editCollabs = undefined;
@@ -104,19 +101,12 @@
       </div>
     </li>
   </ul>
-  {#if editCollabs !== undefined}
-    <dialog class="modal modal-open" id="collab-modal">
-      <div class="modal-box max-h-3/4">
-        <CollabPicker
-          collabs={editCollabs.collabs}
-          avoiding={[editCollabs.card]}
-          onchange={oncollabedit}
-        />
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button onclick={stopEditting}>close</button>
-      </form>
-    </dialog>
+  {#if editCollabs}
+    <CollabPicker
+      collabs={editCollabs.collabs}
+      avoiding={[editCollabs.card]}
+      onsubmit={fininshCollabEditting}
+    />
   {/if}
 </div>
 
