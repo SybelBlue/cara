@@ -5,6 +5,7 @@ import type { SimpleDeck } from '$lib/types';
 
 export const highlightedClass = writable<string | undefined>();
 export const availableClasses = writable<string[]>([]);
+export const allClasses = writable<string[]>([]);
 export const aiBackend = writable<string | undefined>();
 export const aiEnabled = derived(aiBackend, Boolean);
 

@@ -2,8 +2,9 @@
   import { page } from '$app/stores';
 
   import type { Deck, Commit, SimpleDeck, SimpleCard } from '$lib/types';
-  import { debug, availableClasses } from '$lib/stores';
+  import { debug, availableClasses, allClasses } from '$lib/stores';
   import { deckWithIds, exampleDecks, withId } from '$lib/decks';
+  import { undiffWords } from '$lib/diff';
 
   import Editor from '$lib/components/Editor.svelte';
   import CardBoard from '$lib/components/CardBoard.svelte';
@@ -12,6 +13,7 @@
 
   let selectedCard: SimpleCard | undefined = $state();
   let readyForCommit: boolean = $state(false);
+
 
   const deckInfo = $page.url.searchParams.get('deckInfo') ?? btoa('[]');
   const deckName = $page.url.searchParams.get('deckName');
@@ -25,6 +27,15 @@
   $effect(() => {
     // note: prevents all other changes to $availableClasses!
     $availableClasses = displayDeck.map((c) => c.name);
+  });
+  $effect(() => {
+    // note: prevents all other changes to $allClasses!
+    $allClasses = [
+      ...new Set([
+        ...displayDeck.map((c) => c.name),
+        ...displayDeck.flatMap(c => c.responsibilities.flatMap(r => r.collaborators.map(c => c.name).map(undiffWords)))
+      ])
+    ];
   });
 
   $debug = true;
@@ -125,14 +136,6 @@
   const setDisplayDeck = (deck: Deck) => {
     displayDeck = deck;
   };
-
-  import { onMount } from 'svelte';
-  onMount(() => {
-
-    window.dump = () => {
-      console.debug(JSON.stringify({ cards }));
-    }
-  })
 </script>
 
 <svelte:head>

@@ -7,10 +7,10 @@
     name: string;
     diff?: DiffText;
     disabled?: boolean;
-    selectName?: (name: string) => void;
+    selectLabel?: (name: string) => void;
   }
 
-  let { name, diff, disabled = false, selectName }: Props = $props();
+  let { name, diff, disabled = false, selectLabel }: Props = $props();
 
   let hasACard = $derived($availableClasses.includes(name));
 </script>
@@ -18,7 +18,7 @@
 <span
   onmouseenter={() => ($highlightedClass = disabled ? undefined : name)}
   onmouseleave={() => ($highlightedClass = undefined)}
-  onfocus={() => selectName?.(name)}
+  onfocus={() => selectLabel?.(name)}
   class:enabled={!disabled && hasACard}
   class:no-card={!hasACard}
   class="text-accent"

@@ -23,17 +23,26 @@
   import Diff from './Diff.svelte';
   import { isDiff, undiffWords } from '$lib/diff';
 
-  let { name = $bindable(), responsibilities = $bindable(), locked, selectName }: Props = $props();
+  let {
+    name = $bindable(),
+    responsibilities = $bindable(),
+    locked,
+    selectName: selectLabel,
+  }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
 
   const resize = (target: HTMLTextAreaElement) => {
     target.style.height = target.scrollHeight + 'px';
-  }
+  };
+
+  const selectCollab = (respIdx: number, collabName: string) => {
+
+  };
 </script>
 
 <div
-  onfocus={() => selectName?.(name)}
+  onfocus={() => selectLabel?.(name)}
   class:highlight
   class="tw-grow card dark:card-bordered shadow-xl bg-base-100 hover:z-20"
   role="gridcell"
@@ -41,7 +50,7 @@
 >
   <section class="card-body">
     <h3 class="card-title m-1 mb-0 italic">
-      <ClassLabel disabled {selectName} {name} />
+      <ClassLabel disabled {selectLabel} {name} />
     </h3>
     <hr class="border-primary" />
     <table class="table table-auto table-sm">
@@ -52,7 +61,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each responsibilities as r, idx}
+        {#each responsibilities as r, ridx}
           <tr class="hover break-words">
             <td class="desc">
               {#if locked || isDiff(r.description)}
@@ -60,18 +69,22 @@
               {:else}
                 <textarea
                   bind:value={r.description}
-                  onload={e => resize(e.target as HTMLTextAreaElement)}
-                  onfocus={e => resize(e.currentTarget)}
-                  oninput={e => resize(e.currentTarget)}
-                  >
-                <!-- do not add here, bind:value will overwrite -->
+                  onload={(e) => resize(e.target as HTMLTextAreaElement)}
+                  onfocus={(e) => resize(e.currentTarget)}
+                  oninput={(e) => resize(e.currentTarget)}
+                >
+                  <!-- do not add here, bind:value will overwrite -->
                 </textarea>
               {/if}
             </td>
             <td class="text-right">
-              {#each r.collaborators as { name: diff, id }, i}
-                {#if i}<span> </span>{/if}
-                <ClassLabel {selectName} name={undiffWords(diff)} {diff} />
+              {#each r.collaborators as { name: diff, id }, cidx}
+                {#if cidx}<span> </span>{/if}
+                <ClassLabel
+                  selectLabel={(name) => selectCollab(ridx, name)}
+                  name={undiffWords(diff)}
+                  {diff}
+                />
               {/each}
             </td>
           </tr>
