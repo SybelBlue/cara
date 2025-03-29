@@ -15,8 +15,17 @@
   import { withId } from '$lib/decks';
   import { debug, highlightedClass } from '$lib/stores';
   import Card from './Card.svelte';
+  import CollabPicker from './CollabPicker.svelte';
+  import { undiffWords } from '$lib/diff';
+  import { mergeKeyed } from '$lib/common';
 
-  let { cards = $bindable(), animateIn = !$debug, allowEditing, selectCard, addCard }: Props = $props();
+  let {
+    cards = $bindable(),
+    animateIn = !$debug,
+    allowEditing,
+    selectCard,
+    addCard
+  }: Props = $props();
 
   if (animateIn) setTimeout(() => (animateIn = false), 200);
 
@@ -36,10 +45,39 @@
   const addNewCard = () => {
     const card = withId({
       name: 'NewClass' + newClassCounter++,
-      responsibilities: [],
+      responsibilities: []
     });
     addCard?.(card);
     selectCard?.(card);
+  };
+
+  let editCollabs: { collabs: string[]; card: string; respIdx: number } | undefined = $state();
+  const selectCollab = (card: string, respIdx: number, collab: string) => {
+    const collabs = cards
+      .find((c) => c.name === card)
+      ?.responsibilities[respIdx]?.collaborators.map((c) => c.name)
+      .map(undiffWords);
+    if (!collabs) return;
+    editCollabs = { collabs, card, respIdx };
+  };
+  const oncollabedit = (collabs: string[]) => {
+    if (editCollabs) editCollabs.collabs = collabs;
+    console.log(editCollabs?.collabs);
+  };
+  const stopEditting = () => {
+    if (!editCollabs) return;
+    const resp = cards.find((c) => c.name === editCollabs?.card)?.responsibilities[
+      editCollabs?.respIdx ?? -1
+    ];
+    if (!resp) return;
+    // merge the collaborators, prefering the old (id'ed) versions when they exist,
+    // otherwise creatingn new ids for the new custom collabs
+    resp.collaborators = mergeKeyed(
+      resp.collaborators,
+      editCollabs.collabs.map((name) => ({ name })),
+      (x) => undiffWords(x.name)
+    ).flatMap((z) => (z.type === 'right' ? [withId(z.right)] : z.type === 'both' ? [z.left] : []));
+    editCollabs = undefined;
   };
 </script>
 
@@ -49,7 +87,7 @@
       {@const surface = cardProps.name === $highlightedClass}
       <li class:surface animate:flip={{ duration: 400 }}>
         {#if !animateIn}
-          <Card locked={!allowEditing} selectName={propagate} {...cardProps} />
+          <Card locked={!allowEditing} selectName={propagate} {selectCollab} {...cardProps} />
         {/if}
       </li>
     {/each}
@@ -58,14 +96,28 @@
         onfocus={addNewCard}
         class="h-full btn btn-ghost tw-grow card dark:card-bordered shadow-xl"
         role="gridcell"
-        tabindex=0
-        >
+        tabindex="0"
+      >
         <div class="card-body">
-          <div class="btn btn-circle btn-primary btn-outline my-auto"> + </div>
+          <div class="btn btn-circle btn-primary btn-outline my-auto">+</div>
         </div>
       </div>
     </li>
   </ul>
+  {#if editCollabs !== undefined}
+    <dialog class="modal modal-open" id="collab-modal">
+      <div class="modal-box max-h-3/4">
+        <CollabPicker
+          collabs={editCollabs.collabs}
+          avoiding={[editCollabs.card]}
+          onchange={oncollabedit}
+        />
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button onclick={stopEditting}>close</button>
+      </form>
+    </dialog>
+  {/if}
 </div>
 
 <style lang="postcss">

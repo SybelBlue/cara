@@ -4,7 +4,16 @@
   import ClassLabel from './ClassLabel.svelte';
   import type { Keyed } from '$lib/types';
 
-  let { collabs = $bindable() }: { collabs: string[] } = $props();
+  type Props = {
+    collabs: string[];
+    avoiding: string[];
+    onchange?: (collabs: string[]) => void;
+  };
+
+  // bindable breaks here, don't know why...
+  let { collabs, avoiding = [], onchange }: Props = $props();
+  $effect(() => onchange?.(collabs));
+
 
   let search: string = $state('');
 
@@ -18,6 +27,7 @@
 
   let options: Keyed<{ value: string | null }>[] = $derived.by(() => {
     const cs = new Set([...$allClasses, ...collabs]);
+    if (avoiding) cs.difference(new Set(avoiding));
     const tagged = [...cs].map((value, id) => ({ value, id }));
     tagged.sort((a, b) => a.value.localeCompare(b.value));
     const sorted = sortedByBool(tagged, (t) => collabs.includes(t.value));
@@ -27,9 +37,7 @@
     const isSearchMatch = (v: { value: string }) =>
       v.value.toLowerCase().includes(search.trim().toLowerCase());
     const searched = sortedByBool(sorted, isSearchMatch);
-    const newUnknownCollab = !$allClasses.find(
-      (c) => c.toLowerCase() === search.toLowerCase()
-    );
+    const newUnknownCollab = !$allClasses.find((c) => c.toLowerCase() === search.toLowerCase());
     (searched as typeof options).splice(
       searched.findIndex((t) => !isSearchMatch(t)),
       0,
@@ -37,27 +45,29 @@
     );
     return searched;
   });
+
+  const onsearchkeyup = (e: KeyboardEvent) => {
+    if (e.key !== 'Enter') return;
+    const c = options.find((t) => t.value)?.value;
+    if (!c) return;
+    // using proper methods breaks it here... why!??
+    if (collabs.includes(c)) {
+      collabs = collabs.filter(x => x !== c);
+    } else {
+      collabs = [...collabs, c]
+    }
+    search = '';
+  };
 </script>
 
 <div class="form-control">
   <label class="input flex items-center join">
     <input
-      class="join-item grow placeholder:italic"
+      class="join-item border-b-2 grow placeholder:italic"
       type="text"
       placeholder="search collabs..."
       bind:value={search}
-      onkeyup={(e: KeyboardEvent) => {
-        if (e.key !== 'Enter') return;
-        const c = options.find((t) => t.value)?.value;
-        if (!c) return;
-        const i = collabs.findIndex(x => x === c);
-        if (i < 0) {
-          collabs.push(c);
-        } else {
-          collabs.splice(i, 1);
-        }
-        search = '';
-      }}
+      onkeyup={onsearchkeyup}
     />
     {#if search}
       <button class="btn btn-sm btn-ghost join-item" onclick={() => (search = '')}>x</button>
@@ -86,6 +96,7 @@
 </div>
 
 <style lang="postcss">
+  label:hover,
   .search-select {
     @apply underline italic decoration-primary;
   }

@@ -12,6 +12,7 @@
   type DisplayProps = {
     locked?: boolean;
     selectName?: (name: string) => void;
+    selectCollab?: (selfName: string, respIdx: number, collabName: string) => void;
   };
 
   export type Props<S = DiffText> = Data<S> & DisplayProps;
@@ -28,16 +29,13 @@
     responsibilities = $bindable(),
     locked,
     selectName: selectLabel,
+    selectCollab
   }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
 
   const resize = (target: HTMLTextAreaElement) => {
     target.style.height = target.scrollHeight + 'px';
-  };
-
-  const selectCollab = (respIdx: number, collabName: string) => {
-
   };
 </script>
 
@@ -81,7 +79,7 @@
               {#each r.collaborators as { name: diff, id }, cidx}
                 {#if cidx}<span> </span>{/if}
                 <ClassLabel
-                  selectLabel={(name) => selectCollab(ridx, name)}
+                  selectLabel={(n) => (selectCollab ? selectCollab(name, ridx, n) : selectLabel?.(n))}
                   name={undiffWords(diff)}
                   {diff}
                 />

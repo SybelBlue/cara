@@ -1,35 +1,7 @@
 import type { Card as Card, SimpleDeck, Deck, SimpleCard, Key, DiffText } from '$lib/types';
 import { withId } from '$lib/decks';
 import { diffWords, type Change } from 'diff';
-import { any } from './common';
-
-type Zipped<T, K> =
-  | { id: K; type: 'left'; left: T; right: null }
-  | { id: K; type: 'right'; left: null; right: T }
-  | { id: K; type: 'both'; left: T; right: T };
-
-const mergeKeyed = <T, K>(left: T[], right: T[], key: (_: T) => K): Zipped<T, K>[] => {
-  const out: Zipped<T, K>[] = [];
-  const lIds = new Set();
-  const rightKeyed = right.map((o) => ({ data: o, id: key(o) }));
-  for (const l of left) {
-    const id = key(l);
-    const r = rightKeyed.find((m) => m.id === id);
-    lIds.add(id);
-    out.push(
-      r == null
-        ? { id, type: 'left', left: l, right: null }
-        : { id, type: 'both', left: l, right: r.data }
-    );
-  }
-  for (const m of rightKeyed) {
-    const { data: r, id } = m;
-    if (!lIds.has(id)) {
-      out.push({ id, type: 'right', left: null, right: r });
-    }
-  }
-  return out;
-};
+import { any, mergeKeyed } from './common';
 
 type SimpleResponsibility = SimpleCard['responsibilities'][number];
 
