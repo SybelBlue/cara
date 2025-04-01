@@ -1,15 +1,51 @@
-<script lang="ts">
-  import { allClasses } from '$lib/stores';
-  import { flip } from 'svelte/animate';
-  import ClassLabel from './ClassLabel.svelte';
-  import type { Keyed } from '$lib/types';
-  import { onMount } from 'svelte';
+<script module lang="ts">
+  import type { Keyed, Card, DiffText } from '$lib/types';
+  import { undiffWords } from '$lib/diff';
+  import { mergeKeyed } from '$lib/common';
+  import { withId } from '$lib/decks';
 
-  type Props = {
+  export type RespLens<C extends Card<S>, S = DiffText> = {
+    card: C;
+    respIdx: number;
+  };
+
+  export type Props = {
     collabs: string[];
     avoiding: string[];
     setCollabs?: (collabs: string[]) => void;
   };
+
+  export const createPropsFromLens = (
+    { card, respIdx }: RespLens<Keyed<Card>>,
+    setCollabs?: (
+      lens: RespLens<Keyed<Card>>,
+      collabs: Card['responsibilities'][number]['collaborators']
+    ) => void
+  ): Props => ({
+    collabs: card.responsibilities[respIdx]?.collaborators.map((c) => undiffWords(c.name)),
+    avoiding: [undiffWords(card.name)],
+    setCollabs: (collabs: string[]) => {
+      const resp = card.responsibilities[respIdx];
+      if (!resp) return;
+      // merge the collaborators, prefering the old (id'ed) versions when they exist,
+      // otherwise creating new ids for the new custom collabs
+      const newKeyedCollabs = mergeKeyed(
+        resp.collaborators,
+        collabs.map((name) => ({ name })),
+        (x) => undiffWords(x.name)
+      ).flatMap((z) =>
+        z.type === 'right' ? [withId(z.right)] : z.type === 'both' ? [z.left] : []
+      );
+      setCollabs?.({ card, respIdx }, newKeyedCollabs);
+    }
+  });
+</script>
+
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { flip } from 'svelte/animate';
+  import ClassLabel from './ClassLabel.svelte';
+  import { allClasses } from '$lib/stores';
 
   // bindable breaks here, don't know why...
   let { collabs, avoiding = [], setCollabs }: Props = $props();
@@ -66,10 +102,10 @@
     search = '';
   };
 
-  onMount(() => searchbar.focus())
+  onMount(() => searchbar.focus());
 </script>
 
-<dialog class="modal modal-open max-h-full max-w-full" onfocus={() => searchbar?.focus() }>
+<dialog class="modal modal-open max-h-full max-w-full" onfocus={() => searchbar?.focus()}>
   <div class="modal-box max-h-3/4 static">
     <div class="form-control max-h-full static">
       <label class="input static flex items-center">
@@ -81,36 +117,36 @@
           type="text"
           placeholder="[↵] to toggle, [esc] to clear..."
           onkeyup={onsearchkeyup}
-          oninput={() => search = search.replaceAll(/\s/g, '')}
+          oninput={() => (search = search.replaceAll(/\s/g, ''))}
         />
       </label>
       <ul class="overflow-scroll">
-      {#each options as { value: opt, id }, idx (id)}
-        {@const firstItem = !idx}
-        <li animate:flip={{ duration: 400 }} class="list-none">
-          {#if opt}
-            {@const forId = 'collab-' + opt}
-            <label for={forId} class="label cursor-pointer px-4" class:search-select={firstItem}>
-              <input
-                id={forId}
-                class="checkbox checkbox-primary checkbox-xs"
-                type="checkbox"
-                name="collabs"
-                value={opt}
-                bind:group={collabs}
-                onclick={() => searchbar.focus()}
-              />
-              <span>
-                <span class="label-text"><ClassLabel name={opt} /></span>
-                {#if firstItem}&nbsp;<kbd class="kbd kbd-xs">↵</kbd>{/if}
-              </span>
-            </label>
-          {:else}
-            <hr class="border-primary m-2" />
-          {/if}
-        </li>
-      {/each}
-    </ul>
+        {#each options as { value: opt, id }, idx (id)}
+          {@const firstItem = !idx}
+          <li animate:flip={{ duration: 400 }} class="list-none">
+            {#if opt}
+              {@const forId = 'collab-' + opt}
+              <label for={forId} class="label cursor-pointer px-4" class:search-select={firstItem}>
+                <input
+                  id={forId}
+                  class="checkbox checkbox-primary checkbox-xs"
+                  type="checkbox"
+                  name="collabs"
+                  value={opt}
+                  bind:group={collabs}
+                  onclick={() => searchbar.focus()}
+                />
+                <span>
+                  <span class="label-text"><ClassLabel name={opt} /></span>
+                  {#if firstItem}&nbsp;<kbd class="kbd kbd-xs">↵</kbd>{/if}
+                </span>
+              </label>
+            {:else}
+              <hr class="border-primary m-2" />
+            {/if}
+          </li>
+        {/each}
+      </ul>
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">

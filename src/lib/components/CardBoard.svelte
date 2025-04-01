@@ -12,10 +12,10 @@
 
 <script lang="ts">
   import { flip } from 'svelte/animate';
+  import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
+  import Card from './Card.svelte';
   import { withId } from '$lib/decks';
   import { debug, highlightedClass } from '$lib/stores';
-  import Card from './Card.svelte';
-  import CardCollabEditor, { type RespLens } from './CardCollabEditor.svelte';
 
   let {
     cards = $bindable(),
@@ -50,13 +50,17 @@
   };
 
   let editCollabLens: RespLens<Deck[number]> | undefined = $state();
-  const selectCollab = (card: string, respIdx: number, collab: string) => {
-    if (!allowEditing) return propagate(collab);
-    const c = cards.find((c) => c.name === card);
-    if (!c) return;
-    editCollabLens = { card: c, respIdx };
+  const selectCollab = (cardName: string, respIdx: number, collab: string) => {
+    if (allowEditing) {
+      const card = cards.find((c) => c.name === cardName);
+      if (card) {
+        editCollabLens = { card, respIdx };
+        return;
+      }
+    }
+    return propagate(collab);
   };
-  const setCollabs = (card: Deck[number], respIdx: number, collabs: Keyed<{ name: DiffText }>[]) => {
+  const setCollabs = ({ card, respIdx }: RespLens<Deck[number]>, collabs: Keyed<{ name: DiffText }>[]) => {
     card.responsibilities[respIdx].collaborators = collabs;
     editCollabLens = undefined;
   };
@@ -86,7 +90,7 @@
     </li>
   </ul>
   {#if editCollabLens}
-    <CardCollabEditor respLens={editCollabLens} {setCollabs}/>
+    <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)}/>
   {/if}
 </div>
 
