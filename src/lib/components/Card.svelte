@@ -79,10 +79,19 @@
               {#each r.collaborators as { name: diff, id }, cidx}
                 {#if cidx}<span> </span>{/if}
                 <ClassLabel
-                  selectLabel={(n) => (selectCollab ? selectCollab(name, ridx, n) : selectLabel?.(n))}
+                  selectLabel={(n) =>
+                    selectCollab ? selectCollab(name, ridx, n) : selectLabel?.(n)}
                   name={undiffWords(diff)}
                   {diff}
                 />
+              {:else}
+                {#if !locked}
+                  <ClassLabel
+                    selectLabel={(n) =>
+                      selectCollab ? selectCollab(name, ridx, n) : selectLabel?.(n)}
+                    name="[+]"
+                  />
+                {/if}
               {/each}
             </td>
           </tr>

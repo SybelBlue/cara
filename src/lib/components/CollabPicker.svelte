@@ -8,11 +8,11 @@
   type Props = {
     collabs: string[];
     avoiding: string[];
-    onsubmit?: (collabs: string[]) => void;
+    setCollabs?: (collabs: string[]) => void;
   };
 
   // bindable breaks here, don't know why...
-  let { collabs, avoiding = [], onsubmit }: Props = $props();
+  let { collabs, avoiding = [], setCollabs }: Props = $props();
 
   let searchbar: HTMLInputElement;
   let search: string = $state('');
@@ -50,7 +50,7 @@
       if (search) {
         search = '';
       } else {
-        onsubmit?.(collabs);
+        setCollabs?.(collabs);
       }
       return;
     }
@@ -114,7 +114,7 @@
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">
-    <button onclick={() => onsubmit?.(collabs)}>close</button>
+    <button onclick={() => setCollabs?.(collabs)}>close</button>
   </form>
 </dialog>
 

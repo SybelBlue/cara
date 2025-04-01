@@ -17,23 +17,33 @@ export const mergeKeyed = <L, R, K>(
   key: (_: L | R) => K
 ): Zipped<L, R, K>[] => {
   const out: Zipped<L, R, K>[] = [];
-  const lIds = new Set();
-  const rightKeyed = right.map((o) => ({ data: o, id: key(o) }));
+
+  // Create a map of right objects with a 'seen' flag
+  const rightMap = new Map<K, { data: R; seen: boolean }>();
+  for (const r of right) {
+    rightMap.set(key(r), { data: r, seen: false });
+  }
+
+  // Process left items and mark matches as seen
   for (const l of left) {
     const id = key(l);
-    const r = rightKeyed.find((m) => m.id === id);
-    lIds.add(id);
-    out.push(
-      r == null
-        ? { id, type: 'left', left: l, right: null }
-        : { id, type: 'both', left: l, right: r.data }
-    );
-  }
-  for (const m of rightKeyed) {
-    const { data: r, id } = m;
-    if (!lIds.has(id)) {
-      out.push({ id, type: 'right', left: null, right: r });
+    const rightEntry = rightMap.get(id);
+
+    if (rightEntry) {
+      // Mark as seen
+      rightEntry.seen = true;
+      out.push({ id, type: 'both', left: l, right: rightEntry.data });
+    } else {
+      out.push({ id, type: 'left', left: l, right: null });
     }
   }
+
+  // Add remaining right items (those not seen)
+  for (const [id, { data: right, seen }] of rightMap.entries()) {
+    if (!seen) {
+      out.push({ id, type: 'right', left: null, right });
+    }
+  }
+
   return out;
 };

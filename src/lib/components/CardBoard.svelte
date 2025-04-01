@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import type { Deck, SimpleDeck } from '$lib/types';
+  import type { Deck, DiffText, Keyed, SimpleDeck } from '$lib/types';
 
   export interface Props {
     cards: Deck;
@@ -15,9 +15,7 @@
   import { withId } from '$lib/decks';
   import { debug, highlightedClass } from '$lib/stores';
   import Card from './Card.svelte';
-  import CollabPicker from './CollabPicker.svelte';
-  import { undiffWords } from '$lib/diff';
-  import { mergeKeyed } from '$lib/common';
+  import CardCollabEditor, { type RespLens } from './CardCollabEditor.svelte';
 
   let {
     cards = $bindable(),
@@ -51,30 +49,16 @@
     selectCard?.(card);
   };
 
-  let editCollabs: { collabs: string[]; card: string; respIdx: number } | undefined = $state();
+  let editCollabLens: RespLens<Deck[number]> | undefined = $state();
   const selectCollab = (card: string, respIdx: number, collab: string) => {
     if (!allowEditing) return propagate(collab);
-    const collabs = cards
-      .find((c) => c.name === card)
-      ?.responsibilities[respIdx]?.collaborators.map((c) => c.name)
-      .map(undiffWords);
-    if (!collabs) return;
-    editCollabs = { collabs, card, respIdx };
+    const c = cards.find((c) => c.name === card);
+    if (!c) return;
+    editCollabLens = { card: c, respIdx };
   };
-  const fininshCollabEditting = (collabs: string[]) => {
-    if (!editCollabs) return;
-    const resp = cards.find((c) => c.name === editCollabs?.card)?.responsibilities[
-      editCollabs?.respIdx ?? -1
-    ];
-    if (!resp) return;
-    // merge the collaborators, prefering the old (id'ed) versions when they exist,
-    // otherwise creatingn new ids for the new custom collabs
-    resp.collaborators = mergeKeyed(
-      resp.collaborators,
-      collabs.map((name) => ({ name })),
-      (x) => undiffWords(x.name)
-    ).flatMap((z) => (z.type === 'right' ? [withId(z.right)] : z.type === 'both' ? [z.left] : []));
-    editCollabs = undefined;
+  const setCollabs = (card: Deck[number], respIdx: number, collabs: Keyed<{ name: DiffText }>[]) => {
+    card.responsibilities[respIdx].collaborators = collabs;
+    editCollabLens = undefined;
   };
 </script>
 
@@ -101,12 +85,8 @@
       </div>
     </li>
   </ul>
-  {#if editCollabs}
-    <CollabPicker
-      collabs={editCollabs.collabs}
-      avoiding={[editCollabs.card]}
-      onsubmit={fininshCollabEditting}
-    />
+  {#if editCollabLens}
+    <CardCollabEditor respLens={editCollabLens} {setCollabs}/>
   {/if}
 </div>
 
