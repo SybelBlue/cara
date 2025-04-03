@@ -11,6 +11,7 @@
 
   type DisplayProps = {
     locked?: boolean;
+    hidden?: boolean;
     selectName?: (name: string) => void;
     selectCollab?: (selfName: string, respIdx: number, collabName: string) => void;
   };
@@ -28,6 +29,7 @@
     name = $bindable(),
     responsibilities = $bindable(),
     locked,
+    hidden,
     selectName: selectLabel,
     selectCollab
   }: Props = $props();
@@ -42,7 +44,8 @@
 <div
   onfocus={() => selectLabel?.(name)}
   class:highlight
-  class="tw-grow card dark:card-bordered shadow-xl bg-base-100 hover:z-20"
+  class:opacity-0={hidden}
+  class="tw-grow card dark:card-bordered shadow-xl bg-base-100 hover:z-20 transition-opacity"
   role="gridcell"
   tabindex="0"
 >

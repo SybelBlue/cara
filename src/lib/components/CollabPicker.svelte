@@ -16,16 +16,16 @@
   };
 
   export const createPropsFromLens = (
-    { card, respIdx }: RespLens<Keyed<Card>>,
+    l: RespLens<Keyed<Card>>,
     setCollabs?: (
       lens: RespLens<Keyed<Card>>,
       collabs: Card['responsibilities'][number]['collaborators']
     ) => void
   ): Props => ({
-    collabs: card.responsibilities[respIdx]?.collaborators.map((c) => undiffWords(c.name)),
-    avoiding: [undiffWords(card.name)],
+    collabs: l.card.responsibilities[l.respIdx]?.collaborators.map((c) => undiffWords(c.name)) ?? [],
+    avoiding: [undiffWords(l.card.name)],
     setCollabs: (collabs: string[]) => {
-      const resp = card.responsibilities[respIdx];
+      const resp = l.card.responsibilities[l.respIdx];
       if (!resp) return;
       // merge the collaborators, prefering the old (id'ed) versions when they exist,
       // otherwise creating new ids for the new custom collabs
@@ -36,7 +36,7 @@
       ).flatMap((z) =>
         z.type === 'right' ? [withId(z.right)] : z.type === 'both' ? [z.left] : []
       );
-      setCollabs?.({ card, respIdx }, newKeyedCollabs);
+      setCollabs?.(l, newKeyedCollabs);
     }
   });
 </script>
