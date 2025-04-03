@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   import type { Deck, Commit, SimpleDeck, SimpleCard } from '$lib/types';
   import { debug, availableClasses, allClasses } from '$lib/stores';
@@ -15,8 +15,8 @@
   let readyForCommit: boolean = $state(false);
 
 
-  const deckInfo = $page.url.searchParams.get('deckInfo') ?? btoa('[]');
-  const deckName = $page.url.searchParams.get('deckName');
+  const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
+  const deckName = page.url.searchParams.get('deckName');
   const deckInit: SimpleDeck =
     deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
