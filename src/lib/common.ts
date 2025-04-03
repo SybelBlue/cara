@@ -47,3 +47,6 @@ export const mergeKeyed = <L, R, K>(
 
   return out;
 };
+
+export const clamp = (low: number, value: number, high: number) =>
+  value < low ? low : value < high ? value : high;

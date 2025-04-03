@@ -27,8 +27,23 @@
 
   if (animateIn) setTimeout(() => (animateIn = false), 200);
 
-  let width: number = $state(0);
-  let columns = $derived(Math.max(1, Math.round(width / 400 - 0.6)));
+  let width: number = $state(0),
+    boardMouseY: number = $state(0);
+  let mouseInFirstCol: boolean = $state(false);
+  let lastMouseEvent: MouseEvent | undefined = $state();
+
+  const columns = $derived(Math.max(1, Math.round(width / 400 - 0.6)));
+  const colWidth = $derived(columns && width / columns);
+
+  const updatePreview = (e: MouseEvent, columnWidth: number) => {
+    mouseInFirstCol = e.pageX < columnWidth;
+    boardMouseY = e.pageY;
+    $inspect({ boardMouseY, mouseInFirstCol });
+  };
+
+  $effect(() => lastMouseEvent && updatePreview(lastMouseEvent, colWidth));
+
+  const previewCard = $derived(cards.find((c) => c.name === $highlightedClass));
 
   const propagate = (name: string) => {
     const card = cards.find((card) => card.name == name);
@@ -60,17 +75,36 @@
     }
     return propagate(collab);
   };
-  const setCollabs = ({ card, respIdx }: RespLens<Deck[number]>, collabs: Keyed<{ name: DiffText }>[]) => {
+  const setCollabs = (
+    { card, respIdx }: RespLens<Deck[number]>,
+    collabs: Keyed<{ name: DiffText }>[]
+  ) => {
     card.responsibilities[respIdx].collaborators = collabs;
     editCollabLens = undefined;
   };
 </script>
 
+<svelte:window onmousemove={(e) => (lastMouseEvent = e)}/>
+
+{#if previewCard}
+  <div
+    id="preview"
+    class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
+    style="top: {boardMouseY}px"
+  >
+    {#if mouseInFirstCol && columns > 1}
+      <li class="invisble"></li>
+    {/if}
+    <li class="surface">
+      <Card locked {...previewCard} />
+    </li>
+  </div>
+{/if}
+
 <div id="backdrop">
-  <ul class="min-h-full grid p-1 gap-2 grid-cols-{columns}" bind:clientWidth={width}>
+  <ul class="min-h-full card-grid grid-cols-{columns}" bind:clientWidth={width}>
     {#each cards as { id, ...cardProps } (id)}
-      {@const surface = cardProps.name === $highlightedClass}
-      <li class:surface animate:flip={{ duration: 400 }}>
+      <li animate:flip={{ duration: 400 }}>
         {#if !animateIn}
           <Card locked={!allowEditing} selectName={propagate} {selectCollab} {...cardProps} />
         {/if}
@@ -90,7 +124,7 @@
     </li>
   </ul>
   {#if editCollabLens}
-    <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)}/>
+    <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
   {/if}
 </div>
 
@@ -99,13 +133,15 @@
     @apply relative top-0 left-0 bg-base-100 max-h-full overflow-scroll snap-y;
   }
 
-  li {
-    @apply relative snap-start;
-    z-index: 1;
+  .card-grid {
+    @apply min-w-full overflow-visible grid gap-2 px-1;
+  }
 
-    &.surface {
-      @apply sticky snap-none top-0 bottom-0 isolate pointer-events-none;
-      z-index: 2;
-    }
+  .shift {
+    @apply bg-primary;
+  }
+
+  li {
+    @apply relative snap-start z-[1];
   }
 </style>
