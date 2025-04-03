@@ -68,12 +68,7 @@
               {#if locked || isDiff(r.description)}
                 <Diff diff={r.description} />
               {:else}
-                <textarea
-                  bind:value={r.description}
-                  onload={(e) => resize(e.target as HTMLTextAreaElement)}
-                  onfocus={(e) => resize(e.currentTarget)}
-                  oninput={(e) => resize(e.currentTarget)}
-                >
+                <textarea bind:value={r.description} class="h-auto">
                   <!-- do not add here, bind:value will overwrite -->
                 </textarea>
               {/if}
