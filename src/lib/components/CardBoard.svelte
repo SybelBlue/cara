@@ -86,7 +86,6 @@
 <!-- highlighted card preview -->
 {#if previewCard}
   <ul
-    id="preview"
     class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
     style="top: {previewY}px"
     transition:fade={{ duration: 150 }}
@@ -94,7 +93,7 @@
     {#each [...new Array(previewColumn)] as _}
       <li class="invisble"></li>
     {/each}
-    <li class="surface" bind:clientHeight={previewCardHeight}>
+    <li bind:clientHeight={previewCardHeight}>
       <Card locked {...previewCard} />
     </li>
   </ul>

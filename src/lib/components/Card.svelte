@@ -35,10 +35,6 @@
   }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
-
-  const resize = (target: HTMLTextAreaElement) => {
-    target.style.height = target.scrollHeight + 'px';
-  };
 </script>
 
 <div
