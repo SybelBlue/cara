@@ -33,12 +33,13 @@
   const previewCard = $derived(cards.find((c) => c.name === $highlightedClass));
   let height: number = $state(0),
     previewY: number = $state(0),
-    previewCardHeight: number = $state(0);
-  let mouseInFirstCol: boolean = $state(false);
+    previewCardHeight: number = $state(0),
+    previewColumn: number = $state(0);
 
   const updatePreview = (e: MouseEvent, columnWidth: number) => {
-    mouseInFirstCol = e.pageX < columnWidth;
-    previewY = clamp(0, e.pageY - previewCardHeight / 6, height - (previewCardHeight * 5) / 6);
+    const mouseCol = Math.floor(e.pageX / columnWidth);
+    previewColumn = clamp(0, mouseCol === columns - 1 ? columns - 2 : mouseCol + 1, columns - 1);
+    previewY = clamp(0, e.pageY - 100, height - previewCardHeight + 100);
   };
 
   const propagate = (name: string) => {
@@ -90,9 +91,9 @@
     style="top: {previewY}px"
     transition:fade={{ duration: 150 }}
   >
-    {#if mouseInFirstCol && columns > 1}
+    {#each [...new Array(previewColumn)] as _}
       <li class="invisble"></li>
-    {/if}
+    {/each}
     <li class="surface" bind:clientHeight={previewCardHeight}>
       <Card locked {...previewCard} />
     </li>
