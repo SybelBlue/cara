@@ -101,8 +101,6 @@
         class:rename={renameMode}
         class="message-box input input-bordered w-3/4 border-r-0 join-item"
         type="text"
-        name="commitMessage"
-        id="commitMessageInput"
         bind:this={messageBox}
         bind:value={message}
       />
