@@ -22,7 +22,8 @@
       collabs: Card['responsibilities'][number]['collaborators']
     ) => void
   ): Props => ({
-    collabs: l.card.responsibilities[l.respIdx]?.collaborators.map((c) => undiffWords(c.name)) ?? [],
+    collabs:
+      l.card.responsibilities[l.respIdx]?.collaborators.map((c) => undiffWords(c.name)) ?? [],
     avoiding: [undiffWords(l.card.name)],
     setCollabs: (collabs: string[]) => {
       const resp = l.card.responsibilities[l.respIdx];
@@ -81,25 +82,47 @@
     return searched;
   });
 
-  const onsearchkeyup = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      if (search) {
+  let arrowKeyIdx: number = $state(0);
+  const filteredOptions = $derived(options.filter((t) => t.value));
+  const keyHovered = $derived(filteredOptions[arrowKeyIdx]);
+
+  const setArrowKeyIdx = (n: typeof arrowKeyIdx) =>
+    (arrowKeyIdx = (n + filteredOptions.length) % filteredOptions.length);
+  $effect(() => {
+    options;
+    search;
+    setArrowKeyIdx(0);
+  });
+
+  const onsearchkeydown = (e: KeyboardEvent) => {
+    switch (e.key) {
+      case 'Escape':
+        if (search) {
+          search = '';
+        } else {
+          setCollabs?.(collabs);
+        }
+        return;
+      case 'ArrowUp':
+        e.preventDefault();
+        setArrowKeyIdx(arrowKeyIdx - 1);
+        return;
+      case 'ArrowDown':
+        e.preventDefault();
+        setArrowKeyIdx(arrowKeyIdx + 1);
+        return;
+      case 'Enter':
+        const c = keyHovered?.value;
+        if (!c) return;
+        // using proper methods breaks it here... why!??
+        if (collabs.includes(c)) {
+          collabs = collabs.filter((x) => x !== c);
+        } else {
+          collabs = [...collabs, c];
+        }
         search = '';
-      } else {
-        setCollabs?.(collabs);
-      }
-      return;
+        return;
     }
-    if (e.key !== 'Enter') return;
-    const c = options.find((t) => t.value)?.value;
-    if (!c) return;
-    // using proper methods breaks it here... why!??
-    if (collabs.includes(c)) {
-      collabs = collabs.filter((x) => x !== c);
-    } else {
-      collabs = [...collabs, c];
-    }
-    search = '';
   };
 
   onMount(() => searchbar.focus());
@@ -116,17 +139,21 @@
           class="border-b-2 grow placeholder:italic"
           type="text"
           placeholder="[↵] to toggle, [esc] to clear..."
-          onkeyup={onsearchkeyup}
+          onkeydown={onsearchkeydown}
           oninput={() => (search = search.replaceAll(/\s/g, ''))}
         />
       </label>
       <ul class="overflow-scroll">
-        {#each options as { value: opt, id }, idx (id)}
-          {@const firstItem = !idx}
-          <li animate:flip={{ duration: 400 }} class="list-none">
+        {#each options as { value: opt, id } (id)}
+          {@const searchSelect = keyHovered?.id === id}
+          <li animate:flip={{ duration: 400 }} class="list-none" class:search-select={searchSelect}>
             {#if opt}
               {@const forId = 'collab-' + opt}
-              <label for={forId} class="label cursor-pointer px-4" class:search-select={firstItem}>
+              <label
+                for={forId}
+                class="label cursor-pointer px-4"
+                class:search-select={searchSelect}
+              >
                 <input
                   id={forId}
                   class="checkbox checkbox-primary checkbox-xs"
@@ -138,7 +165,7 @@
                 />
                 <span>
                   <span class="label-text"><ClassLabel name={opt} /></span>
-                  {#if firstItem}&nbsp;<kbd class="kbd kbd-xs">↵</kbd>{/if}
+                  {#if searchSelect}&nbsp;<kbd class="kbd kbd-xs">↵</kbd>{/if}
                 </span>
               </label>
             {:else}
