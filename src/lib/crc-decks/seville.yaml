@@ -2,94 +2,87 @@
 format-ver: 0.1
 cards:
   Location:
-    responsibilities:
-      - description: Identified by its address
-        collaborators: []
-      - description: Has store hours, product inventory and price
-        collaborators:
-          - Item
-      - description: Has a list of all assigned employees
-        collaborators:
-          - User
+    - description: Identified by its address
+      collaborators: []
+    - description: Has store hours, product inventory and price
+      collaborators:
+        - Item
+    - description: Has a list of all assigned employees
+      collaborators:
+        - User
   Item:
-    responsibilities:
-      - description: |
-          Identified by a SKU#
-        collaborators: []
-      - description: Knows its display name and physical dimensions
-        collaborators: []
-      - description: Has a transit/purchased status linked to a Location
-        collaborators:
-          - Location
+    - description: |
+        Identified by a SKU#
+      collaborators: []
+    - description: Knows its display name and physical dimensions
+      collaborators: []
+    - description: Has a transit/purchased status linked to a Location
+      collaborators:
+        - Location
   User:
-    responsibilities:
-      - description: Identified by an active email address
-        collaborators: []
-      - description:
-          Has a linked profile (name, addresses, emails, phone numbers, delivery
-          vehicles)
-        collaborators:
-          - BuyNLargeGateway
-      - description: Has an active cart
-        collaborators:
-          - Item
-      - description: Manage payment methods and process payments
-        collaborators:
-          - BuyNLargeGateway
-          - Order
-          - AccessRole
-      - description: Provide delivery instructions and contact information
-        collaborators:
-          - BuyNLargeGateway
-          - User
-      - description: Has access roles that determine user privileges
-        collaborators:
-          - AccessRole
+    - description: Identified by an active email address
+      collaborators: []
+    - description:
+        Has a linked profile (name, addresses, emails, phone numbers, delivery
+        vehicles)
+      collaborators:
+        - BuyNLargeGateway
+    - description: Has an active cart
+      collaborators:
+        - Item
+    - description: Manage payment methods and process payments
+      collaborators:
+        - BuyNLargeGateway
+        - Order
+        - AccessRole
+    - description: Provide delivery instructions and contact information
+      collaborators:
+        - BuyNLargeGateway
+        - User
+    - description: Has access roles that determine user privileges
+      collaborators:
+        - AccessRole
   AccessRole:
-    responsibilities:
-      - description: Identified by a role token ID
-        collaborators: []
-      - description: Grants read/write privileges based on User profile and Location data
-        collaborators:
-          - BuyNLargeGateway
-          - User
-          - Location
+    - description: Identified by a role token ID
+      collaborators: []
+    - description: Grants read/write privileges based on User profile and Location data
+      collaborators:
+        - BuyNLargeGateway
+        - User
+        - Location
   Order:
-    responsibilities:
-      - description: |
-          Identified by a TXN#, timestamp, Location and customer
-        collaborators:
-          - Location
-          - User
-          - BuyNLargeGateway
-      - description: Track order status during delivery to customer
-        collaborators:
-          - User
-          - Location
-          - Item
-      - description: Calculate total price including items, taxes, and delivery fees
-        collaborators:
-          - Item
-      - description: Lists any associated return policies if a return
-        collaborators:
-          - ReturnPolicy
+    - description: |
+        Identified by a TXN#, timestamp, Location and customer
+      collaborators:
+        - Location
+        - User
+        - BuyNLargeGateway
+    - description: Track order status during delivery to customer
+      collaborators:
+        - User
+        - Location
+        - Item
+    - description: Calculate total price including items, taxes, and delivery fees
+      collaborators:
+        - Item
+    - description: Lists any associated return policies if a return
+      collaborators:
+        - ReturnPolicy
   ReturnPolicy:
-    responsibilities:
-      - description: Created by a manager for a Location
-        collaborators:
-          - User
-          - Location
-      - description: Filters which items may be returned, and at what rate
-        collaborators:
-          - Item
+    - description: Created by a manager for a Location
+      collaborators:
+        - User
+        - Location
+    - description: Filters which items may be returned, and at what rate
+      collaborators:
+        - Item
   BuyNLargeGateway:
-    responsibilities:
-      - description: Process transactions and returns securely
-        collaborators:
-          - User
-          - AccessRole
-          - Order
-      - description: Authenticate users and roles
-        collaborators:
-          - User
-          - AccessRole
+    - description: Process transactions and returns securely
+      collaborators:
+        - User
+        - AccessRole
+        - Order
+    - description: Authenticate users and roles
+      collaborators:
+        - User
+        - AccessRole

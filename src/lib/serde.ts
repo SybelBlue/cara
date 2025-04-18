@@ -1,4 +1,4 @@
-// import { parse, stringify } from 'yaml';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { z } from 'zod';
 
 // Define a generic interface for versioned data
@@ -18,79 +18,35 @@ abstract class Serializer<InputType, SerializedType> {
   validate(data: unknown): SerializedType {
     return this.schema.parse(data);
   }
-}
 
-// Example data structures for different versions
-// V1: Simple user with name and email
-interface UserV1 {
-  name: string;
-  email: string;
-}
-
-// V2: User with name split into first/last and added createdAt
-interface UserV2 {
-  firstName: string;
-  lastName: string;
-  email: string;
-  createdAt: string;
-}
-
-// Define a union type of all possible data types
-type UserDataVersions = UserV1 | UserV2;
-
-// V1 Serializer implementation
-class UserSerializerV1 extends Serializer<UserV1, UserV1> {
-  readonly version = 1;
-  readonly schema = z.object({
-    name: z.string(),
-    email: z.string().email()
-  });
-
-  serialize(data: UserV1): UserV1 {
-    return data;
-  }
-
-  deserialize(data: UserV1): UserV1 {
-    return data;
+  export(data: InputType): VersionedData<SerializedType> {
+    return { data: this.serialize(data), version: this.version };
   }
 }
 
-// V2 Serializer implementation
-class UserSerializerV2 extends Serializer<UserV2, UserV2> {
-  readonly version = 2;
-  readonly schema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email(),
-    createdAt: z.string().datetime()
-  });
-
-  serialize(data: UserV2): UserV2 {
-    return data;
-  }
-
-  deserialize(data: UserV2): UserV2 {
-    return data;
-  }
-}
-
-// Type-safe migration functions
-const migrateV1toV2 = (v1Data: UserV1): UserV2 => {
-  const nameParts = v1Data.name.split(' ');
-  return {
-    firstName: nameParts[0] || '',
-    lastName: nameParts.slice(1).join(' ') || '',
-    email: v1Data.email,
-    createdAt: new Date().toISOString()
-  };
+type SubmissionDeckV1 = {
+  [name: string]: Array<{ description: string; collaborators: Array<string> }>;
 };
 
-const migrateV2toV1 = (v2Data: UserV2): UserV1 => {
-  return {
-    name: `${v2Data.firstName} ${v2Data.lastName}`.trim(),
-    email: v2Data.email
-  };
-};
+class SubmissionV1Serializer extends Serializer<SubmissionDeckV1, SubmissionDeckV1> {
+  readonly version = 0.1;
+  readonly schema = z.object({}).catchall(
+    z.array(
+      z.object({
+        description: z.string(),
+        collaborators: z.array(z.string())
+      })
+    )
+  );
+
+  serialize(data: SubmissionDeckV1): SubmissionDeckV1 {
+    return data;
+  }
+
+  deserialize(data: SubmissionDeckV1): SubmissionDeckV1 {
+    return data;
+  }
+}
 
 // Define migration function type
 type MigrationFn<From, To> = (data: From) => To;
@@ -260,64 +216,50 @@ class SerializationManager<LatestType extends SupportedUnion, SupportedUnion> {
   }
 }
 
-// Example usage
-function demo() {
-  // Create serializers
-  const v1Serializer = new UserSerializerV1();
-  const v2Serializer = new UserSerializerV2();
+export { SerializationManager, Serializer, type MigrationMapEntry, type MigrationFn };
 
-  // Create migration mappings with proper typing
-  const migrations: MigrationMapEntry<UserDataVersions>[] = [
-    {
-      fromVersion: 1,
-      toVersion: 2,
-      migrate: migrateV1toV2 as MigrationFn<UserDataVersions, UserDataVersions>
-    },
-    {
-      fromVersion: 2,
-      toVersion: 1,
-      migrate: migrateV2toV1 as MigrationFn<UserDataVersions, UserDataVersions>
+export { stringifyYaml, parseYaml };
+
+import type { SimpleDeck } from './types';
+(function test() {
+  class SimpleDeckSerializer extends Serializer<SimpleDeck, SimpleDeck> {
+    version = 0.2;
+    schema = z.array(
+      z.object({
+        id: z.number(),
+        name: z.string().regex(/[A-Z]\w*/),
+        responsibilities: z.array(
+          z.object({
+            id: z.number(),
+            description: z.string().nonempty(),
+            collaborators: z.array(z.object({ id: z.number(), name: z.string().nonempty() }))
+          })
+        )
+      })
+    );
+    serialize(data: SimpleDeck): SimpleDeck {
+      return data;
     }
-  ];
+    deserialize(data: SimpleDeck): SimpleDeck {
+      return data;
+    }
+  }
 
-  // Create manager with UserV2 as the latest type
-  const userManager = new SerializationManager<UserV2, UserDataVersions>(
-    [v1Serializer, v2Serializer],
-    migrations
+  type SubmissionUnion = SubmissionDeckV1 | SimpleDeck;
+
+  const subV1Serializer = new SubmissionV1Serializer();
+  const simpleDeckSerializer = new SimpleDeckSerializer();
+
+
+
+  new SerializationManager<SimpleDeck, SubmissionUnion>(
+    [subV1Serializer, simpleDeckSerializer],
+    [
+      {
+        fromVersion: 0.1,
+        toVersion: 0.2,
+        migrate:
+      }
+    ]
   );
-
-  // V1 User
-  const userV1: UserV1 = {
-    name: 'John Doe',
-    email: 'john@example.com'
-  };
-
-  // Convert V1 to V2 (since our manager expects the latest type)
-  const userV1AsV2 = migrateV1toV2(userV1);
-
-  // Serialize to V1 format (this now correctly transforms V2 data to V1 format before serializing)
-  const serializedV1 = userManager.serialize(userV1AsV2, 1);
-  console.log('Serialized V1:', serializedV1);
-
-  // V2 User
-  const userV2: UserV2 = {
-    firstName: 'Jane',
-    lastName: 'Smith',
-    email: 'jane@example.com',
-    createdAt: new Date().toISOString()
-  };
-
-  // Serialize V2 user (to V2 format)
-  const serializedV2 = userManager.serialize(userV2);
-  console.log('Serialized V2:', serializedV2);
-
-  // Deserialize V1 to latest (V2)
-  const deserializedFromV1 = userManager.deserialize(serializedV1);
-  console.log('Deserialized from V1:', deserializedFromV1);
-
-  // Deserialize V2 specifically to V1
-  const deserializedToV1 = userManager.deserializeToVersion<UserV1>(serializedV2, 1);
-  console.log('Deserialized to V1:', deserializedToV1);
-}
-
-demo();
+})();
