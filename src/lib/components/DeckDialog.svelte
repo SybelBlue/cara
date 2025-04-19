@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { SimpleDeck } from '$lib/types';
+  import type { SimpleCard } from '$lib/types';
   import { deckWithIds } from '$lib/decks';
   import { exampleDecks } from '$lib/decks';
   import { aiEnabled } from '$lib/stores';
 
   type Props = {
-    loadDeck: (deck: SimpleDeck) => void;
+    loadDeck(deck: SimpleCard[]): void;
   };
 
   let loading: boolean = $state(false);

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
 
-  import type { Deck, Commit, SimpleDeck, SimpleCard, Keyed } from '$lib/types';
+  import type { Commit, SimpleCard, Card, Keyed } from '$lib/types';
   import { debug, availableClasses, allClasses } from '$lib/stores';
   import { deckWithIds, exampleDecks, withId } from '$lib/decks';
   import { undiffWords } from '$lib/diff';
@@ -17,12 +17,12 @@
 
   const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
   const deckName = page.url.searchParams.get('deckName');
-  const deckInit: SimpleDeck =
+  const deckInit: SimpleCard[] =
     deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
   console.log('Initializing deck', deckInit);
-  let cards: SimpleDeck = $state(deckInit);
-  let displayDeck: Deck = $state(deckInit);
+  let cards: SimpleCard[] = $state(deckInit);
+  let displayDeck: Card[] = $state(deckInit);
 
   $effect(() => {
     // note: prevents all other changes to $availableClasses!
@@ -41,8 +41,8 @@
   $debug = true;
 
   /// fake data ///
-  const randomizedEdits = (deck: SimpleDeck) => {
-    const out = JSON.parse(JSON.stringify(deck)) as SimpleDeck;
+  const randomizedEdits = (deck: SimpleCard[]) => {
+    const out = JSON.parse(JSON.stringify(deck)) as SimpleCard[];
     const randomIdx = (list: any[]) => Math.floor(Math.random() * list.length);
     const randomElem = <T,>(list: T[]): T => list[randomIdx(list)];
     const changed = [];
@@ -123,7 +123,7 @@
     cards = JSON.parse(JSON.stringify(cards).replaceAll(card.name, name));
     editorCard = cards.find(c => c.name === name);
   };
-  const onSelectCard = (card: Deck[number]) => {
+  const onSelectCard = (card: Card) => {
     console.log('Card selected:', card.name);
     readyForCommit = true;
     editorCard = cards.find((c) => c.id === card.id);
@@ -138,7 +138,7 @@
     editorCard = undefined;
   }
 
-  const setDisplayDeck = (deck: Deck) => {
+  const setDisplayDeck = (deck: Card[]) => {
     displayDeck = deck;
   };
 </script>

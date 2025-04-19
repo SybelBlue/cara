@@ -1,25 +1,17 @@
 <script module lang="ts">
-  import type { Keyed, DiffText } from '$lib/types';
+  import type { CardData, DiffText } from '$lib/types';
 
-  export interface Data<S> {
-    name: string;
-    responsibilities: Keyed<{
-      description: S;
-      collaborators: Keyed<{ name: S }>[];
-    }>[];
-  }
-
-  type DisplayProps = {
-    locked?: boolean;
-    hidden?: boolean;
-    selectBody?: (name: string) => void;
-    selectName?: (name: string) => void;
-    edittedResp?: (name: string, ridx: number) => void;
-    addResp?: () => void;
-    selectCollab?: (selfName: string, respIdx: number, collabName: string) => void;
+  export type DisplayProps = {
+    locked: boolean;
+    hidden: boolean;
+    selectBody(name: string): void;
+    selectName(name: string): void;
+    edittedResp(name: string, ridx: number): void;
+    addResp(): void;
+    selectCollab(selfName: string, respIdx: number, collabName: string): void;
   };
 
-  export type Props<S = DiffText> = Data<S> & DisplayProps;
+  export type Props<S extends DiffText = DiffText> = CardData<S> & Partial<DisplayProps>;
 </script>
 
 <script lang="ts">

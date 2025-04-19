@@ -1,9 +1,8 @@
 <script module lang="ts">
-  import type { Deck } from '$lib/types';
-
-  export type SortFn = (a: Deck[number], b: Deck[number]) => number;
+  import type { Card, Comparison } from '$lib/types';
+  export type SortFn = Comparison<Card>;
   export type Props = {
-    currentDeck: Deck;
+    currentDeck: Card[];
     setSortFn?: (f?: SortFn) => void;
   };
 </script>

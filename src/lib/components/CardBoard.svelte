@@ -1,11 +1,11 @@
 <script module lang="ts">
-  import type { Deck, DiffText, Keyed, SimpleDeck } from '$lib/types';
+  import type { DiffText, Keyed, SimpleCard, Card as CardProps } from '$lib/types';
 
   export interface Props {
-    cards: Deck;
+    cards: CardProps[];
     allowEditing?: boolean;
-    selectCard?: (c: Deck[number]) => void;
-    addCard?: (c: SimpleDeck[number]) => void;
+    selectCard?: (c: CardProps) => void;
+    addCard?: (c: SimpleCard) => void;
   }
 </script>
 
@@ -62,7 +62,7 @@
     selectCard?.(card);
   };
 
-  let editCollabLens: RespLens<Deck[number]> | undefined = $state();
+  let editCollabLens: RespLens<CardProps> | undefined = $state();
   const selectCollab = (cardName: string, respIdx: number, collab: string) => {
     if (allowEditing) {
       const card = cards.find((c) => c.name === cardName);
@@ -74,7 +74,7 @@
     return propagate(collab);
   };
   const setCollabs = (
-    { card, respIdx }: RespLens<Deck[number]>,
+    { card, respIdx }: RespLens<CardProps>,
     collabs: Keyed<{ name: DiffText }>[]
   ) => {
     card.responsibilities[respIdx].collaborators = collabs;

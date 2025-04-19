@@ -1,7 +1,7 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
-  import type { Deck, DiffText, Keyed, SimpleCard } from '$lib/types';
+  import type { DiffText, Keyed, SimpleCard, Card as CardT } from '$lib/types';
   import { fade } from 'svelte/transition';
   import Card from './Card.svelte';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
@@ -73,12 +73,12 @@
     );
   };
 
-  let editCollabLens: RespLens<Deck[number]> | undefined = $state();
+  let editCollabLens: RespLens<CardT> | undefined = $state();
   const selectCollab = (_cardName: string, respIdx: number, _collab: string) => {
     editCollabLens = { card, respIdx };
   };
   const setCollabs = (
-    { card, respIdx }: RespLens<Deck[number]>,
+    { card, respIdx }: RespLens<CardT>,
     collabs: Keyed<{ name: DiffText }>[]
   ) => {
     card.responsibilities[respIdx].collaborators = collabs;

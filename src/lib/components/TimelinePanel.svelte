@@ -1,16 +1,16 @@
 <script module lang="ts">
+  import type { Card, Commit, SimpleCard } from '$lib/types';
   export type Props = {
-    currentDeck: SimpleDeck;
+    currentDeck: SimpleCard[];
     commits: Commit[];
     show?: boolean;
     expand?: boolean;
-    setDisplayDeck?: (_: Deck) => void;
+    setDisplayDeck?: (_: Card[]) => void;
   };
 </script>
 
 <script lang="ts">
   import { slide } from 'svelte/transition';
-  import type { Commit, SimpleDeck, Deck } from '$lib/types';
 
   import Timeline from './Timeline.svelte';
 
@@ -18,7 +18,7 @@
 
   let { show, currentDeck, commits, expand = false, setDisplayDeck }: Props = $props();
 
-  let compareDeck: SimpleDeck | undefined = $state(undefined);
+  let compareDeck: SimpleCard[] | undefined = $state(undefined);
   let highlightedCommitId: number = $state(commits[commits.length - 1].id);
 
   const setCompareCommit = (c: Commit) => {

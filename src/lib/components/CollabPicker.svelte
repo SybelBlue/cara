@@ -4,7 +4,7 @@
   import { mergeKeyed } from '$lib/common';
   import { withId } from '$lib/decks';
 
-  export type RespLens<C extends Card<S>, S = DiffText> = {
+  export type RespLens<C extends Card> = {
     card: C;
     respIdx: number;
   };

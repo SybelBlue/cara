@@ -1,6 +1,6 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
-  import type { Deck } from '$lib/types';
+  import type { Card } from '$lib/types';
   import ThemeChanger from './ThemeChange.svelte';
   import TimelinePanel from './TimelinePanel.svelte';
   import type { Props as TimelinePanelProps } from './TimelinePanel.svelte';
@@ -18,7 +18,7 @@
     commits
   }: Props = $props();
 
-  let displayDeck: Deck = $state(currentDeck);
+  let displayDeck: Card[] = $state(currentDeck);
 
   const setDisplayDeck: Props['setDisplayDeck'] = (d) => (displayDeck = d);
 
@@ -28,7 +28,7 @@
     if (!setCardBoardDeck) return;
     const base = sorter ? displayDeck.toSorted(sorter) : displayDeck;
 
-    const [out, unchanged]: Deck[] = [[], []];
+    const [out, unchanged]: Card[][] = [[], []];
     for (const c of base) (hasDiff(c) ? out : unchanged).push(c);
 
     setCardBoardDeck([...out, ...unchanged]);
