@@ -67,7 +67,7 @@
       {/if}
     </nav>
     <h1 class="text-lg font-mono italic text-accent decoration-primary hover:underline">
-      {'{ cara }'}
+      {'{ '}<span class="transition-all hover:text-primary hover:px-2">cara</span>{' }'}
     </h1>
     <nav class="flex-1 flex flex-row-reverse gap-4">
       {#if currentDeck.length}
