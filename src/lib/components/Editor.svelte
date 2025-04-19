@@ -86,10 +86,6 @@
   };
 </script>
 
-{#if editCollabLens}
-  <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
-{/if}
-
 <div
   use:clickOutside={() => {
     if (card && Date.now() - lastChange > 200) close?.();
@@ -190,6 +186,10 @@
     <div class="flex justify-center w-2/3 max-w-fill mx-auto gap-2">
       <button class="btn btn-outline btn-primary" onclick={finishDelete}> delete </button>
     </div>
+  {/if}
+
+  {#if editCollabLens}
+    <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
   {/if}
 </div>
 

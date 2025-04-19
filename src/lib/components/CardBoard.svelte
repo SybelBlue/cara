@@ -17,6 +17,7 @@
   import { highlightedClass } from '$lib/stores';
   import { clamp } from '$lib/common';
   import { fade } from 'svelte/transition';
+  import ClassLabel from './ClassLabel.svelte';
 
   let {
     cards = $bindable(),
@@ -122,10 +123,13 @@
         onfocus={addNewCard}
         class="h-full btn btn-ghost tw-grow card dark:card-bordered shadow-xl"
         role="gridcell"
+        aria-label="add new card button"
         tabindex="0"
       >
         <div class="card-body">
-          <div class="btn btn-circle btn-primary btn-outline my-auto">+</div>
+          <div class="max-h-8 h-full my-auto">
+            <ClassLabel name="[+ add card +]" />
+          </div>
         </div>
       </div>
     </li>
