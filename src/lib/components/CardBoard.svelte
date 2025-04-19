@@ -109,6 +109,7 @@
           hidden={cardProps.name === $highlightedClass}
           locked={!allowEditing}
           selectName={propagate}
+          selectBody={propagate}
           {selectCollab}
           {...cardProps}
         />

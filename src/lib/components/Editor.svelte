@@ -1,19 +1,29 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
-  import type { SimpleCard } from '$lib/types';
+  import type { Deck, DiffText, Keyed, SimpleCard } from '$lib/types';
   import { fade } from 'svelte/transition';
   import Card from './Card.svelte';
+  import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
+  import { withId } from '$lib/decks';
 
   interface Props {
-    card: SimpleCard;
+    card: Keyed<SimpleCard>;
     readyForCommit: boolean;
     propose?: (card: SimpleCard, message: string) => void;
     rename?: (card: SimpleCard, newName: string) => void;
+    delete?: (card: Keyed<SimpleCard>) => void;
     close?: () => void;
   }
 
-  let { readyForCommit = $bindable(false), card, propose, rename, close }: Props = $props();
+  let {
+    readyForCommit = $bindable(false),
+    card,
+    propose,
+    rename,
+    close,
+    delete: onDelete
+  }: Props = $props();
 
   let lastChange = $derived.by(() => {
     card && renameMode;
@@ -22,7 +32,7 @@
 
   let messageBox: HTMLInputElement | undefined = $state();
   let message: string = $state('');
-  let validSymbolName = $derived(Boolean(message) && !$availableClasses.includes(message));
+  let validSymbolName = $derived(!message.includes(' ') && !$availableClasses.includes(message));
 
   let renameMode = $state(false);
 
@@ -31,15 +41,54 @@
     if (!rename) return;
     if (clickedName !== card.name) return;
     renameMode = true;
+    message = card.name;
     setTimeout(() => messageBox?.focus(), 100);
   };
+
   const finishRename = () => {
     const newName = message;
     renameMode = false;
     message = '';
-    rename?.(card, newName);
+    if (newName) {
+      rename?.(card, newName);
+    } else {
+      finishDelete();
+    }
+  };
+
+  const finishDelete = () => {
+    if (confirm(`Delete the '${card.name}' card?`)) onDelete?.(card);
+  };
+
+  let showAddRespButton: boolean = $derived(
+    !card.responsibilities.length ||
+      card.responsibilities[card.responsibilities.length - 1].description !== '...'
+  );
+  const addResp = () => {
+    card.responsibilities.push(
+      withId({
+        description: '...',
+        collaborators: []
+      })
+    );
+  };
+
+  let editCollabLens: RespLens<Deck[number]> | undefined = $state();
+  const selectCollab = (_cardName: string, respIdx: number, _collab: string) => {
+    editCollabLens = { card, respIdx };
+  };
+  const setCollabs = (
+    { card, respIdx }: RespLens<Deck[number]>,
+    collabs: Keyed<{ name: DiffText }>[]
+  ) => {
+    card.responsibilities[respIdx].collaborators = collabs;
+    editCollabLens = undefined;
   };
 </script>
+
+{#if editCollabLens}
+  <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
+{/if}
 
 <div
   use:clickOutside={() => {
@@ -80,8 +129,13 @@
   <!--  -->
 
   <!-- The Card area -->
-  <div class="mx-auto w-4/5">
-    <Card selectName={startRename} {...card} />
+  <div class="flex-col mx-auto w-4/5">
+    <Card
+      selectName={startRename}
+      {selectCollab}
+      addResp={showAddRespButton ? addResp : undefined}
+      {...card}
+    />
   </div>
   <!-- -->
 
@@ -107,10 +161,11 @@
       {#if readyForCommit}
         <input
           class:rename={renameMode}
+          class:btn-error={renameMode && !message}
           class="submit-button btn btn-outline w-1/4 join-item"
           type="submit"
-          value={renameMode ? 'rename' : 'propose'}
-          disabled={renameMode && !validSymbolName}
+          value={renameMode ? (message ? 'rename' : 'delete') : 'propose'}
+          disabled={renameMode && !validSymbolName && Boolean(message)}
           id="submitBtn"
           onclick={(e) => {
             if (!card) {
@@ -130,6 +185,12 @@
     </form>
   {/if}
   <!-- -->
+
+  {#if !renameMode}
+    <div class="flex justify-center w-2/3 max-w-fill mx-auto gap-2">
+      <button class="btn btn-outline btn-primary" onclick={finishDelete}> delete </button>
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">
@@ -139,7 +200,8 @@
       @apply bg-primary text-primary-content;
     }
     &.message-box {
-      @apply outline-none;
+      @apply outline-none text-base-content;
+      font-family: var(--font-mono);
     }
   }
 </style>

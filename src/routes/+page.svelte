@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
 
-  import type { Deck, Commit, SimpleDeck, SimpleCard } from '$lib/types';
+  import type { Deck, Commit, SimpleDeck, SimpleCard, Keyed } from '$lib/types';
   import { debug, availableClasses, allClasses } from '$lib/stores';
   import { deckWithIds, exampleDecks, withId } from '$lib/decks';
   import { undiffWords } from '$lib/diff';
@@ -11,7 +11,7 @@
   import Toolbar from '$lib/components/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
 
-  let selectedCard: SimpleCard | undefined = $state();
+  let editorCard: Keyed<SimpleCard> | undefined = $state();
   let readyForCommit: boolean = $state(false);
 
 
@@ -117,21 +117,26 @@
     const { response: deck } = await response.json();
     console.log(deck);
     cards = displayDeck = deckWithIds(deck);
-    selectedCard = undefined;
+    editorCard = undefined;
   };
   const onRename = (card: SimpleCard, name: string) => {
     cards = JSON.parse(JSON.stringify(cards).replaceAll(card.name, name));
-    selectedCard = cards.find(c => c.name === name);
+    editorCard = cards.find(c => c.name === name);
   };
   const onSelectCard = (card: Deck[number]) => {
     console.log('Card selected:', card.name);
     readyForCommit = true;
-    selectedCard = cards.find((c) => c.id === card.id);
+    editorCard = cards.find((c) => c.id === card.id);
   };
-  const onAddCard = (card: SimpleDeck[number]) => {
+  const onAddCard = (card: Keyed<SimpleCard>) => {
     cards.push(card);
     displayDeck.push(card);
   };
+  const onDeleteCard = (card: Keyed<SimpleCard>) => {
+    cards = cards.filter(c => c.id !== card.id);
+    displayDeck = displayDeck.filter(c => c.id !== card.id);
+    editorCard = undefined;
+  }
 
   const setDisplayDeck = (deck: Deck) => {
     displayDeck = deck;
@@ -159,13 +164,14 @@
   {#if displayDeck.length == 0}
     <DeckDialog loadDeck={(keyedDeck) => (cards = displayDeck = keyedDeck)} />
   {:else}
-    <div class:split={selectedCard} class="transition-all min-h-full max-h-full">
-      {#if selectedCard}
+    <div class:split={editorCard} class="transition-all min-h-full max-h-full">
+      {#if editorCard}
         <Editor
-          card={selectedCard}
+          card={editorCard}
           propose={onProposeEdit}
           rename={onRename}
-          close={() => (selectedCard = undefined)}
+          delete={onDeleteCard}
+          close={() => (editorCard = undefined)}
           {readyForCommit}
         />
       {/if}
