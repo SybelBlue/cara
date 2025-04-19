@@ -1,9 +1,9 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
-  import type { DiffText, Keyed, SimpleCard, Card as CardT } from '$lib/types';
+  import type { DiffText, Keyed, SimpleCard, Card } from '$lib/types';
   import { fade } from 'svelte/transition';
-  import Card from './Card.svelte';
+  import CardComponent from './Card.svelte';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
   import { withId } from '$lib/decks';
 
@@ -32,7 +32,7 @@
 
   let messageBox: HTMLInputElement | undefined = $state();
   let message: string = $state('');
-  let validSymbolName = $derived(!message.includes(' ') && !$availableClasses.includes(message));
+  let validSymbolName = $derived(!(/\b\d|\s|\W/.test(message)) && !$availableClasses.includes(message));
 
   let renameMode = $state(false);
 
@@ -45,10 +45,16 @@
     setTimeout(() => messageBox?.focus(), 100);
   };
 
-  const finishRename = () => {
-    const newName = message;
+  /** cancel renaming without saving new name */
+  const cancelRename = () => {
     renameMode = false;
     message = '';
+  };
+
+  /** end renaming and save, propagting */
+  const completeRename = () => {
+    const newName = message;
+    cancelRename();
     if (newName) {
       rename?.(card, newName);
     } else {
@@ -73,12 +79,12 @@
     );
   };
 
-  let editCollabLens: RespLens<CardT> | undefined = $state();
+  let editCollabLens: RespLens<Card> | undefined = $state();
   const selectCollab = (_cardName: string, respIdx: number, _collab: string) => {
     editCollabLens = { card, respIdx };
   };
   const setCollabs = (
-    { card, respIdx }: RespLens<CardT>,
+    { card, respIdx }: RespLens<Card>,
     collabs: Keyed<{ name: DiffText }>[]
   ) => {
     card.responsibilities[respIdx].collaborators = collabs;
@@ -126,7 +132,7 @@
 
   <!-- The Card area -->
   <div class="flex-col mx-auto w-4/5">
-    <Card
+    <CardComponent
       selectName={startRename}
       {selectCollab}
       addResp={showAddRespButton ? addResp : undefined}
@@ -139,7 +145,7 @@
   {#if $aiEnabled || renameMode}
     <form
       class="propose-form flex justify-center w-5/6 mx-auto join"
-      transition:fade
+      transition:fade={{ duration: 250 }}
       use:clickOutside={() => {
         if (renameMode && Date.now() - lastChange > 200) {
           renameMode = false;
@@ -153,6 +159,9 @@
         type="text"
         bind:this={messageBox}
         bind:value={message}
+        onkeydown={(e) => {
+          if (e.key === 'Escape') cancelRename();
+        }}
       />
       {#if readyForCommit}
         <input
@@ -169,7 +178,7 @@
               return;
             }
             if (renameMode) {
-              finishRename();
+              completeRename();
             } else {
               propose?.(card, message);
             }
@@ -182,11 +191,11 @@
   {/if}
   <!-- -->
 
-  {#if !renameMode}
+  <!-- {#if !renameMode}
     <div class="flex justify-center w-2/3 max-w-fill mx-auto gap-2">
       <button class="btn btn-outline btn-primary" onclick={finishDelete}> delete </button>
     </div>
-  {/if}
+  {/if} -->
 
   {#if editCollabLens}
     <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />

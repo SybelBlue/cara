@@ -6,7 +6,7 @@
   import { deckWithIds, exampleDecks, withId } from '$lib/decks';
   import { undiffWords } from '$lib/diff';
 
-  import Editor from '$lib/components/Editor.svelte';
+  import CardEditor from '$lib/components/CardEditor.svelte';
   import CardBoard from '$lib/components/CardBoard.svelte';
   import Toolbar from '$lib/components/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
@@ -166,7 +166,7 @@
   {:else}
     <div class:split={editorCard} class="transition-all min-h-full max-h-full">
       {#if editorCard}
-        <Editor
+        <CardEditor
           card={editorCard}
           propose={onProposeEdit}
           rename={onRename}
