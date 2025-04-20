@@ -121,14 +121,14 @@
     <li>
       <div
         onfocus={addNewCard}
-        class="h-full btn btn-ghost tw-grow card dark:card-bordered shadow-xl"
+        class="h-full btn btn-ghost tw-grow card hover:text-accent dark:card-bordered shadow-xl"
         role="gridcell"
         aria-label="add new card button"
         tabindex="0"
       >
         <div class="card-body">
           <div class="max-h-8 h-full my-auto">
-            <ClassLabel name="[+ add card +]" />
+            <span class="font-mono">[+ add card +]</span>
           </div>
         </div>
       </div>

@@ -203,3 +203,7 @@ export type Commit = {
 };
 
 export type Comparison<T> = (a: T, b: T) => number;
+
+export type Test = {
+  code: string;
+};

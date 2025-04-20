@@ -25,14 +25,15 @@
     delete: onDelete
   }: Props = $props();
 
-  let lastChange = $derived.by(() => {
-    card && renameMode;
+  const lastChange = $derived.by(() => {
+    card;
+    renameMode;
     return Date.now();
   });
 
   let messageBox: HTMLInputElement | undefined = $state();
   let message: string = $state('');
-  let validSymbolName = $derived(!(/\b\d|\s|\W/.test(message)) && !$availableClasses.includes(message));
+  const validSymbolName = $derived(!(/\b\d|\s|\W/.test(message)) && !$availableClasses.includes(message));
 
   let renameMode = $state(false);
 
@@ -100,7 +101,7 @@
 >
   <!-- header -->
   <div>
-    <div class="flex max-h-fit">
+    <div class="flex max-h-fit shadow-md rounded-b-3xl mb-2">
       <h2 class="text-lg font-mono text-neutral mx-auto my-auto p-2 pointer-events-none">
         {'「 editor 」'}
       </h2>
