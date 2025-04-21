@@ -77,6 +77,7 @@
 
   // svelte-ignore state_referenced_locally
   const fakeCommits = $derived.by(() => {
+    return [];
     if (!cards || cards.length == 0) return [];
     let lastDeck = cards;
     return [
