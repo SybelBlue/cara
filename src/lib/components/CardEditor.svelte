@@ -27,7 +27,7 @@
 
   const lastChange = $derived.by(() => {
     card;
-    renameMode;
+    renaming;
     return Date.now();
   });
 
@@ -35,20 +35,20 @@
   let message: string = $state('');
   const validSymbolName = $derived(!(/\b\d|\s|\W/.test(message)) && !$availableClasses.includes(message));
 
-  let renameMode = $state(false);
+  let renaming = $state(false);
 
   const startRename = (clickedName: string) => {
     console.log(clickedName);
     if (!rename) return;
     if (clickedName !== card.name) return;
-    renameMode = true;
+    renaming = true;
     message = card.name;
     setTimeout(() => messageBox?.focus(), 100);
   };
 
   /** cancel renaming without saving new name */
   const cancelRename = () => {
-    renameMode = false;
+    renaming = false;
     message = '';
   };
 
@@ -143,19 +143,19 @@
   <!-- -->
 
   <!-- The "propose" area -->
-  {#if $aiEnabled || renameMode}
+  {#if $aiEnabled || renaming}
     <form
       class="propose-form flex justify-center w-5/6 mx-auto join"
       transition:fade={{ duration: 250 }}
       use:clickOutside={() => {
-        if (renameMode && Date.now() - lastChange > 200) {
-          renameMode = false;
+        if (renaming && Date.now() - lastChange > 200) {
+          renaming = false;
           message = '';
         }
       }}
     >
       <input
-        class:rename={renameMode}
+        class:rename={renaming}
         class="message-box input input-bordered w-3/4 border-r-0 join-item"
         type="text"
         bind:this={messageBox}
@@ -166,19 +166,19 @@
       />
       {#if readyForCommit}
         <input
-          class:rename={renameMode}
-          class:btn-error={renameMode && !message}
+          class:rename={renaming}
+          class:btn-error={renaming && !message}
           class="submit-button btn btn-outline w-1/4 join-item"
           type="submit"
-          value={renameMode ? (message ? 'rename' : 'delete') : 'propose'}
-          disabled={renameMode && !validSymbolName && Boolean(message)}
+          value={renaming ? (message ? 'rename' : 'delete') : 'propose'}
+          disabled={renaming && !validSymbolName && Boolean(message)}
           id="submitBtn"
           onclick={(e) => {
             if (!card) {
               console.error('Tried to commit undefined card!');
               return;
             }
-            if (renameMode) {
+            if (renaming) {
               completeRename();
             } else {
               propose?.(card, message);

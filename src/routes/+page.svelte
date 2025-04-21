@@ -58,14 +58,16 @@
         () => card.responsibilities.splice(randomIdx(card.responsibilities), 1),
         () => {
           let r = randomElem(card.responsibilities);
+          if (!r) return;
           r.description = r.description.replace(/\b\w+$/, '- todo!');
         },
         () => {
           let r = randomElem(card.responsibilities);
+          if (!r) return;
           r.collaborators.splice(randomIdx(r.collaborators), 1);
         },
         () => {
-          randomElem(card.responsibilities).collaborators.push(
+          randomElem(card.responsibilities)?.collaborators.push(
             withId({ name: randomElem(out).name })
           );
         }
@@ -158,11 +160,12 @@
     readyForCommit = true;
     editorCard = cards.find((c) => c.id === card.id);
   };
-  const onAddCard = (card: Keyed<SimpleCard>) => {
+  const onAddCard = (card: SimpleCard) => {
     cards.push(card);
     displayDeck.push(card);
+    editorCard = card;
   };
-  const onDeleteCard = (card: Keyed<SimpleCard>) => {
+  const onDeleteCard = (card: SimpleCard) => {
     cards = cards.filter((c) => c.id !== card.id);
     displayDeck = displayDeck.filter((c) => c.id !== card.id);
     editorCard = undefined;

@@ -53,7 +53,6 @@
       responsibilities: []
     });
     addCard?.(card);
-    selectCard?.(card);
   };
 
   let editCollabLens: RespLens<CardProps> | undefined = $state();
@@ -75,24 +74,26 @@
 
 <svelte:window onmousemove={(e) => updatePreview(e, colWidth)} />
 
-<!-- highlighted card preview -->
-{#if previewCard}
-  <ul
-    class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
-    style="top: {previewY}px"
-    transition:fade={{ duration: 150 }}
-  >
-    {#each [...new Array(previewColumn)] as _}
-      <li class="invisble"></li>
-    {/each}
-    <li bind:clientHeight={previewCardHeight}>
-      <Card locked {...previewCard} />
-    </li>
-  </ul>
-{/if}
-
-<!-- card display -->
 <div id="backdrop" bind:clientWidth={width} bind:clientHeight={height}>
+
+  <!-- highlighted card preview: usually invisible, never in layout -->
+  {#if previewCard}
+    <ul
+      class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
+      style="top: {previewY}px"
+      transition:fade={{ duration: 150 }}
+    >
+      {#each [...new Array(previewColumn)] as _}
+        <li class="invisble"></li>
+      {/each}
+      <li bind:clientHeight={previewCardHeight}>
+        <Card locked {...previewCard} />
+      </li>
+    </ul>
+  {/if}
+  <!--  -->
+
+  <!-- card grid -->
   <ul class="min-h-full pb-2 card-grid grid-cols-{columns}">
     <!-- card listing -->
     {#each cards as { id, ...cardProps } (id)}
@@ -107,6 +108,7 @@
         />
       </li>
     {/each}
+    <!--  -->
 
     <!-- add-new-card button -->
     <li>
@@ -124,10 +126,15 @@
         </div>
       </div>
     </li>
+    <!--  -->
   </ul>
+  <!--  -->
+
+  <!-- collab picker modal: usually invisible, never in layout -->
   {#if editCollabLens}
     <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
   {/if}
+  <!--  -->
 </div>
 
 <style lang="postcss">
