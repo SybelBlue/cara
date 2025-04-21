@@ -17,8 +17,8 @@
   }
 
   let {
+    card = $bindable(),
     readyForCommit = $bindable(false),
-    card,
     propose,
     rename,
     close,

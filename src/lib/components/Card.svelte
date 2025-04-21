@@ -134,8 +134,10 @@
   }
 
   .desc {
-    @apply text-ellipsis rounded-lg bg-transparent;
+    @apply text-ellipsis rounded-lg bg-transparent font-sans;
 
+    font-size: 12pt;
+    /**= thanks to eli wiston for this contribution */
     font-family: var(--font-handwritten);
     font-size: 18pt;
   }

@@ -1,4 +1,4 @@
-import type { Keyed, DeckJson, SimpleDeck } from './types';
+import type { Keyed, DeckJson, SimpleCard } from './types';
 
 import libraryJson from '$lib/crc-decks/library.json';
 import rpgJson from '$lib/crc-decks/rpg.json';
@@ -20,7 +20,7 @@ export const withId: <T extends object>(o: T) => Keyed<T> = (function () {
   };
 })();
 
-export const deckWithIds = (deck: DeckJson): SimpleDeck => {
+export const deckWithIds = (deck: DeckJson): SimpleCard[] => {
   return deck.cards.map((card) =>
     withId({
       id: card.id,
@@ -32,9 +32,17 @@ export const deckWithIds = (deck: DeckJson): SimpleDeck => {
   );
 };
 
-export const exampleDecks: Record<string, SimpleDeck> = {
+export const exampleDecks: Record<string, SimpleCard[]> = {
   rpg: deckWithIds(rpgJson),
   library: deckWithIds(libraryJson),
   hospital: deckWithIds(hospitalJson),
-  seville: deckWithIds(sevilleJson)
+  seville: deckWithIds(sevilleJson),
+  empty: deckWithIds({
+    cards: [
+      {
+        name: 'NewClass',
+        responsibilities: [{ description: 'A new responsibility...', collaborators: [] }]
+      }
+    ]
+  })
 };

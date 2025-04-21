@@ -15,7 +15,7 @@
 
   let editorCard: Keyed<SimpleCard> | undefined = $state();
   let readyForCommit: boolean = $state(false);
-  let showTests: boolean = $state(true);
+  let showTests: boolean = $state(false);
 
   const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
   const deckName = page.url.searchParams.get('deckName');
@@ -46,6 +46,7 @@
 
   /// fake data ///
   const randomizedEdits = (deck: SimpleCard[]) => {
+    if (deck.length < 2) return [];
     const out = JSON.parse(JSON.stringify(deck)) as SimpleCard[];
     const randomIdx = (list: any[]) => Math.floor(Math.random() * list.length);
     const randomElem = <T,>(list: T[]): T => list[randomIdx(list)];
@@ -77,7 +78,7 @@
 
   // svelte-ignore state_referenced_locally
   const fakeCommits = $derived.by(() => {
-    return [];
+    // return [];
     if (!cards || cards.length == 0) return [];
     let lastDeck = cards;
     return [
@@ -187,16 +188,19 @@
   {/if}
 </svelte:head>
 
-<Toolbar bind:showTests={showTests} currentDeck={cards} {setDisplayDeck} {commits} />
+<Toolbar bind:showTests currentDeck={cards} {setDisplayDeck} {commits} />
 
-<main class="flex w-screen max-h-full overflow-hidden">
+<main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
   {#if displayDeck.length == 0}
     <DeckDialog loadDeck={(keyedDeck) => (cards = displayDeck = keyedDeck)} />
   {:else}
-    <div class:flex-1={editorCard} class="transition-all min-h-full max-h-full">
+    <div
+      class:open-tray={editorCard}
+      class="transition-all min-h-full max-h-full"
+    >
       {#if editorCard}
         <CardEditor
-          card={editorCard}
+          bind:card={editorCard}
           propose={onProposeEdit}
           rename={onRename}
           delete={onDeleteCard}
@@ -205,13 +209,19 @@
         />
       {/if}
     </div>
-    <div class="static flex-1">
+    <div class="static grow flex-1">
       <CardBoard allowEditing cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
     </div>
-    <div class:flex-1={showTests} class="transition-all min-h-full max-h-full">
+    <div class:open-tray={showTests} class="transition-all min-h-full max-h-full">
       {#if showTests}
-        <TestsTray bind:tests={tests} close={() => (showTests = false)} />
+        <TestsTray bind:tests close={() => (showTests = false)} />
       {/if}
     </div>
   {/if}
 </main>
+
+<style lang="postcss">
+  .open-tray {
+    @apply flex-1 grow;
+  }
+</style>

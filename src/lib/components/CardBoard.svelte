@@ -17,7 +17,6 @@
   import { highlightedClass } from '$lib/stores';
   import { clamp } from '$lib/common';
   import { fade } from 'svelte/transition';
-  import ClassLabel from './ClassLabel.svelte';
 
   let {
     cards = $bindable(),
@@ -121,7 +120,7 @@
     <li>
       <div
         onfocus={addNewCard}
-        class="h-full btn btn-ghost tw-grow card hover:text-accent dark:card-bordered shadow-xl"
+        class="h-full btn btn-ghost tw-grow card max-h-[25vh] hover:text-accent dark:card-bordered shadow-xl"
         role="gridcell"
         aria-label="add new card button"
         tabindex="0"
@@ -141,7 +140,7 @@
 
 <style lang="postcss">
   #backdrop {
-    @apply relative top-0 left-0 bg-base-100 max-h-full overflow-scroll snap-y;
+    @apply relative top-0 left-0 bg-base-100 h-full max-h-full overflow-scroll snap-y;
   }
 
   .card-grid {

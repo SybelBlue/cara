@@ -15,6 +15,6 @@
 
 <style lang="postcss">
   #app {
-    @apply absolute overflow-hidden flex flex-col p-0 m-auto max-h-[100vh] max-w-[100vw] box-border;
+    @apply absolute overflow-hidden flex flex-col p-0 m-auto min-h-full max-h-[100vh] max-w-[100vw] box-border;
   }
 </style>
