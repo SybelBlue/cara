@@ -210,7 +210,7 @@
       {/if}
     </div>
     <div class="static grow flex-1">
-      <CardBoard allowEditing cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
+      <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
     </div>
     <div class:open-tray={showTests} class="transition-all min-h-full max-h-full">
       {#if showTests}

@@ -3,7 +3,7 @@
 
   export interface Props {
     cards: CardProps[];
-    allowEditing?: boolean;
+    locked?: boolean;
     selectCard?: (c: CardProps) => void;
     addCard?: (c: SimpleCard) => void;
   }
@@ -18,12 +18,7 @@
   import { clamp } from '$lib/common';
   import { fade } from 'svelte/transition';
 
-  let {
-    cards = $bindable(),
-    allowEditing,
-    selectCard,
-    addCard
-  }: Props = $props();
+  let { cards = $bindable(), locked, selectCard, addCard }: Props = $props();
 
   let width: number = $state(0);
 
@@ -63,14 +58,11 @@
 
   let editCollabLens: RespLens<CardProps> | undefined = $state();
   const selectCollab = (cardName: string, respIdx: number, collab: string) => {
-    if (allowEditing) {
-      const card = cards.find((c) => c.name === cardName);
-      if (card) {
-        editCollabLens = { card, respIdx };
-        return;
-      }
+    if (locked) return propagate(collab);
+    const card = cards.find((c) => c.name === cardName);
+    if (card) {
+      editCollabLens = { card, respIdx };
     }
-    return propagate(collab);
   };
   const setCollabs = (
     { card, respIdx }: RespLens<CardProps>,
@@ -101,13 +93,13 @@
 
 <!-- card display -->
 <div id="backdrop" bind:clientWidth={width} bind:clientHeight={height}>
-  <ul class="min-h-full card-grid grid-cols-{columns}">
+  <ul class="min-h-full pb-2 card-grid grid-cols-{columns}">
     <!-- card listing -->
     {#each cards as { id, ...cardProps } (id)}
       <li animate:flip={{ duration: 600 }}>
         <Card
+          {locked}
           hidden={cardProps.name === $highlightedClass}
-          locked={!allowEditing}
           selectName={propagate}
           selectBody={propagate}
           {selectCollab}
