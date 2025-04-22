@@ -1,18 +1,18 @@
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
-  import type { DiffText, Keyed, SimpleCard, Card } from '$lib/types';
+  import type { SimpleCard, Card } from '$lib/types';
   import { fade } from 'svelte/transition';
   import CardComponent from './Card.svelte';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
   import { withId } from '$lib/decks';
 
   interface Props {
-    card: Keyed<SimpleCard>;
+    card: SimpleCard;
     readyForCommit: boolean;
     propose?: (card: SimpleCard, message: string) => void;
     rename?: (card: SimpleCard, newName: string) => void;
-    delete?: (card: Keyed<SimpleCard>) => void;
+    delete?: (card: SimpleCard) => void;
     close?: () => void;
   }
 
@@ -86,7 +86,7 @@
   };
   const setCollabs = (
     { card, respIdx }: RespLens<Card>,
-    collabs: Keyed<{ name: DiffText }>[]
+    collabs: Card['responsibilities'][number]['collaborators']
   ) => {
     card.responsibilities[respIdx].collaborators = collabs;
     editCollabLens = undefined;

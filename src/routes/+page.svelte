@@ -13,7 +13,7 @@
   import TestsTray from '$lib/components/TestsTray.svelte';
   import { onMount } from 'svelte';
 
-  let editorCard: Keyed<SimpleCard> | undefined = $state();
+  let editorCard: SimpleCard | undefined = $state();
   let readyForCommit: boolean = $state(false);
   let showTests: boolean = $state(false);
 
@@ -207,7 +207,7 @@
       }}
     />
   {:else}
-    <div class:open-tray={editorCard} class="transition-all min-h-full max-h-full">
+    <div class:open={editorCard} class="tray">
       {#if editorCard}
         <CardEditor
           bind:card={editorCard}
@@ -219,10 +219,10 @@
         />
       {/if}
     </div>
-    <div class="static grow flex-1">
+    <div class="static open tray">
       <CardBoard locked cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
     </div>
-    <div class:open-tray={showTests} class="transition-all min-h-full max-h-full">
+    <div class:open={showTests} class="tray">
       {#if showTests}
         <TestsTray bind:tests close={() => (showTests = false)} />
       {/if}
@@ -231,7 +231,10 @@
 </main>
 
 <style lang="postcss">
-  .open-tray {
-    @apply flex-1 grow;
+  .tray {
+    @apply transition-all min-h-full max-h-full;
+    &.open {
+      @apply flex-1 grow;
+    }
   }
 </style>
