@@ -5,7 +5,7 @@
   import { aiEnabled } from '$lib/stores';
 
   type Props = {
-    loadDeck(deck: SimpleCard[]): void;
+    loadDeck(deck: SimpleCard[], name?: string): void;
   };
 
   let loading: boolean = $state(false);
@@ -34,7 +34,7 @@
           aria-label="load this deck"
           disabled={!deckName}
           onclick={() => {
-            if (deckName) loadDeck(exampleDecks[deckName]);
+            if (deckName) loadDeck(exampleDecks[deckName], deckName);
           }}
         />
       </div>

@@ -18,8 +18,9 @@
   let showTests: boolean = $state(false);
 
   const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
-  const deckName = page.url.searchParams.get('deckName');
+  let deckName = $state(page.url.searchParams.get('deckName'));
   const deckInit: SimpleCard[] =
+    // svelte-ignore state_referenced_locally
     deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
   console.log('Initializing deck', deckInit);
@@ -177,7 +178,11 @@
 </script>
 
 <svelte:head>
-  <title>CARA</title>
+  {#if deckName}
+    <title>cara : {deckName.toLowerCase()}</title>
+  {:else}
+    <title>cara</title>
+  {/if}
   <meta name="description" content="crc card design game" />
 
   <!-- patch to delay page load until theme is ready in deployment -->
@@ -195,12 +200,14 @@
 
 <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
   {#if displayDeck.length == 0}
-    <DeckDialog loadDeck={(keyedDeck) => (cards = displayDeck = keyedDeck)} />
+    <DeckDialog
+      loadDeck={(keyedDeck, name) => {
+        cards = displayDeck = keyedDeck;
+        deckName = name || null;
+      }}
+    />
   {:else}
-    <div
-      class:open-tray={editorCard}
-      class="transition-all min-h-full max-h-full"
-    >
+    <div class:open-tray={editorCard} class="transition-all min-h-full max-h-full">
       {#if editorCard}
         <CardEditor
           bind:card={editorCard}
