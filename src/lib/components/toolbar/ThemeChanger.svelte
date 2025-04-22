@@ -2,6 +2,7 @@
 <script>
   import { onMount } from 'svelte';
   import { themeChange } from 'theme-change';
+  import ToolbarButton from './ToolbarButton.svelte';
   onMount(() => themeChange(false));
   let themes = [
     'autumn',
@@ -39,25 +40,30 @@
   ];
 </script>
 
-<div title="Change Theme" class="dropdown dropdown-start z-30 [@supports(color:oklch(0%_0_0))]:block">
-  <div tabindex="0" role="button" class="btn btn-ghost input-bordered btn-circle">
-    <svg
-      width="15"
-      height="15"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      class="h-5 w-5 stroke-current"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+<div
+  title="Change Theme"
+  class="dropdown dropdown-start z-30 [@supports(color:oklch(0%_0_0))]:block"
+>
+  <ToolbarButton label="change theme">
+    {#snippet inner()}
+      <svg
+        width="15"
+        height="15"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="h-5 w-5 stroke-current"
       >
-      </path>
-    </svg>
-  </div>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+        >
+        </path>
+      </svg>
+    {/snippet}
+  </ToolbarButton>
   <div
     class="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 mt-16"
   >

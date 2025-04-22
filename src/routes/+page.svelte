@@ -8,7 +8,7 @@
 
   import CardEditor from '$lib/components/CardEditor.svelte';
   import CardBoard from '$lib/components/CardBoard.svelte';
-  import Toolbar from '$lib/components/Toolbar.svelte';
+  import Toolbar from '$lib/components/toolbar/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
   import TestsTray from '$lib/components/TestsTray.svelte';
   import { onMount } from 'svelte';
