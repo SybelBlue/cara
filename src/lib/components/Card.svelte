@@ -20,6 +20,7 @@
   import Diff from './Diff.svelte';
   import { isDiff, undiffWords } from '$lib/diff';
   import { flip } from 'svelte/animate';
+  import { onMount } from 'svelte';
 
   let {
     name = $bindable(),
@@ -34,6 +35,13 @@
   }: Props = $props();
 
   let highlight = $derived($highlightedClass === name);
+
+  const resizeTextarea = (e: HTMLTextAreaElement) => {
+    e.style.height = e.scrollHeight + 'px'
+  };
+  let textareas: HTMLTextAreaElement[] = [];
+
+  onMount(() => { textareas.forEach(resizeTextarea) });
 </script>
 
 <div
@@ -69,8 +77,10 @@
                 <Diff diff={r.description} />
               {:else}
                 <textarea
+                  bind:this={textareas[ridx]}
                   bind:value={r.description}
                   class="h-auto"
+                  oninput={(e) => resizeTextarea(e.currentTarget)}
                   onblur={() => edittedResp?.(name, ridx)}
                 >
                   <!-- do not add here, bind:value will overwrite -->
@@ -136,10 +146,8 @@
   .desc {
     @apply text-ellipsis rounded-lg bg-transparent font-sans;
 
-    font-size: 12pt;
-    /**= thanks to eli wiston for this contribution */
     font-family: var(--font-handwritten);
-    font-size: 18pt;
+    font-size: 14pt;
   }
 
   textarea {
