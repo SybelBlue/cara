@@ -220,7 +220,7 @@
       {/if}
     </div>
     <div class="static open tray">
-      <CardBoard locked cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
+      <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
     </div>
     <div class:open={showTests} class="tray">
       {#if showTests}

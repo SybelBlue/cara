@@ -145,10 +145,6 @@
     @apply min-w-full overflow-visible grid gap-2 px-1;
   }
 
-  .shift {
-    @apply bg-primary;
-  }
-
   li {
     @apply relative snap-start z-[1];
   }

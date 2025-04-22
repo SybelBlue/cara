@@ -41,7 +41,10 @@
   };
   let textareas: HTMLTextAreaElement[] = [];
 
-  onMount(() => { textareas.forEach(resizeTextarea) });
+  onMount(() => {
+    textareas.forEach(resizeTextarea);
+    setTimeout(() => textareas.forEach(resizeTextarea), 150);
+  });
 </script>
 
 <div
