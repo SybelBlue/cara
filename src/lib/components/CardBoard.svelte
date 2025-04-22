@@ -74,25 +74,24 @@
 
 <svelte:window onmousemove={(e) => updatePreview(e, colWidth)} />
 
+<!-- highlighted card preview: usually invisible, never in layout -->
+{#if previewCard}
+  <ul
+    class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
+    style="top: {previewY}px"
+    transition:fade={{ duration: 150 }}
+  >
+    {#each [...new Array(previewColumn)] as _}
+      <li class="invisble"></li>
+    {/each}
+    <li bind:clientHeight={previewCardHeight}>
+      <Card locked {...previewCard} />
+    </li>
+  </ul>
+{/if}
+<!--  -->
+
 <div id="backdrop" bind:clientWidth={width} bind:clientHeight={height}>
-
-  <!-- highlighted card preview: usually invisible, never in layout -->
-  {#if previewCard}
-    <ul
-      class="absolute pointer-events-none z-10 card-grid grid-cols-{columns}"
-      style="top: {previewY}px"
-      transition:fade={{ duration: 150 }}
-    >
-      {#each [...new Array(previewColumn)] as _}
-        <li class="invisble"></li>
-      {/each}
-      <li bind:clientHeight={previewCardHeight}>
-        <Card locked {...previewCard} />
-      </li>
-    </ul>
-  {/if}
-  <!--  -->
-
   <!-- card grid -->
   <ul class="min-h-full pb-2 card-grid grid-cols-{columns}">
     <!-- card listing -->
