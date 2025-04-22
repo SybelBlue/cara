@@ -37,9 +37,10 @@
   let highlight = $derived($highlightedClass === name);
 
   const resizeTextarea = (e: HTMLTextAreaElement) => {
+    if (!e || !e.style) return;
     e.style.height = e.scrollHeight + 'px'
   };
-  let textareas: HTMLTextAreaElement[] = [];
+  let textareas: HTMLTextAreaElement[] = $state([]);
 
   onMount(() => {
     textareas.forEach(resizeTextarea);
