@@ -1,3 +1,15 @@
+<script module lang="ts">
+  export type EditorActions = {
+    proposeCommit(card: SimpleCard, message: string): void;
+    renameCard(card: SimpleCard, newName: string): void;
+    deleteCard(card: SimpleCard): void;
+    close(): void;
+  };
+  export type Props = Partial<EditorActions> & {
+    card: SimpleCard;
+    readyForCommit: boolean;
+  };
+</script>
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
@@ -7,22 +19,13 @@
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
   import { withId } from '$lib/decks';
 
-  interface Props {
-    card: SimpleCard;
-    readyForCommit: boolean;
-    propose?: (card: SimpleCard, message: string) => void;
-    rename?: (card: SimpleCard, newName: string) => void;
-    delete?: (card: SimpleCard) => void;
-    close?: () => void;
-  }
-
   let {
     card = $bindable(),
     readyForCommit = $bindable(false),
-    propose,
-    rename,
+    proposeCommit,
+    renameCard,
     close,
-    delete: onDelete
+    deleteCard,
   }: Props = $props();
 
   const lastChange = $derived.by(() => {
@@ -41,7 +44,7 @@
 
   const startRename = (clickedName: string) => {
     console.log(clickedName);
-    if (!rename) return;
+    if (!renameCard) return;
     if (clickedName !== card.name) return;
     renaming = true;
     message = card.name;
@@ -59,14 +62,14 @@
     const newName = message;
     cancelRename();
     if (newName) {
-      rename?.(card, newName);
+      renameCard?.(card, newName);
     } else {
       finishDelete();
     }
   };
 
   const finishDelete = () => {
-    if (confirm(`Delete the '${card.name}' card?`)) onDelete?.(card);
+    if (confirm(`Delete the '${card.name}' card?`)) deleteCard?.(card);
   };
 
   let showAddRespButton: boolean = $derived(
@@ -180,7 +183,7 @@
           class="submit-button btn btn-outline w-1/4 join-item"
           type="submit"
           value="propose"
-          onclick={() => propose?.(card, message)}
+          onclick={() => proposeCommit?.(card, message)}
         />
       {:else}
         <div class="btn btn-disabled btn-outline loading loading-ring loading-lg mb-auto"></div>

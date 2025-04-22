@@ -11,7 +11,7 @@
   import ToolbarButton from './ToolbarButton.svelte';
 
   type Props = Omit<TimelinePanelProps, 'show'> & {
-    showTests: boolean;
+    showTests?: boolean;
   };
 
   let {
@@ -49,8 +49,8 @@
   <!-- left nav buttons -->
   <div class="w-full px-4 py-3 flex items-center justify-between">
     <nav class="flex-1 flex gap-4">
+      <ThemeChanger />
       {#if currentDeck.length}
-        <ThemeChanger />
         <SortWidget {currentDeck} setSortFn={(fn) => (sorter = fn)} />
       {/if}
     </nav>

@@ -1,21 +1,14 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { page } from '$app/state';
 
-  import type { Commit, SimpleCard, Card, Keyed, Test } from '$lib/types';
-  import { debug, availableClasses, allClasses } from '$lib/stores';
-  import { deckWithIds, exampleDecks, withId } from '$lib/decks';
-  import { undiffWords } from '$lib/diff';
+  import type { Commit, SimpleCard, Card, Test } from '$lib/types';
+  import { exampleDecks, withId } from '$lib/decks';
+  import { debug } from '$lib/stores';
 
-  import CardEditor from '$lib/components/CardEditor.svelte';
-  import CardBoard from '$lib/components/CardBoard.svelte';
-  import Toolbar from '$lib/components/toolbar/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
-  import TestsTray from '$lib/components/TestsTray.svelte';
-  import { onMount } from 'svelte';
-
-  let editorCard: SimpleCard | undefined = $state();
-  let readyForCommit: boolean = $state(false);
-  let showTests: boolean = $state(false);
+  import App from '$lib/components/App.svelte';
+  import Toolbar from '$lib/components/toolbar/Toolbar.svelte';
 
   const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
   let deckName = $state(page.url.searchParams.get('deckName'));
@@ -24,24 +17,7 @@
     deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
   console.log('Initializing deck', deckInit);
-  let cards: SimpleCard[] = $state(deckInit);
-  let displayDeck: Card[] = $state(deckInit);
-
-  $effect(() => {
-    // note: prevents all other changes to $availableClasses!
-    $availableClasses = displayDeck.map((c) => c.name);
-  });
-  $effect(() => {
-    // note: prevents all other changes to $allClasses!
-    $allClasses = [
-      ...new Set([
-        ...displayDeck.map((c) => c.name),
-        ...displayDeck.flatMap((c) =>
-          c.responsibilities.flatMap((r) => r.collaborators.map((c) => c.name).map(undiffWords))
-        )
-      ])
-    ];
-  });
+  let deck: SimpleCard[] = $state(deckInit);
 
   $debug = true;
 
@@ -80,10 +56,10 @@
   };
 
   // svelte-ignore state_referenced_locally
-  const fakeCommits = $derived.by(() => {
+  const fakeCommits = (() => {
     // return [];
-    if (!cards || cards.length == 0) return [];
-    let lastDeck = cards;
+    if (!deck || deck.length == 0) return [];
+    let lastDeck = deck;
     return [
       {
         id: 7,
@@ -108,9 +84,9 @@
       { id: 2, state: [], text: 'updated manna', date: '11/2/2024' },
       { id: 1, state: [], text: 'initial commit', date: '11/1/2024' }
     ].toReversed();
-  });
+  })();
   /// fake data ///
-  const commits: Commit[] = $derived(fakeCommits);
+  let commits: Commit[] = $state(fakeCommits);
 
   let tests: Test[] = $state([
     {
@@ -135,46 +111,6 @@
     tests.splice(0, 0, ...tests);
     tests.splice(0, 0, ...tests);
   });
-
-  const onProposeEdit = async (card: SimpleCard, message: string) => {
-    console.log('Propose card', message, card);
-    readyForCommit = false;
-    const response = await fetch('/api/object', {
-      method: 'POST',
-      body: JSON.stringify({
-        // TODO: currently we're passing in the deck/card with ids. That may reduce quality
-        description: `Consider this deck:\n\`\`\`json\n{ "cards" : ${JSON.stringify(cards)} }\n\`\`\`\n\nGiven that we are now upserting the following card, describing the change as "${message}", update both the collaborators on this card and the whole deck to remain consistent. This may involve removing or adding responsibilities, their respective lists of collaborators, or even adding or removing whole cards. Make sure to reproduce all unchanged cards.\n\`\`\`json\n${JSON.stringify(card)}\n\`\`\``,
-        schema: 'Deck'
-      })
-    });
-    const { response: deck } = await response.json();
-    console.log(deck);
-    cards = displayDeck = deckWithIds(deck);
-    editorCard = undefined;
-  };
-  const onRename = (card: SimpleCard, name: string) => {
-    cards = JSON.parse(JSON.stringify(cards).replaceAll(card.name, name));
-    editorCard = cards.find((c) => c.name === name);
-  };
-  const onSelectCard = (card: Card) => {
-    console.log('Card selected:', card.name);
-    readyForCommit = true;
-    editorCard = cards.find((c) => c.id === card.id);
-  };
-  const onAddCard = (card: SimpleCard) => {
-    cards.push(card);
-    displayDeck.push(card);
-    editorCard = card;
-  };
-  const onDeleteCard = (card: SimpleCard) => {
-    cards = cards.filter((c) => c.id !== card.id);
-    displayDeck = displayDeck.filter((c) => c.id !== card.id);
-    editorCard = undefined;
-  };
-
-  const setDisplayDeck = (deck: Card[]) => {
-    displayDeck = deck;
-  };
 </script>
 
 <svelte:head>
@@ -196,45 +132,17 @@
   {/if}
 </svelte:head>
 
-<Toolbar bind:showTests currentDeck={cards} {setDisplayDeck} {commits} />
 
-<main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
-  {#if displayDeck.length == 0}
+{#if deck.length == 0}
+  <Toolbar currentDeck={[]} commits={[]} />
+  <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
     <DeckDialog
       loadDeck={(keyedDeck, name) => {
-        cards = displayDeck = keyedDeck;
+        deck = keyedDeck;
         deckName = name || null;
       }}
     />
-  {:else}
-    <div class:open={editorCard} class="tray">
-      {#if editorCard}
-        <CardEditor
-          bind:card={editorCard}
-          propose={onProposeEdit}
-          rename={onRename}
-          delete={onDeleteCard}
-          close={() => (editorCard = undefined)}
-          {readyForCommit}
-        />
-      {/if}
-    </div>
-    <div class="static open tray">
-      <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
-    </div>
-    <div class:open={showTests} class="tray">
-      {#if showTests}
-        <TestsTray bind:tests close={() => (showTests = false)} />
-      {/if}
-    </div>
-  {/if}
-</main>
-
-<style lang="postcss">
-  .tray {
-    @apply transition-all min-h-full max-h-full;
-    &.open {
-      @apply flex-1 grow;
-    }
-  }
-</style>
+  </main>
+{:else}
+  <App bind:deck bind:tests bind:commits />
+{/if}
