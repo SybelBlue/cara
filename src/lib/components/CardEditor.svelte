@@ -33,7 +33,9 @@
 
   let messageBox: HTMLInputElement | undefined = $state();
   let message: string = $state('');
-  const validSymbolName = $derived(!(/\b\d|\s|\W/.test(message)) && !$availableClasses.includes(message));
+  const validSymbolName = $derived(
+    !/\b\d|\s|\W/.test(message) && !$availableClasses.includes(message)
+  );
 
   let renaming = $state(false);
 
@@ -97,55 +99,55 @@
   use:clickOutside={() => {
     if (card && Date.now() - lastChange > 200) close?.();
   }}
-  class="relative min-h-full w-full z-50 bg-base-100 grid grid-cols-1 shadow-xl"
+  class="relative size-full max-h-full z-50 py-4 flex flex-col bg-base-100 shadow-xl"
 >
   <!-- header -->
-  <div>
-    <div class="flex max-h-fit shadow-md rounded-b-3xl mb-2">
-      <h2 class="text-lg font-mono text-neutral mx-auto my-auto p-2 pointer-events-none">
-        {'「 editor 」'}
-      </h2>
-      <!-- "X" button in top right -->
-      <button
-        class="btn btn-sm btn-circle btn-outline outline-neutral mx-2 my-auto"
-        onclick={() => close?.()}
-        aria-label="Select Theme"
+  <div class="flex-none flex max-h-fit shadow-md rounded-b-3xl mb-2">
+    <h2 class="text-lg font-mono text-neutral mx-auto my-auto p-2 pointer-events-none">
+      {'「 editor 」'}
+    </h2>
+    <!-- "X" button in top right -->
+    <button
+      class="btn btn-sm btn-circle btn-outline outline-neutral mx-2 my-auto"
+      onclick={() => close?.()}
+      aria-label="Select Theme"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-      <!-- -->
-    </div>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+    <!-- -->
   </div>
   <!--  -->
 
-  <!-- The Card area -->
-  <div class="flex-col mx-auto w-4/5">
-    <CardComponent
-      selectName={startRename}
-      {selectCollab}
-      addResp={showAddRespButton ? addResp : undefined}
-      {...card}
-    />
+  <div class="flex-grow flex flex-col p-2 overflow-auto">
+    <!-- The Card area -->
+    <div class="flex-col m-auto w-4/5">
+      <CardComponent
+        selectName={startRename}
+        {selectCollab}
+        addResp={showAddRespButton ? addResp : undefined}
+        {...card}
+      />
+    </div>
+    <!-- -->
   </div>
-  <!-- -->
 
   <!-- The "propose" area -->
   {#if $aiEnabled || renaming}
     <form
-      class="propose-form flex justify-center w-5/6 mx-auto join"
+      class="propose-form flex-grow flex justify-center w-5/6 mx-auto join"
       transition:fade={{ duration: 250 }}
       use:clickOutside={() => {
         if (renaming && Date.now() - lastChange > 200) {
@@ -191,12 +193,6 @@
     </form>
   {/if}
   <!-- -->
-
-  <!-- {#if !renameMode}
-    <div class="flex justify-center w-2/3 max-w-fill mx-auto gap-2">
-      <button class="btn btn-outline btn-primary" onclick={finishDelete}> delete </button>
-    </div>
-  {/if} -->
 
   {#if editCollabLens}
     <CollabPicker {...createPropsFromLens(editCollabLens, setCollabs)} />
