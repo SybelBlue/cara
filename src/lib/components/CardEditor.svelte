@@ -131,9 +131,9 @@
   </div>
   <!--  -->
 
+  <!-- The Card area -->
   <div class="flex-grow flex flex-col p-2 overflow-auto">
-    <!-- The Card area -->
-    <div class="flex-col m-auto w-4/5">
+    <div class="m-auto w-4/5">
       <CardComponent
         selectName={startRename}
         {selectCollab}
@@ -141,8 +141,8 @@
         {...card}
       />
     </div>
-    <!-- -->
   </div>
+  <!-- -->
 
   <!-- The "propose" area -->
   {#if $aiEnabled || renaming}
@@ -166,26 +166,21 @@
           if (e.key === 'Escape') cancelRename();
         }}
       />
-      {#if readyForCommit}
+      {#if renaming}
         <input
-          class:rename={renaming}
-          class:btn-error={renaming && !message}
+          class:btn-error={!message}
+          class="rename submit-button btn btn-outline w-1/4 join-item"
+          type="submit"
+          value={message ? 'rename' : 'delete'}
+          disabled={Boolean(message) && !validSymbolName}
+          onclick={completeRename}
+        />
+      {:else if readyForCommit}
+        <input
           class="submit-button btn btn-outline w-1/4 join-item"
           type="submit"
-          value={renaming ? (message ? 'rename' : 'delete') : 'propose'}
-          disabled={renaming && !validSymbolName && Boolean(message)}
-          id="submitBtn"
-          onclick={(e) => {
-            if (!card) {
-              console.error('Tried to commit undefined card!');
-              return;
-            }
-            if (renaming) {
-              completeRename();
-            } else {
-              propose?.(card, message);
-            }
-          }}
+          value="propose"
+          onclick={() => propose?.(card, message)}
         />
       {:else}
         <div class="btn btn-disabled btn-outline loading loading-ring loading-lg mb-auto"></div>
