@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { clickOutside } from '$lib/actions';
+  import { Highlight } from 'svelte-highlight';
+  import { yaml } from 'svelte-highlight/languages';
   import type { Card } from '$lib/types';
+  import { clickOutside } from '$lib/actions';
+  import { hasDiff } from '$lib/diff';
   import ThemeChanger from './ThemeChange.svelte';
   import TimelinePanel from './TimelinePanel.svelte';
   import type { Props as TimelinePanelProps } from './TimelinePanel.svelte';
   import SortWidget, { type SortFn } from './SortWidget.svelte';
-  import { hasDiff } from '$lib/diff';
+  import { deckToSubmission } from '$lib/serde';
+  import { copyToClipboard } from '$lib/common';
 
   type Props = Omit<TimelinePanelProps, 'show'> & {
     showTests: boolean;
@@ -21,6 +25,9 @@
   let displayDeck: Card[] = $state(currentDeck);
   let showTimeline = $state(false);
   let sorter: undefined | SortFn = $state();
+
+  let showSubmissionModal = $state(false);
+  const submissionYaml = $derived(deckToSubmission(currentDeck));
 
   const setDisplayDeck: Props['setDisplayDeck'] = (d) => (displayDeck = d);
 
@@ -97,13 +104,54 @@
           </button>
         {/if}
         <!--  -->
+
+        <button
+          class="btn btn-ghost btn-circle input-bordered"
+          aria-label="donwload state"
+          onclick={() => (showSubmissionModal = !showSubmissionModal)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#e3e3e3"
+          >
+            <path
+              d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"
+            />
+          </svg>
+        </button>
       {/if}
     </nav>
   </div>
+
   {#if currentDeck.length > 0 && commits.length > 0}
     <TimelinePanel show={showTimeline} {currentDeck} {setDisplayDeck} {commits} expand />
   {/if}
 </header>
+
+{#if showSubmissionModal}
+  <dialog class="modal modal-open max-h-full max-w-full">
+    <div class="modal-box max-h-3/4 static flex-col">
+      <button
+        class="flex btn btn-block btn-primary mb-2"
+        onclick={() => copyToClipboard(submissionYaml)}>
+        copy to clipboard
+      </button>
+      <div class="flex w-full overflow-auto">
+        <div class="card w-full dark:card-bordered shadow-md max-w-full">
+          <section class="card-body h-fit text-sm">
+            <Highlight language={yaml} code={submissionYaml} />
+          </section>
+        </div>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button onclick={() => (showSubmissionModal = false)}>close</button>
+    </form>
+  </dialog>
+{/if}
 
 <style lang="postcss">
   svg {

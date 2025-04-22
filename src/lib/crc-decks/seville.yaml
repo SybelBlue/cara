@@ -1,6 +1,6 @@
 ---
-format-ver: 0.1
-cards:
+version: serialized-0.1
+data:
   Location:
     - description: Identified by its address
       collaborators: []
