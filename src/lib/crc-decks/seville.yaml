@@ -22,8 +22,7 @@ data:
   User:
     - description: Identified by an active email address
       collaborators: []
-    - description:
-        Has a linked profile (name, addresses, emails, phone numbers, delivery
+    - description: Has a linked profile (name, addresses, emails, phone numbers, delivery
         vehicles)
       collaborators:
         - BuyNLargeGateway

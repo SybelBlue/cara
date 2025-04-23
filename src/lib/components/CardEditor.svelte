@@ -10,6 +10,7 @@
     readyForCommit: boolean;
   };
 </script>
+
 <script lang="ts">
   import { clickOutside } from '$lib/actions';
   import { aiEnabled, availableClasses } from '$lib/stores';
@@ -25,7 +26,7 @@
     proposeCommit,
     renameCard,
     close,
-    deleteCard,
+    deleteCard
   }: Props = $props();
 
   const lastChange = $derived.by(() => {

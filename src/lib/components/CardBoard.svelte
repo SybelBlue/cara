@@ -4,7 +4,7 @@
   export type CardBoardActions = {
     selectCard(c: FullCard): void;
     addCard(c: SimpleCard): void;
-  }
+  };
 
   export type Props = Partial<CardBoardActions> & {
     cards: FullCard[];

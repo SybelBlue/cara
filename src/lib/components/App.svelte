@@ -61,7 +61,7 @@
       deck.push(card);
       displayDeck.push(card);
       editorCard = card;
-    },
+    }
   };
 
   const editorActions: EditorActions = {
@@ -94,8 +94,8 @@
   };
 
   const testTrayActions: TestTrayActions = {
-    close: () => (showTests = false),
-  }
+    close: () => (showTests = false)
+  };
 </script>
 
 <Toolbar bind:showTests currentDeck={deck} {setDisplayDeck} {commits} />

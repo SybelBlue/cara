@@ -132,7 +132,6 @@
   {/if}
 </svelte:head>
 
-
 {#if deck.length == 0}
   <Toolbar currentDeck={[]} commits={[]} />
   <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">

@@ -5,7 +5,7 @@
       "responsibilities": [
         {
           "description": "Identified by its address",
-          "collaborators": [ ]
+          "collaborators": []
         },
         {
           "description": "Has store hours, product inventory and price",
@@ -22,11 +22,11 @@
       "responsibilities": [
         {
           "description": "Identified by a SKU#",
-          "collaborators": [ ]
+          "collaborators": []
         },
         {
           "description": "Knows its display name and physical dimensions",
-          "collaborators": [ ]
+          "collaborators": []
         },
         {
           "description": "Has a transit/purchased status linked to a Location",
@@ -39,20 +39,15 @@
       "responsibilities": [
         {
           "description": "Identified by an active email address",
-          "collaborators": [
-          ]
+          "collaborators": []
         },
         {
           "description": "Has a linked profile (name, addresses, emails, phone numbers, delivery vehicles)",
-          "collaborators": [
-            { "name": "BuyNLargeGateway" }
-          ]
+          "collaborators": [{ "name": "BuyNLargeGateway" }]
         },
         {
           "description": "Has an active cart",
-          "collaborators": [
-            { "name": "Item" }
-          ]
+          "collaborators": [{ "name": "Item" }]
         },
         {
           "description": "Manage payment methods and process payments",
@@ -60,7 +55,11 @@
         },
         {
           "description": "Provide delivery instructions and contact information",
-          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "User" }, { "name": "AccessRole" }]
+          "collaborators": [
+            { "name": "BuyNLargeGateway" },
+            { "name": "User" },
+            { "name": "AccessRole" }
+          ]
         },
         {
           "description": "Has access roles that determine user privileges",
@@ -73,12 +72,15 @@
       "responsibilities": [
         {
           "description": "Identified by a role token ID",
-          "collaborators": [
-          ]
+          "collaborators": []
         },
         {
           "description": "Grants read/write privileges based on User profile and Location data",
-          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "User" }, { "name": "Location" }]
+          "collaborators": [
+            { "name": "BuyNLargeGateway" },
+            { "name": "User" },
+            { "name": "Location" }
+          ]
         }
       ]
     },
@@ -95,11 +97,7 @@
         },
         {
           "description": "Track order status during delivery to customer",
-          "collaborators": [
-            { "name": "User" },
-            { "name": "Location" },
-            { "name": "Item" }
-          ]
+          "collaborators": [{ "name": "User" }, { "name": "Location" }, { "name": "Item" }]
         },
         {
           "description": "Calculate total price including items, taxes, and delivery fees",
@@ -116,16 +114,11 @@
       "responsibilities": [
         {
           "description": "Created by a manager for a Location",
-          "collaborators": [
-            { "name": "User" },
-            { "name": "Location" }
-          ]
+          "collaborators": [{ "name": "User" }, { "name": "Location" }]
         },
         {
           "description": "Filters which items may be returned, and at what rate",
-          "collaborators": [
-            { "name": "Item" }
-          ]
+          "collaborators": [{ "name": "Item" }]
         }
       ]
     },
@@ -134,11 +127,7 @@
       "responsibilities": [
         {
           "description": "Process transactions and returns securely",
-          "collaborators": [
-            { "name": "User" },
-            { "name": "AccessRole" },
-            { "name": "Order" }
-          ]
+          "collaborators": [{ "name": "User" }, { "name": "AccessRole" }, { "name": "Order" }]
         },
         {
           "description": "Authenticate users and roles",

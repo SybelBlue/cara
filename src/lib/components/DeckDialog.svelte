@@ -67,7 +67,7 @@
         }}
       ></textarea>
       {#if activePromise}
-      <hr>
+        <hr />
         <div transition:fade>
           {#await activePromise}
             <span class="loading loading-dots loading-xs"></span>
@@ -77,7 +77,9 @@
             </button>
           {:catch error}
             <details class="collapse font-sans">
-              <summary class="collapse-title text-center text-md decoration-accent italic underline">
+              <summary
+                class="collapse-title text-center text-md decoration-accent italic underline"
+              >
                 loading failed!
               </summary>
               <div class="collapse-content">

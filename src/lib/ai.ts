@@ -65,8 +65,8 @@ export class CohereBackend {
       response_format: {
         type: 'json_object',
         schema: SCHEMAS[schema_to_select]
-    }
-  });
+      }
+    });
 
     if (DEBUG) {
       console.log('Cohere Response:', response);
@@ -76,7 +76,7 @@ export class CohereBackend {
       // Parse the generated text as JSON
       const jsonStr = response.message?.content?.[0].text.trim();
       if (!jsonStr) {
-        throw new Error("Either message or content in response object is null");
+        throw new Error('Either message or content in response object is null');
       }
       const parsed = JSON.parse(jsonStr) as Type;
       return parsed;
@@ -88,12 +88,12 @@ export class CohereBackend {
 
 // Create instances of the backends
 export const BACKENDS = {
-  "cohere" : {
-    "apiKey" : COHERE_API_KEY,
-    "backend" : new CohereBackend()
+  cohere: {
+    apiKey: COHERE_API_KEY,
+    backend: new CohereBackend()
   },
-  "openai" : {
-    "apiKey" : CHAT_API_KEY,
-    "backend" : new OpenAIBackend()
+  openai: {
+    apiKey: CHAT_API_KEY,
+    backend: new OpenAIBackend()
   }
 };

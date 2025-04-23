@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Snippet } from 'svelte';
 
   export type Props = {
     label: string;
@@ -9,11 +9,7 @@
 </script>
 
 <script lang="ts">
-  let {
-    toggled = $bindable(false),
-    label,
-    inner
-  }: Props = $props();
+  let { toggled = $bindable(false), label, inner }: Props = $props();
 </script>
 
 <button
