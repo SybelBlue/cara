@@ -12,16 +12,22 @@
   import { deckWithIds } from '$lib/decks';
   import { undiffWords } from '$lib/diff';
 
-  import CardEditor, { type EditorActions } from '$lib/components/CardEditor.svelte';
-  import CardBoard, { type CardBoardActions } from '$lib/components/CardBoard.svelte';
-  import TestsTray, { type TestTrayActions } from '$lib/components/TestsTray.svelte';
+  import CardEditor, { type EditorActions } from './CardEditor.svelte';
+  import CardBoard, { type CardBoardActions } from './CardBoard.svelte';
+  import TestsTray, { type TestTrayActions } from './TestsTray.svelte';
   import Toolbar from './toolbar/Toolbar.svelte';
 
   let { deck = $bindable(), commits = $bindable(), tests = $bindable() }: Props = $props();
 
+  /** when defined, opens the editor to inspect itself */
   let editorCard: SimpleCard | undefined = $state();
+  /** toggles editor readiness when an blocking llm proposal is made */
   let readyForCommit: boolean = $state(false);
+
+  /** the flag for the tests tray */
   let showTests: boolean = $state(false);
+
+  /** the shallow copy of `deck` that may reorder the cards */
   let displayDeck: Card[] = $state(deck);
 
   const setDisplayDeck = (cards: Card[]) => (displayDeck = cards);
