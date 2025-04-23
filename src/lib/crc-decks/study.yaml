@@ -1,0 +1,99 @@
+---
+version: serialized-0.1
+data:
+  cards:
+    Item:
+      - description: Identified by a SKU#
+        collaborators: []
+      - description: Knows its display name and physical dimensions
+        collaborators: []
+      - description: Has a transit/purchased status
+        collaborators: []
+    User:
+      - description: Identified by an active email address
+        collaborators: []
+      - description: Has a linked profile (name, addresses, emails, phone numbers, delivery vehicles)
+        collaborators:
+          - BuyNLargeGateway
+      - description: Has access roles that determine user privileges
+        collaborators:
+          - AccessRole
+    Customer:
+      - description: Has an active cart
+        collaborators:
+          - Item
+      - description: Manage payment methods and process payments
+        collaborators:
+          - BuyNLargeGateway
+          - Order
+      - description: Provide delivery instructions and contact information
+        collaborators:
+          - BuyNLargeGateway
+    Employee:
+      - description: Has a company email address
+        collaborators: []
+      - description: Can edit the amount of stock
+        collaborators:
+          - Item
+    Manager:
+      - description: Can edit store name, hours of operation
+        collaborators: []
+      - description: Can manage return policies
+        collaborators:
+          - ReturnPolicy
+    Admin:
+      - description: Can make new managers out of employees
+        collaborators:
+          - AccessRole
+          - User
+      - description: Can make new company emails
+        collaborators:
+          - User
+    DeliveryPerson:
+      - description: Can view and edit a customer's cart
+        collaborators:
+          - User
+          - Item
+      - description: Has a phone number that customers may call
+        collaborators: []
+      - description: May register a private vehicle for use on the job
+        collaborators: []
+    AccessRole:
+      - description: Identified by a role token ID
+        collaborators: []
+      - description: Grants read/write privileges based on User profile
+        collaborators:
+          - BuyNLargeGateway
+          - User
+    Order:
+      - description: Identified by a TXN#, timestamp, and customer
+        collaborators:
+          - User
+          - BuyNLargeGateway
+      - description: Lists items purchased by a customer
+        collaborators:
+          - Item
+      - description: Calculate total price including items, taxes, and delivery fees
+        collaborators:
+          - Item
+    Delivery:
+      - description: Order with delivery status
+        collaborators:
+          - Order
+          - DeliveryPerson
+      - description: Includes delivery person's profile during fulfillment
+        collaborators:
+          - DeliveryPerson
+    Return:
+      - description: Order associated with a return policy and store manager
+        collaborators:
+          - Order
+          - ReturnPolicy
+          - Manager
+    ReturnPolicy:
+      - description: Created by a manager
+        collaborators:
+          - Manager
+      - description: Filters which items may be returned, and at what rate
+        collaborators:
+          - Item

@@ -1,0 +1,23 @@
+[
+  {
+    "code": "Feature: Item Management\n\n  Scenario: Employee edits item stock\n    Given an Employee jane with company email \"jane@bnl.com\"\n    And an Item chair with SKU 1234 and stock count 10\n    When jane edits the stock count of chair to 15\n    Then the stock count of chair should be 15\n\n  Scenario: Customer searches for item\n    Given a Customer bob with an active email \"bob@example.com\"\n    And an Item table with SKU 5678 and display name \"Coffee Table\"\n    When bob searches for an Item with display name \"Coffee Table\"\n    Then a search returns [table]\n\n  Scenario: Customer adds item to cart\n    Given a Customer alice with an active email \"alice@example.com\"\n    And an Item lamp with SKU 9012 and display name \"Floor Lamp\"\n    When alice adds lamp to her cart\n    Then alice's cart should contain lamp"
+  },
+  {
+    "code": "Feature: User Authentication and Profiles\n\n  Scenario: User registers and creates profile\n    Given a new User sam with email \"sam@example.com\"\n    When sam authenticates through BuyNLargeGateway\n    And sam creates a profile with name \"Samuel Smith\"\n    Then sam should have an active profile with name \"Samuel Smith\"\n\n  Scenario: Customer adds payment method\n    Given a Customer rachel with an active profile\n    When rachel adds a payment method through BuyNLargeGateway\n    Then rachel should have a payment method available"
+  },
+  {
+    "code": "Feature: Order Processing\n\n  Scenario: Customer places an order\n    Given a Customer tom with an active cart\n    And tom's cart contains [desk, chair]\n    When tom processes payment through BuyNLargeGateway\n    Then a new Order should be created with items [desk, chair]\n    And the Order should have a unique TXNno.\n    And the Order should be associated with tom\n\n  Scenario: Customer requests delivery\n    Given a Customer linda with a completed Order no.5678\n    And a DeliveryPerson mike with phone \"555-1234\"\n    When linda requests delivery for Order no.5678\n    Then a new Delivery should be created for Order no.5678\n    And the Delivery should be assigned to mike\n    And linda should have access to mike's phone number"
+  },
+  {
+    "code": "Feature: Returns Processing\n\n  Scenario: Customer requests a return\n    Given a Customer peter with Order no.1234 containing [sofa]\n    And a Manager sarah who created ReturnPolicy standard\n    When peter requests a return for Order no.1234\n    Then a new Return should be created for Order no.1234\n    And the Return should be associated with ReturnPolicy standard\n    And the Return should be approved by sarah"
+  },
+  {
+    "code": "Feature: Employee Management\n\n  Scenario: Admin creates a new manager\n    Given an Admin alex with company email \"alex@bnl.com\"\n    And an Employee maria with company email \"maria@bnl.com\"\n    When alex promotes maria to Manager\n    Then maria should have Manager AccessRole\n    And maria should be able to edit store hours\n\n  Scenario: Admin creates company email\n    Given an Admin david with company email \"david@bnl.com\"\n    When david creates a company email \"newemployee@bnl.com\"\n    Then a new company email \"newemployee@bnl.com\" should exist"
+  },
+  {
+    "code": "Feature: Manager Functions\n\n  Scenario: Manager modifies store hours\n    Given a Manager patricia with proper AccessRole\n    When patricia changes store hours to \"9AM-9PM\"\n    Then the store hours should be \"9AM-9PM\"\n\n  Scenario: Manager creates return policy\n    Given a Manager robert with proper AccessRole\n    When robert creates a ReturnPolicy premium for Item category \"Electronics\"\n    Then a ReturnPolicy premium should exist for Item category \"Electronics\""
+  },
+  {
+    "code": "Feature: DeliveryPerson Functions\n\n  Scenario: DeliveryPerson registers vehicle\n    Given a DeliveryPerson carlos with company email \"carlos@bnl.com\"\n    When carlos registers vehicle \"Toyota Prius\" with license \"ABC123\"\n    Then carlos should have a registered vehicle \"Toyota Prius\"\n\n  Scenario: DeliveryPerson updates delivery status\n    Given a DeliveryPerson jenny with assigned Delivery no.4321\n    And Delivery no.4321 is associated with Order no.8765\n    When jenny updates the status of Delivery no.4321 to \"En Route\"\n    Then Delivery no.4321 should have status \"En Route\"\n    And the customer of Order no.8765 should be notified"
+  }
+]

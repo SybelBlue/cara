@@ -4,6 +4,7 @@ import libraryJson from '$lib/crc-decks/library.json';
 import rpgJson from '$lib/crc-decks/rpg.json';
 import hospitalJson from '$lib/crc-decks/hospital.json';
 import sevilleJson from '$lib/crc-decks/seville.json';
+import studyJson from '$lib/crc-decks/study.json';
 
 export const withId: <T extends object>(o: T) => Keyed<T> = (function () {
   let nextId = 0;
@@ -33,6 +34,7 @@ export const deckWithIds = (deck: DeckJson): SimpleCard[] => {
 };
 
 export const exampleDecks: Record<string, SimpleCard[]> = {
+  study: deckWithIds(studyJson),
   rpg: deckWithIds(rpgJson),
   library: deckWithIds(libraryJson),
   hospital: deckWithIds(hospitalJson),

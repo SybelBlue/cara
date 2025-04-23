@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import type { Commit, SimpleCard, Card, Test } from '$lib/types';
-  import { availableClasses, allClasses } from '$lib/stores';
+  import { availableClasses, allClasses, debug } from '$lib/stores';
   import { deckWithIds } from '$lib/decks';
   import { undiffWords } from '$lib/diff';
 
@@ -16,6 +16,7 @@
   import CardBoard, { type CardBoardActions } from './CardBoard.svelte';
   import TestsTray, { type TestTrayActions } from './TestsTray.svelte';
   import Toolbar from './toolbar/Toolbar.svelte';
+  import { beforeNavigate } from '$app/navigation';
 
   let { deck = $bindable(), commits = $bindable(), tests = $bindable() }: Props = $props();
 
@@ -96,6 +97,10 @@
   const testTrayActions: TestTrayActions = {
     close: () => (showTests = false)
   };
+
+  beforeNavigate((nav) => {
+    if (!$debug) nav.cancel();
+  })
 </script>
 
 <Toolbar bind:showTests currentDeck={deck} {setDisplayDeck} {commits} />
@@ -107,7 +112,7 @@
     {/if}
   </div>
   <div class="static open tray">
-    <CardBoard cards={displayDeck} {...cardBoardActions} />
+    <CardBoard locked cards={displayDeck} {...cardBoardActions} />
   </div>
   <div class:open={showTests} class="tray">
     {#if showTests}

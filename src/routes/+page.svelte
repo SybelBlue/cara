@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
 
   import type { Commit, SimpleCard, Card, Test } from '$lib/types';
@@ -10,6 +9,8 @@
   import App from '$lib/components/App.svelte';
   import Toolbar from '$lib/components/toolbar/Toolbar.svelte';
 
+  import testsJson from '$lib/crc-decks/study-tests.json';
+
   const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
   let deckName = $state(page.url.searchParams.get('deckName'));
   const deckInit: SimpleCard[] =
@@ -19,7 +20,7 @@
   console.log('Initializing deck', deckInit);
   let deck: SimpleCard[] = $state(deckInit);
 
-  $debug = true;
+  $debug = false;
 
   /// fake data ///
   const randomizedEdits = (deck: SimpleCard[]) => {
@@ -88,29 +89,7 @@
   /// fake data ///
   let commits: Commit[] = $state(fakeCommits);
 
-  let tests: Test[] = $state([
-    {
-      code: `Feature: Guess the word
-
-  # The first example has two steps
-  Scenario: Maker starts a game
-    When the Maker starts a game
-    Then the Maker waits for a Breaker to join`
-    },
-    {
-      code: `Feature: Guess the word
-
-  # The second example has three steps
-  Scenario: Breaker joins a game
-    Given the Maker has started a game with the word "silky"
-    When the Breaker joins the Maker's game
-    Then the Breaker must guess a word with 5 characters`
-    }
-  ]);
-  onMount(() => {
-    tests.splice(0, 0, ...tests);
-    tests.splice(0, 0, ...tests);
-  });
+  let tests: Test[] = $state(testsJson);
 </script>
 
 <svelte:head>

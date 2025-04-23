@@ -1,0 +1,176 @@
+{
+  "cards": [
+    {
+      "name": "Item",
+      "responsibilities": [
+        {
+          "description": "Identified by a SKU no.",
+          "collaborators": []
+        },
+        {
+          "description": "Knows its display name and physical dimensions",
+          "collaborators": []
+        },
+        {
+          "description": "Has a transit/purchased status",
+          "collaborators": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "responsibilities": [
+        {
+          "description": "Identified by an active email address",
+          "collaborators": []
+        },
+        {
+          "description": "Has a linked profile (name, addresses, emails, phone numbers, delivery vehicles)",
+          "collaborators": [{ "name": "BuyNLargeGateway" }]
+        },
+        {
+          "description": "Has access roles that determine user privileges",
+          "collaborators": [{ "name": "AccessRole" }]
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "responsibilities": [
+        {
+          "description": "Has an active cart",
+          "collaborators": [{ "name": "Item" }]
+        },
+        {
+          "description": "Manage payment methods and process payments",
+          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "Order" }]
+        },
+        {
+          "description": "Provide delivery instructions and contact information",
+          "collaborators": [{ "name": "BuyNLargeGateway" }]
+        }
+      ]
+    },
+    {
+      "name": "Employee",
+      "responsibilities": [
+        {
+          "description": "Has a company email address",
+          "collaborators": []
+        },
+        {
+          "description": "Can edit the amount of stock",
+          "collaborators": [{ "name": "Item" }]
+        }
+      ]
+    },
+    {
+      "name": "Manager",
+      "responsibilities": [
+        {
+          "description": "Can edit store name, hours of operation",
+          "collaborators": []
+        },
+        {
+          "description": "Can manage return policies",
+          "collaborators": [{ "name": "ReturnPolicy" }]
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "responsibilities": [
+        {
+          "description": "Can make new managers out of employees",
+          "collaborators": [{ "name": "AccessRole" }, { "name": "User" }]
+        },
+        {
+          "description": "Can make new company emails",
+          "collaborators": [{ "name": "User" }]
+        }
+      ]
+    },
+    {
+      "name": "DeliveryPerson",
+      "responsibilities": [
+        {
+          "description": "Can view and edit a customer's cart",
+          "collaborators": [{ "name": "User" }, { "name": "Item" }]
+        },
+        {
+          "description": "Has a phone number that customers may call",
+          "collaborators": []
+        },
+        {
+          "description": "May register a private vehicle for use on the job",
+          "collaborators": []
+        }
+      ]
+    },
+    {
+      "name": "AccessRole",
+      "responsibilities": [
+        {
+          "description": "Identified by a role token ID",
+          "collaborators": []
+        },
+        {
+          "description": "Grants read/write privileges based on User profile",
+          "collaborators": [{ "name": "BuyNLargeGateway" }, { "name": "User" }]
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "responsibilities": [
+        {
+          "description": "Identified by a TXN no., timestamp, and customer",
+          "collaborators": [{ "name": "User" }, { "name": "BuyNLargeGateway" }]
+        },
+        {
+          "description": "Lists items purchased by a customer",
+          "collaborators": [{ "name": "Item" }]
+        },
+        {
+          "description": "Calculate total price including items, taxes, and delivery fees",
+          "collaborators": [{ "name": "Item" }]
+        }
+      ]
+    },
+    {
+      "name": "Delivery",
+      "responsibilities": [
+        {
+          "description": "Order with delivery status",
+          "collaborators": [{ "name": "Order" }, { "name": "DeliveryPerson" }]
+        },
+        {
+          "description": "Includes delivery person's profile during fulfillment",
+          "collaborators": [{ "name": "DeliveryPerson" }]
+        }
+      ]
+    },
+    {
+      "name": "Return",
+      "responsibilities": [
+        {
+          "description": "Order associated with a return policy and store manager",
+          "collaborators": [{ "name": "Order" }, { "name": "ReturnPolicy" }, { "name": "Manager" }]
+        }
+      ]
+    },
+    {
+      "name": "ReturnPolicy",
+      "responsibilities": [
+        {
+          "description": "Created by a manager",
+          "collaborators": [{ "name": "Manager" }]
+        },
+        {
+          "description": "Filters which items may be returned, and at what rate",
+          "collaborators": [{ "name": "Item" }]
+        }
+      ]
+    }
+  ]
+}
