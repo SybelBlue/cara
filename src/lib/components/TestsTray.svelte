@@ -14,26 +14,35 @@
   import Highlight from 'svelte-highlight';
   import { gherkin } from 'svelte-highlight/languages';
 
-  import { clickOutside } from '$lib/actions';
-  import { onMount } from 'svelte';
-
   let { tests = $bindable(), close }: Props = $props();
-
-  const lastChange = $derived.by(() => Date.now());
-  onMount(() => {
-    lastChange;
-  });
 </script>
 
-<div
-  use:clickOutside={() => {
-    if (Date.now() - lastChange > 200) close?.();
-  }}
-  class="relative h-full max-h-full w-full bg-base-100 grid grid-cols-1 shadow-xl"
->
+<div class="relative h-full max-h-full w-full bg-base-100 grid grid-cols-1 shadow-xl">
   <!-- header -->
   <div>
     <div class="flex max-h-fit shadow-md rounded-b-3xl mb-2">
+      <!-- "X" button in top left -->
+      <button
+        class="btn btn-sm btn-circle btn-outline outline-neutral mx-2 my-auto"
+        onclick={() => close?.()}
+        aria-label="Select Theme"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <!-- -->
       <h2 class="text-lg font-mono text-neutral mx-auto my-auto p-2 pointer-events-none">
         {'「 tests 」'}
       </h2>

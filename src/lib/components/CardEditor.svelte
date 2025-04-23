@@ -103,7 +103,7 @@
   use:clickOutside={() => {
     if (card && Date.now() - lastChange > 200) close?.();
   }}
-  class="relative size-full max-h-full z-50 py-4 flex flex-col bg-base-100 shadow-xl"
+  class="relative size-full max-h-full z-50 flex flex-col bg-base-100 shadow-xl"
 >
   <!-- header -->
   <div class="flex-none flex max-h-fit shadow-md rounded-b-3xl mb-2">
