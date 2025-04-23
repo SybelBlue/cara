@@ -1,9 +1,7 @@
 <script module lang="ts">
   import type { CardData, DiffText } from '$lib/types';
 
-  export type DisplayProps = {
-    locked: boolean;
-    hidden: boolean;
+  export type CardActions = {
     selectBody(name: string): void;
     selectName(name: string): void;
     edittedResp(name: string, ridx: number): void;
@@ -11,12 +9,17 @@
     selectCollab(selfName: string, respIdx: number, collabName: string): void;
   };
 
-  export type Props<S extends DiffText = DiffText> = CardData<S> & Partial<DisplayProps>;
+  export type Props<S extends DiffText = DiffText> = CardData<S> &
+    Partial<CardActions> &
+    Partial<{
+      locked: boolean;
+      hidden: boolean;
+    }>;
 </script>
 
 <script lang="ts">
   import { highlightedClass } from '$lib/stores';
-  import ClassLabel from '$lib/components/ClassLabel.svelte';
+  import ClassLabel from '$lib/components/card/ClassLabel.svelte';
   import Diff from './Diff.svelte';
   import { isDiff, undiffWords } from '$lib/diff';
   import { flip } from 'svelte/animate';
@@ -38,7 +41,7 @@
 
   const resizeTextarea = (e: HTMLTextAreaElement) => {
     if (!e || !e.style) return;
-    e.style.height = e.scrollHeight + 'px'
+    e.style.height = e.scrollHeight + 'px';
   };
   let textareas: HTMLTextAreaElement[] = $state([]);
 
@@ -102,7 +105,7 @@
                   {diff}
                 />
               {:else}
-              <!-- ... provide an add collaborator button -->
+                <!-- ... provide an add collaborator button -->
                 {#if !locked}
                   <ClassLabel
                     selectLabel={(n) =>

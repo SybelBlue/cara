@@ -15,7 +15,7 @@
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
-  import CardComponent from './Card.svelte';
+  import CardComponent from './card/Card.svelte';
   import { withId } from '$lib/decks';
   import { highlightedClass } from '$lib/stores';
   import { clamp } from '$lib/common';

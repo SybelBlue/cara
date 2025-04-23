@@ -1,4 +1,4 @@
-import type { Card as Card, SimpleDeck, Deck, SimpleCard, Key, DiffText } from '$lib/types';
+import type { Card, SimpleCard, Key, DiffText } from '$lib/types';
 import { withId } from '$lib/decks';
 import { diffWords, type Change } from 'diff';
 import { any, mergeKeyed } from './common';
@@ -68,7 +68,11 @@ const diffResponsibilities = (
   return out;
 };
 
-export const diffDecks = (prev: SimpleDeck, curr: SimpleDeck, expandUnchanged: boolean): Deck => {
+export const diffDecks = (
+  prev: SimpleCard[],
+  curr: SimpleCard[],
+  expandUnchanged: boolean
+): Card[] => {
   return mergeKeyed(prev, curr, (o) => o.id).map((z) => ({
     id: z.id,
     name: z.type == 'left' ? z.left.name : z.right.name,

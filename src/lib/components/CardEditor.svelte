@@ -15,7 +15,7 @@
   import { aiEnabled, availableClasses } from '$lib/stores';
   import type { SimpleCard, Card } from '$lib/types';
   import { fade } from 'svelte/transition';
-  import CardComponent from './Card.svelte';
+  import CardComponent from './card/Card.svelte';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
   import { withId } from '$lib/decks';
 

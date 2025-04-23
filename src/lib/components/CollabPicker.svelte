@@ -45,7 +45,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { flip } from 'svelte/animate';
-  import ClassLabel from './ClassLabel.svelte';
+  import ClassLabel from './card/ClassLabel.svelte';
   import { allClasses } from '$lib/stores';
 
   // bindable breaks here, don't know why...

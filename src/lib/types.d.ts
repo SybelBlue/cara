@@ -177,7 +177,7 @@ export type DeckJson = {
   }>;
 };
 
-import type { Props as CardProps } from '$lib/components/Card.svelte';
+import type { Props as CardProps } from '$lib/components/card/Card.svelte';
 import type { Change } from 'diff';
 
 export type DiffText = string | Change[];
