@@ -1,4 +1,3 @@
-
 // The type of backend to use for generating objects
 export type Backend = 'openai' | 'cohere';
 export type Key = number;
@@ -136,7 +135,7 @@ export const TYPEDEFS = {
   responsibilities: Array<{
     id?: int;
     description: string;
-    collaborators: Array<{ 
+    collaborators: Array<{
       id?: int;
       name: string;
     }>;
@@ -151,7 +150,7 @@ export const TYPEDEFS = {
     responsibilities: Array<{
       id?: int;
       description: string;
-      collaborators: Array<{ 
+      collaborators: Array<{
         id?: int;
         name: string;
       }>;
@@ -170,7 +169,7 @@ export type DeckJson = {
     responsibilities: Array<{
       id?: int;
       description: string;
-      collaborators: Array<{ 
+      collaborators: Array<{
         id?: int;
         name: string;
       }>;
@@ -178,14 +177,23 @@ export type DeckJson = {
   }>;
 };
 
-import type { Props as Card } from '$lib/components/Card.svelte';
+import type { Props as CardProps } from '$lib/components/card/Card.svelte';
+import type { Change } from 'diff';
 
 export type DiffText = string | Change[];
 
+export type CardData<S extends DiffText> = {
+  name: string;
+  responsibilities: Keyed<{
+    description: S;
+    collaborators: Keyed<{ name: S }>[];
+  }>[];
+};
+
 /** Valid `CardProps` without Diffs */
-export type SimpleCard = Card<string>;
-/** Valid `Deck` without Diffs */
-export type SimpleDeck = Keyed<SimpleCard>[];
+export type SimpleCard = Keyed<CardProps<string>>;
+
+export type Card = Keyed<CardProps<DiffText>>;
 
 export type Commit = {
   id: number;
@@ -194,7 +202,8 @@ export type Commit = {
   state: SimpleDeck;
 };
 
-/** The type `CardBoard` expects for `.cards` */
-export type Deck = Keyed<Card>[];
+export type Comparison<T> = (a: T, b: T) => number;
 
-export { Card };
+export type Test = {
+  code: string;
+};

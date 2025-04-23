@@ -1,37 +1,30 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
 
-  import type { Deck, Commit, SimpleDeck, SimpleCard } from '$lib/types';
-  import { debug, availableClasses } from '$lib/stores';
-  import { deckWithIds, exampleDecks, withId } from '$lib/decks';
+  import type { Commit, SimpleCard, Card, Test } from '$lib/types';
+  import { exampleDecks, withId } from '$lib/decks';
+  import { debug } from '$lib/stores';
 
-  import Editor from '$lib/components/Editor.svelte';
-  import CardBoard from '$lib/components/CardBoard.svelte';
-  import Toolbar from '$lib/components/Toolbar.svelte';
   import DeckDialog from '$lib/components/DeckDialog.svelte';
+  import App from '$lib/components/App.svelte';
+  import Toolbar from '$lib/components/toolbar/Toolbar.svelte';
 
-  let selectedCard: SimpleCard | undefined = $state();
-  let readyForCommit: boolean = $state(false);
-
-  const deckInfo = $page.url.searchParams.get('deckInfo') ?? btoa('[]');
-  const deckName = $page.url.searchParams.get('deckName');
-  const deckInit: SimpleDeck =
+  const deckInfo = page.url.searchParams.get('deckInfo') ?? btoa('[]');
+  let deckName = $state(page.url.searchParams.get('deckName'));
+  const deckInit: SimpleCard[] =
+    // svelte-ignore state_referenced_locally
     deckName && deckName in exampleDecks ? exampleDecks[deckName] : JSON.parse(atob(deckInfo));
 
   console.log('Initializing deck', deckInit);
-  let cards: SimpleDeck = $state(deckInit);
-  let displayDeck: Deck = $state(deckInit);
-
-  $effect(() => {
-    // note: prevents all other changes to $availableClasses!
-    $availableClasses = displayDeck.map((c) => c.name);
-  });
+  let deck: SimpleCard[] = $state(deckInit);
 
   $debug = true;
 
   /// fake data ///
-  const randomizedEdits = (deck: SimpleDeck) => {
-    const out = JSON.parse(JSON.stringify(deck)) as SimpleDeck;
+  const randomizedEdits = (deck: SimpleCard[]) => {
+    if (deck.length < 2) return [];
+    const out = JSON.parse(JSON.stringify(deck)) as SimpleCard[];
     const randomIdx = (list: any[]) => Math.floor(Math.random() * list.length);
     const randomElem = <T,>(list: T[]): T => list[randomIdx(list)];
     const changed = [];
@@ -42,14 +35,16 @@
         () => card.responsibilities.splice(randomIdx(card.responsibilities), 1),
         () => {
           let r = randomElem(card.responsibilities);
+          if (!r) return;
           r.description = r.description.replace(/\b\w+$/, '- todo!');
         },
         () => {
           let r = randomElem(card.responsibilities);
+          if (!r) return;
           r.collaborators.splice(randomIdx(r.collaborators), 1);
         },
         () => {
-          randomElem(card.responsibilities).collaborators.push(
+          randomElem(card.responsibilities)?.collaborators.push(
             withId({ name: randomElem(out).name })
           );
         }
@@ -61,9 +56,10 @@
   };
 
   // svelte-ignore state_referenced_locally
-  const fakeCommits = $derived.by(() => {
-    if (!cards || cards.length == 0) return [];
-    let lastDeck = cards;
+  const fakeCommits = (() => {
+    // return [];
+    if (!deck || deck.length == 0) return [];
+    let lastDeck = deck;
     return [
       {
         id: 7,
@@ -88,39 +84,41 @@
       { id: 2, state: [], text: 'updated manna', date: '11/2/2024' },
       { id: 1, state: [], text: 'initial commit', date: '11/1/2024' }
     ].toReversed();
-  });
+  })();
   /// fake data ///
-  const commits: Commit[] = $derived(fakeCommits);
+  let commits: Commit[] = $state(fakeCommits);
 
-  const onProposeEdit = async (card: SimpleCard, message: string) => {
-    console.log('Propose card', message, card);
-    readyForCommit = false;
-    const response = await fetch('/api/object', {
-      method: 'POST',
-      body: JSON.stringify({
-        // TODO: currently we're passing in the deck/card with ids. That may reduce quality
-        description: `Consider this deck:\n\`\`\`json\n{ "cards" : ${JSON.stringify(cards)} }\n\`\`\`\n\nGiven that we are now upserting the following card, describing the change as "${message}", update both the collaborators on this card and the whole deck to remain consistent. This may involve removing or adding responsibilities, their respective lists of collaborators, or even adding or removing whole cards. Make sure to reproduce all unchanged cards.\n\`\`\`json\n${JSON.stringify(card)}\n\`\`\``,
-        schema: 'Deck'
-      })
-    });
-    const { response: deck } = await response.json();
-    console.log(deck);
-    cards = displayDeck = deckWithIds(deck);
-    selectedCard = undefined;
-  };
-  const onSelectCard = (card: Deck[number]) => {
-    console.log('Card selected:', card.name);
-    readyForCommit = true;
-    selectedCard = cards.find((c) => c.id === card.id);
-  };
+  let tests: Test[] = $state([
+    {
+      code: `Feature: Guess the word
 
-  const setDisplayDeck = (deck: Deck) => {
-    displayDeck = deck;
-  };
+  # The first example has two steps
+  Scenario: Maker starts a game
+    When the Maker starts a game
+    Then the Maker waits for a Breaker to join`
+    },
+    {
+      code: `Feature: Guess the word
+
+  # The second example has three steps
+  Scenario: Breaker joins a game
+    Given the Maker has started a game with the word "silky"
+    When the Breaker joins the Maker's game
+    Then the Breaker must guess a word with 5 characters`
+    }
+  ]);
+  onMount(() => {
+    tests.splice(0, 0, ...tests);
+    tests.splice(0, 0, ...tests);
+  });
 </script>
 
 <svelte:head>
-  <title>CARA</title>
+  {#if deckName}
+    <title>cara : {deckName.toLowerCase()}</title>
+  {:else}
+    <title>cara</title>
+  {/if}
   <meta name="description" content="crc card design game" />
 
   <!-- patch to delay page load until theme is ready in deployment -->
@@ -134,30 +132,17 @@
   {/if}
 </svelte:head>
 
-<Toolbar currentDeck={cards} {setDisplayDeck} {commits} />
 
-<main class="flex w-screen max-h-full overflow-hidden">
-  {#if displayDeck.length == 0}
-    <DeckDialog loadDeck={(keyedDeck) => (cards = displayDeck = keyedDeck)} />
-  {:else}
-    <div class:split={selectedCard} class="transition-all min-h-full max-h-full">
-      {#if selectedCard}
-        <Editor
-          card={selectedCard}
-          propose={onProposeEdit}
-          close={() => (selectedCard = undefined)}
-          {readyForCommit}
-        />
-      {/if}
-    </div>
-    <div class="static split">
-      <CardBoard cards={displayDeck} selectCard={onSelectCard} />
-    </div>
-  {/if}
-</main>
-
-<style lang="postcss">
-  .split {
-    @apply flex-1;
-  }
-</style>
+{#if deck.length == 0}
+  <Toolbar currentDeck={[]} commits={[]} />
+  <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
+    <DeckDialog
+      loadDeck={(keyedDeck, name) => {
+        deck = keyedDeck;
+        deckName = name || null;
+      }}
+    />
+  </main>
+{:else}
+  <App bind:deck bind:tests bind:commits />
+{/if}
