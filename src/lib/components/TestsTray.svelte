@@ -1,15 +1,21 @@
+<script module lang="ts">
+  import type { Test } from '$lib/types';
+
+  export type TestTrayActions = {
+    close(): void;
+  };
+
+  export type Props = Partial<TestTrayActions> & {
+    tests: Test[];
+  };
+</script>
+
 <script lang="ts">
   import Highlight from 'svelte-highlight';
   import { gherkin } from 'svelte-highlight/languages';
 
-  import type { Test } from '$lib/types';
   import { clickOutside } from '$lib/actions';
   import { onMount } from 'svelte';
-
-  interface Props {
-    tests: Test[];
-    close?: () => void;
-  }
 
   let { tests = $bindable(), close }: Props = $props();
 

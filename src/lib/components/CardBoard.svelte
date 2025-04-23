@@ -1,18 +1,21 @@
 <script module lang="ts">
-  import type { DiffText, Keyed, SimpleCard, Card as CardProps } from '$lib/types';
+  import type { DiffText, Keyed, SimpleCard, Card as FullCard } from '$lib/types';
 
-  export interface Props {
-    cards: CardProps[];
-    locked?: boolean;
-    selectCard?: (c: CardProps) => void;
-    addCard?: (c: SimpleCard) => void;
+  export type CardBoardActions = {
+    selectCard(c: FullCard): void;
+    addCard(c: SimpleCard): void;
   }
+
+  export type Props = Partial<CardBoardActions> & {
+    cards: FullCard[];
+    locked?: boolean;
+  };
 </script>
 
 <script lang="ts">
   import { flip } from 'svelte/animate';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
-  import Card from './Card.svelte';
+  import CardComponent from './Card.svelte';
   import { withId } from '$lib/decks';
   import { highlightedClass } from '$lib/stores';
   import { clamp } from '$lib/common';
@@ -55,7 +58,7 @@
     addCard?.(card);
   };
 
-  let editCollabLens: RespLens<CardProps> | undefined = $state();
+  let editCollabLens: RespLens<FullCard> | undefined = $state();
   const selectCollab = (cardName: string, respIdx: number, collab: string) => {
     if (locked) return propagate(collab);
     const card = cards.find((c) => c.name === cardName);
@@ -64,7 +67,7 @@
     }
   };
   const setCollabs = (
-    { card, respIdx }: RespLens<CardProps>,
+    { card, respIdx }: RespLens<FullCard>,
     collabs: Keyed<{ name: DiffText }>[]
   ) => {
     card.responsibilities[respIdx].collaborators = collabs;
@@ -85,7 +88,7 @@
       <li class="invisble"></li>
     {/each}
     <li bind:clientHeight={previewCardHeight}>
-      <Card locked {...previewCard} />
+      <CardComponent locked {...previewCard} />
     </li>
   </ul>
 {/if}
@@ -97,7 +100,7 @@
     <!-- card listing -->
     {#each cards as { id, ...cardProps } (id)}
       <li animate:flip={{ duration: 600 }}>
-        <Card
+        <CardComponent
           {locked}
           hidden={cardProps.name === $highlightedClass}
           selectName={propagate}

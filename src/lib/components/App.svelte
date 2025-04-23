@@ -13,8 +13,8 @@
   import { undiffWords } from '$lib/diff';
 
   import CardEditor, { type EditorActions } from '$lib/components/CardEditor.svelte';
-  import CardBoard from '$lib/components/CardBoard.svelte';
-  import TestsTray from '$lib/components/TestsTray.svelte';
+  import CardBoard, { type CardBoardActions } from '$lib/components/CardBoard.svelte';
+  import TestsTray, { type TestTrayActions } from '$lib/components/TestsTray.svelte';
   import Toolbar from './toolbar/Toolbar.svelte';
 
   let { deck = $bindable(), commits = $bindable(), tests = $bindable() }: Props = $props();
@@ -46,14 +46,16 @@
     ];
   });
 
-  const onSelectCard = (card: Card) => {
-    readyForCommit = true;
-    editorCard = deck.find((c) => c.id === card.id);
-  };
-  const onAddCard = (card: SimpleCard) => {
-    deck.push(card);
-    displayDeck.push(card);
-    editorCard = card;
+  const cardBoardActions: CardBoardActions = {
+    selectCard: (card: Card) => {
+      readyForCommit = true;
+      editorCard = deck.find((c) => c.id === card.id);
+    },
+    addCard: (card: SimpleCard) => {
+      deck.push(card);
+      displayDeck.push(card);
+      editorCard = card;
+    },
   };
 
   const editorActions: EditorActions = {
@@ -84,14 +86,13 @@
     },
     close: () => (editorCard = undefined)
   };
+
+  const testTrayActions: TestTrayActions = {
+    close: () => (showTests = false),
+  }
 </script>
 
-<Toolbar
-  bind:showTests
-  currentDeck={deck}
-  {setDisplayDeck}
-  {commits}
-/>
+<Toolbar bind:showTests currentDeck={deck} {setDisplayDeck} {commits} />
 
 <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
   <div class:open={editorCard} class="tray">
@@ -100,11 +101,11 @@
     {/if}
   </div>
   <div class="static open tray">
-    <CardBoard cards={displayDeck} selectCard={onSelectCard} addCard={onAddCard} />
+    <CardBoard cards={displayDeck} {...cardBoardActions} />
   </div>
   <div class:open={showTests} class="tray">
     {#if showTests}
-      <TestsTray bind:tests close={() => (showTests = false)} />
+      <TestsTray bind:tests {...testTrayActions} />
     {/if}
   </div>
 </main>
