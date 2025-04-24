@@ -68,59 +68,61 @@
     <!--  -->
 
     <!-- card body -->
-    <table class="table table-auto table-sm">
-      <thead>
-        <tr>
-          <th>responsibilities</th>
-          <th class="text-right">collabs</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- listing of responsibilities -->
-        {#each responsibilities as r, ridx (r.id)}
-          <tr class="hover break-words" animate:flip>
-            <td class="desc">
-              {#if locked || isDiff(r.description)}
-                <Diff diff={r.description} />
-              {:else}
-                <textarea
-                  bind:this={textareas[ridx]}
-                  bind:value={r.description}
-                  class="h-auto"
-                  oninput={(e) => resizeTextarea(e.currentTarget)}
-                  onblur={() => edittedResp?.(name, ridx)}
-                >
-                  <!-- do not add here, bind:value will overwrite -->
-                </textarea>
-              {/if}
-            </td>
-            <td class="text-right">
-              <!-- list out collaborators, or... -->
-              {#each r.collaborators as { name: diff, id }, cidx (id)}
-                {#if cidx}<span> </span>{/if}
-                <ClassLabel
-                  selectLabel={(n) =>
-                    selectCollab ? selectCollab(name, ridx, n) : selectName?.(n)}
-                  name={undiffWords(diff)}
-                  {diff}
-                />
-              {:else}
-                <!-- ... provide an add collaborator button -->
-                {#if !locked}
+    <div class="overflow-auto">
+      <table class="table table-auto table-sm">
+        <thead>
+          <tr>
+            <th>responsibilities</th>
+            <th class="text-right">collabs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- listing of responsibilities -->
+          {#each responsibilities as r, ridx (r.id)}
+            <tr class="hover break-words" animate:flip>
+              <td class="desc">
+                {#if locked || isDiff(r.description)}
+                  <Diff diff={r.description} />
+                {:else}
+                  <textarea
+                    bind:this={textareas[ridx]}
+                    bind:value={r.description}
+                    class="h-auto"
+                    oninput={(e) => resizeTextarea(e.currentTarget)}
+                    onblur={() => edittedResp?.(name, ridx)}
+                  >
+                    <!-- do not add here, bind:value will overwrite -->
+                  </textarea>
+                {/if}
+              </td>
+              <td class="text-right">
+                <!-- list out collaborators, or... -->
+                {#each r.collaborators as { name: diff, id }, cidx (id)}
+                  {#if cidx}<span> </span>{/if}
                   <ClassLabel
                     selectLabel={(n) =>
                       selectCollab ? selectCollab(name, ridx, n) : selectName?.(n)}
-                    name="[+]"
+                    name={undiffWords(diff)}
+                    {diff}
                   />
-                {/if}
-              {/each}
-              <!--  -->
-            </td>
-          </tr>
-        {/each}
-      </tbody>
-      <!--  -->
-    </table>
+                {:else}
+                  <!-- ... provide an add collaborator button -->
+                  {#if !locked}
+                    <ClassLabel
+                      selectLabel={(n) =>
+                        selectCollab ? selectCollab(name, ridx, n) : selectName?.(n)}
+                      name="[+]"
+                    />
+                  {/if}
+                {/each}
+                <!--  -->
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+        <!--  -->
+      </table>
+    </div>
     <!--  -->
 
     <!-- add responsibility button -->
