@@ -1,5 +1,6 @@
 <script module lang="ts">
   import type { Test } from '$lib/types';
+  import caraGherkin from '$lib/cara-gherkin';
 
   export type TestTrayActions = {
     close(): void;
@@ -8,11 +9,15 @@
   export type Props = Partial<TestTrayActions> & {
     tests: Test[];
   };
+
+  const language = {
+    name: 'cara-gherkin',
+    register: caraGherkin,
+  };
 </script>
 
 <script lang="ts">
   import Highlight from 'svelte-highlight';
-  import { gherkin } from 'svelte-highlight/languages';
 
   let { tests = $bindable(), close }: Props = $props();
 </script>
@@ -54,7 +59,7 @@
       {#each tests as { code }}
         <li class="card dark:card-bordered shadow-md snap-start">
           <section class="card-body h-fit text-sm">
-            <Highlight language={gherkin} {code} />
+            <Highlight {language} {code} />
           </section>
         </li>
       {/each}

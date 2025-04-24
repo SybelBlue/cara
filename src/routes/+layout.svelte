@@ -55,9 +55,11 @@
     .hljs-addition {
       @apply text-primary;
     }
-    .hljs-title,
     .hljs-section {
       @apply text-primary;
+    }
+    .hljs-title {
+      @apply hljs-section italic;
     }
     .hljs-keyword,
     .hljs-selector-tag {

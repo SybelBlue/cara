@@ -21,7 +21,7 @@
   onfocus={() => selectLabel?.(name)}
   class:enabled={!disabled && hasACard}
   class:no-card={!hasACard}
-  class="text-accent"
+  class="text-accent select-all"
   role="link"
   tabindex="0"
 >

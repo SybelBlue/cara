@@ -70,7 +70,7 @@
     <!-- card body -->
     <div class="overflow-auto">
       <table class="table table-auto table-sm">
-        <thead>
+        <thead class="select-none">
           <tr>
             <th>responsibilities</th>
             <th class="text-right">collabs</th>
