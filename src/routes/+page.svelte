@@ -122,5 +122,5 @@
     />
   </main>
 {:else}
-  <App bind:deck bind:tests bind:commits />
+  <App {deck} {tests} {commits} />
 {/if}

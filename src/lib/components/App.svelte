@@ -60,7 +60,7 @@
     },
     addCard: (card: SimpleCard) => {
       deck.push(card);
-      displayDeck.push(card);
+      console.debug([...deck.map((c) => c.id)]);
       editorCard = card;
     }
   };
@@ -84,7 +84,7 @@
     },
     renameCard: (card: SimpleCard, name: string) => {
       deck = JSON.parse(JSON.stringify(deck).replaceAll(card.name, name));
-      editorCard = deck.find((c) => c.name === name);
+      editorCard = deck.find((c) => c.id === card.id);
     },
     deleteCard: (card: SimpleCard) => {
       deck = deck.filter((c) => c.id !== card.id);
@@ -100,10 +100,18 @@
 
   beforeNavigate((nav) => {
     if (!$debug) nav.cancel();
-  })
+  });
 </script>
 
-<Toolbar bind:showTests currentDeck={deck} {setDisplayDeck} {commits} />
+<Toolbar
+  bind:showTests
+  currentDeck={deck}
+  {setDisplayDeck}
+  {commits}
+  onShowSubmission={() => {
+    console.debug('dump', JSON.parse(JSON.stringify({ deck, editorCard, tests, commits })));
+  }}
+/>
 
 <main class="flex w-screen min-h-full grow max-h-full overflow-hidden">
   <div class:open={editorCard} class="tray">

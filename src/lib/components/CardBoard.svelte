@@ -53,7 +53,7 @@
   const addNewCard = () => {
     const card = withId({
       name: 'NewClass' + newClassCounter++,
-      responsibilities: []
+      responsibilities: [ withId({ description: '...', collaborators: [] })]
     });
     addCard?.(card);
   };

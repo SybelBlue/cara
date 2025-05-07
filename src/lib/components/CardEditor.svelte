@@ -19,6 +19,7 @@
   import CardComponent from './card/Card.svelte';
   import CollabPicker, { createPropsFromLens, type RespLens } from './CollabPicker.svelte';
   import { withId } from '$lib/decks';
+  import { onDestroy } from 'svelte';
 
   let {
     card = $bindable(),
@@ -34,6 +35,13 @@
     renaming;
     return Date.now();
   });
+
+  let lastId = $state(card.id);
+  $effect(() => {
+    if (!card || card.id !== lastId) cancelRename();
+    lastId = card.id;
+  });
+  onDestroy(() => { cancelRename(); });
 
   let messageBox: HTMLInputElement | undefined = $state();
   let message: string = $state('');

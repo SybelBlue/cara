@@ -48,13 +48,11 @@
     "@fontsource/patrick-hand": "^5.2.5",
     "@types/diff": "^6.0.0",
     "@types/npm": "^7.19.3",
-    "@types/reveal.js": "^5.0.4",
     "cohere-ai": "^7.14.0",
     "diff": "^7.0.0",
     "dotenv": "^16.4.6",
     "local": "^0.3.3",
     "openai": "^4.72.0",
-    "reveal.js": "^5.1.0",
     "svelte-highlight": "^7.8.3",
     "yaml": "^2.7.1",
     "zod": "^3.24.2"

@@ -12,13 +12,15 @@
 
   type Props = Omit<TimelinePanelProps, 'show'> & {
     showTests?: boolean;
+    onShowSubmission?: () => void;
   };
 
   let {
     showTests = $bindable(false),
     currentDeck,
     setDisplayDeck: setCardBoardDeck,
-    commits
+    commits,
+    onShowSubmission
   }: Props = $props();
 
   let displayDeck: Card[] = $state(currentDeck);
@@ -26,6 +28,7 @@
 
   let showSubmissionModal = $state(false);
   const submissionYaml = $derived(deckToSubmission(currentDeck));
+  $effect(() => { if (showSubmissionModal) onShowSubmission?.(); });
 
   let sorter: undefined | SortFn = $state();
 
